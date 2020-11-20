@@ -1,0 +1,19 @@
+--- Ehdr_p1.java	2020-09-16 14:18:15.000000000 +0200
++++ new/Ehdr_p1.java	2020-09-16 14:33:40.021933290 +0200
+@@ -3,12 +3,10 @@
+ 
+ package jogamp.common.os.elf;
+ 
+-import java.nio.*;
+-
+-import com.jogamp.gluegen.runtime.*;
+-import com.jogamp.common.os.*;
+-import com.jogamp.common.nio.*;
+-import jogamp.common.os.MachineDataInfoRuntime;
++import com.jogamp.common.nio.Buffers;
++import com.jogamp.common.nio.StructAccessor;
++import com.jogamp.common.os.MachineDataInfo;
++import java.nio.ByteBuffer;
+ 
+ 
+ public class Ehdr_p1 {
