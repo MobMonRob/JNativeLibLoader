@@ -2,7 +2,8 @@
 
 Getestet unter Netbeans 12, Maven, Java SDK 11
 
-## Aufrufendes Projekt konfigurieren
+## Dokumentation für Nutzer
+### Aufrufendes Projekt konfigurieren
 #### Dependency konfigurieren
 In pom.xml hinzufügen:
 
@@ -59,7 +60,7 @@ Beispiel
         }
      */
 
-## Fehlerbehebung
+### Fehlerbehebung
 Falls man das Quelltextprojekt benutzt und das Laden des JARs debuggen möchte:
 In Netbeans "compile on save" deaktiveren. ->Siehe [StackOverflow Frage](https://web.archive.org/web/20201113173334/https://stackoverflow.com/questions/1304149/disabling-automatic-build-in-netbeans/1313691#1313691) \
 Netbeans gibt sonst im Run Output folgenden Hinweis:
@@ -76,7 +77,7 @@ Das verhindert folgenden Fehler:
 Die Ursache ist, dass Netbeans standardmäßig ("compile on save" aktiviert) die .class Dateien einer Dependency lädt, sofern die Dependency ein Netbeans Projekt ist. Mit der Deaktivierung dieser Funktion wird die JAR benutzt. \
 **Achtung: Man darauf achten, dass das JAR Artefakt des NativeLibLoader Projekts erstellt worden ist bevor man das aufrufende Projekt baut.**
 
-# Dokumentation für Entwickler
+## Dokumentation für Entwickler
 #### Interessante ähnliche Projekte
 https://github.com/KeepSafe/ReLinker \
 https://github.com/scijava/native-lib-loader
