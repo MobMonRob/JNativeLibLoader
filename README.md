@@ -3,7 +3,11 @@
 Getestet unter Netbeans 12, Maven, Java SDK 11
 
 ## Dokumentation für Nutzer
-### Aufrufendes Projekt konfigurieren
+Beispiel für ein funktionierendes abhängiges Projekt: https://github.com/MobMonRob/JViconDataStream2
+
+### Verwendendes Projekt konfigurieren
+Das Repository dieses Projektes dem Repository des verwendenden Projektes als `git submodule` hinzufügen.
+
 #### Dependency konfigurieren
 In pom.xml hinzufügen:
 
@@ -22,8 +26,8 @@ Damit die .so Dateien geladen werdem können, müssen sie sich unter `<Projektpf
             </resource>
 
 
-#### .so Dateien laden
-Beispiel
+#### .so Dateien laden vorbereiten
+So eine ähnliche Klasse anlegen:
 
     package de.dhbw.rahmlab.vicon.datastream.nativelib;
     
@@ -31,9 +35,6 @@ Beispiel
     import java.util.ArrayList;
     import java.util.List;
     
-    /**
-     * @author fabian
-     */
     public class NativeLibLoader {
     
         private static boolean isLoaded = false;
@@ -52,13 +53,13 @@ Beispiel
             de.dhbw.rahmlab.nativelibloader.api.NativeLibLoader.load(glueLibNames, ViconDataStreamSDKSwigJNI.class);
         }
     }
-    
-    /*
-    //Verwendung in Klassen, die hiervon abhängen:
+
+#### .so Dateien laden
+Innerhalb einer Klasse, die die Bibliothek benötigt. Am besten natürlich die Klasse, die die `native` Aufrufe definiert. Geht zur Not aber auch in einer diese aufrufenden Klasse.
+
         static {
             NativeLibLoader.load();
         }
-     */
 
 #### Fehlerbehebung
 Falls man das Quelltextprojekt benutzt und das Laden des JARs debuggen möchte:
