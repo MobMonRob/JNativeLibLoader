@@ -1,10 +1,23 @@
 # JNativeLibLoader
-## Credits
-Most of the source code in this repository is a more ore less customized extraction from the Gluegen project of the jogamp community from 15. September 2020.
-You can find the full source code of the gluegen project here: https://github.com/JogAmp/gluegen.
+## Description
+The aim of JNativeLibLoader is to offer a mighty and easy to use library to load native libraries from JAR files. \
+This includes:
+1. unpacking binary native library files from the JAR to a cache
+2. recognizing the platform the using application is running at
+3. loading the binary native library files into the jvm depending on the platform
 
-## Dokumentation für alle
-Getestet unter Netbeans 12, Maven, Java SDK 11
+## Credits
+Most of the source code in this repository is a more ore less customized extraction from the Gluegen project of the Jogamp community from 15. September 2020. \
+You can find the full source code of the Gluegen project here: https://github.com/JogAmp/gluegen. \
+The copy of the Gluegen license is in the file `Gluegen_LICENSE.txt`. \
+The following folders contain customized, extracted Gluegen code:
+* `/NativeLibLoader/src/main/java/de/dhbw/rahmlab/nativelibloader/impl/com/jogamp/common`
+* `/NativeLibLoader/src/main/java/de/dhbw/rahmlab/nativelibloader/impl/jogamp/common`
+* `/NativeGenerator_Linux64/include`
+* `/NativeGenerator_Linux64/src`
+
+## Documentation for all
+Tested with Netbeans 12, Maven, Java SDK 11, GCC 7.5.0
 
 ## Dokumentation für Nutzer
 Beispiel für ein funktionierendes abhängiges Projekt: https://github.com/MobMonRob/JViconDataStream2
