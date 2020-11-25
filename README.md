@@ -1,5 +1,9 @@
 # JNativeLibLoader
+## Credits
+Most of the source code in this repository is a more ore less customized extraction from the Gluegen project of the jogamp community from 15. September 2020.
+You can find the full source code of the gluegen project here: https://github.com/JogAmp/gluegen.
 
+## Dokumentation für alle
 Getestet unter Netbeans 12, Maven, Java SDK 11
 
 ## Dokumentation für Nutzer
