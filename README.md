@@ -76,8 +76,11 @@ Innerhalb einer Klasse, die die Bibliothek benötigt. Am besten natürlich die K
 
 	import de.dhbw.rahmlab.vicon.datastream.NativeLibLoader;
 	
-	static {
-		NativeLibLoader.load();
+	public class YourClassWhichUsesNativeFunctions
+	{
+		static {
+			NativeLibLoader.load();
+		}
 	}
 
 #### Fehlerbehebung
