@@ -72,7 +72,7 @@ So eine ähnliche Klasse anlegen:
     }
 
 #### .so Dateien laden
-Innerhalb einer Klasse, die die Bibliothek benötigt. Am besten natürlich die Klasse, die die `native` Aufrufe definiert. Geht zur Not aber auch in einer diese aufrufenden Klasse.
+Innerhalb einer Klasse, die die Bibliothek benötigt. Am besten natürlich die Klasse, die die `native` Aufrufe definiert. Geht zur Not aber auch in einer diese aufrufenden Klasse. Wichtig ist lediglich, dass die native Bibliothek geladen wird, bevor versucht wird, derer Funktionen aufzurufen.
 
 	import de.dhbw.rahmlab.vicon.datastream.NativeLibLoader;
 	
