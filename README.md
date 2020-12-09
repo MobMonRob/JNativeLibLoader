@@ -74,9 +74,11 @@ So eine ähnliche Klasse anlegen:
 #### .so Dateien laden
 Innerhalb einer Klasse, die die Bibliothek benötigt. Am besten natürlich die Klasse, die die `native` Aufrufe definiert. Geht zur Not aber auch in einer diese aufrufenden Klasse.
 
-        static {
-            NativeLibLoader.load();
-        }
+	import de.dhbw.rahmlab.vicon.datastream.NativeLibLoader;
+	
+	static {
+		NativeLibLoader.load();
+	}
 
 #### Fehlerbehebung
 Falls man das Quelltextprojekt benutzt und das Laden des JARs debuggen möchte:
