@@ -64,6 +64,9 @@ So eine ähnliche Klasse anlegen:
         }
     
         private static void loadActually() {
+		//Useful, if .so loading fails
+		//System.setProperty("jogamp.debug", "true");
+	
             List<String> glueLibNames = new ArrayList<>();
             glueLibNames.add("jViconDataStreamSDK");
     
