@@ -11,9 +11,6 @@ import java.security.PrivilegedAction;
 import java.util.List;
 
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.elf.ElfHeaderPart1;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.elf.ElfHeaderPart2;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.elf.SectionArmAttributes;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.nio.Buffers;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.AndroidVersion;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.NativeLibrary;
@@ -164,6 +161,7 @@ public abstract class PlatformPropsImpl {
         OS_VERSION_NUMBER = new VersionNumber(OS_VERSION);
         OS_TYPE = getOSTypeImpl(OS_lower, isAndroid);
 
+        /*
         // Hard values, i.e. w/ probing binaries
         final String elfCpuName;
         final CPUType elfCpuType;
@@ -229,9 +227,11 @@ public abstract class PlatformPropsImpl {
                 System.err.println("Platform.Elf: valid "+elfValid+", elfCpuName "+elfCpuName+", cpuType "+elfCpuType+", abiType "+elfABIType+", elfLittleEndian "+elfLittleEndian);
             }
         }
+        */
 
         // Determine endianess, favor ELF value
         final boolean littleEndian = queryIsLittleEndianImpl();
+        /*
         if( elfValid ) {
             switch( elfLittleEndian ) {
                 case 1:
@@ -245,10 +245,12 @@ public abstract class PlatformPropsImpl {
                     break;
             }
         } else {
+        */
             LITTLE_ENDIAN = littleEndian;
-        }
+        //}
         if( DEBUG ) {
-            System.err.println("Platform.Endian: test-little "+littleEndian+", elf[valid "+elfValid+", val "+elfLittleEndian+"] -> LITTLE_ENDIAN "+LITTLE_ENDIAN);
+            //System.err.println("Platform.Endian: test-little "+littleEndian+", elf[valid "+elfValid+", val "+elfLittleEndian+"] -> LITTLE_ENDIAN "+LITTLE_ENDIAN);
+            System.err.println("Platform.Endian: test-little "+littleEndian+" -> LITTLE_ENDIAN "+LITTLE_ENDIAN);
         }
 
         // Property values for comparison
@@ -263,6 +265,7 @@ public abstract class PlatformPropsImpl {
         }
 
         final int strategy;
+        /*
         if( isAndroid ) {
             if( DEBUG ) {
                 System.err.println("Android: CPU_ABI1 str "+AndroidVersion.CPU_ABI+", CPU_TYPE "+AndroidVersion.CPU_TYPE+", ABI_TYPE "+AndroidVersion.ABI_TYPE);
@@ -329,21 +332,23 @@ public abstract class PlatformPropsImpl {
                     strategy = 211;
                 }
             } else {
+        */
                 // Last resort: properties
                 ARCH = propARCH;
                 ARCH_lower = propARCH_lower;
                 CPU_ARCH = propCpuType;
                 ABI_TYPE = propABIType;
                 strategy = 220;
-            }
-        }
+        //    }
+        //}
         if( OSType.IOS == OS_TYPE ) {
             useDynamicLibraries = false;
         } else {
             useDynamicLibraries = true;
         }
         if( DEBUG ) {
-            System.err.println("Platform.Hard: ARCH "+ARCH+", CPU_ARCH "+CPU_ARCH+", ABI_TYPE "+ABI_TYPE+" - strategy "+strategy+"(isAndroid "+isAndroid+", elfValid "+elfValid+"), useDynLibs "+useDynamicLibraries);
+            //System.err.println("Platform.Hard: ARCH "+ARCH+", CPU_ARCH "+CPU_ARCH+", ABI_TYPE "+ABI_TYPE+" - strategy "+strategy+"(isAndroid "+isAndroid+", elfValid "+elfValid+"), useDynLibs "+useDynamicLibraries);
+            System.err.println("Platform.Hard: ARCH "+ARCH+", CPU_ARCH "+CPU_ARCH+", ABI_TYPE "+ABI_TYPE+" - strategy "+strategy+"(isAndroid "+isAndroid+"), useDynLibs "+useDynamicLibraries);
         }
         os_and_arch = getOSAndArch(OS_TYPE, CPU_ARCH, ABI_TYPE, LITTLE_ENDIAN);
     }
@@ -412,6 +417,7 @@ public abstract class PlatformPropsImpl {
      * Elf ARM Tags are read using {@link ElfHeader}, .. and {@link SectionArmAttributes#abiVFPArgsAcceptsVFPVariant(byte)}.
      * </p>
      */
+    /*
     private static final File queryElfFile(final OSType osType) {
         File file = null;
         try {
@@ -486,6 +492,7 @@ public abstract class PlatformPropsImpl {
         }
         return null;
     }
+    */
 
     private static final OSType getOSTypeImpl(final String osLower, final boolean isAndroid) throws RuntimeException {
         if ( isAndroid ) {
