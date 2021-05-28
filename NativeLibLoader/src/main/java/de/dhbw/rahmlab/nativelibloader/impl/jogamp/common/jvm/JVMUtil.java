@@ -54,9 +54,11 @@ public class JVMUtil {
 
     static {
         final ByteBuffer buffer = Buffers.newDirectByteBuffer(64);
+        /*
         if( ! initialize(buffer) ) {
             throw new RuntimeException("Failed to initialize the JVMUtil "+Thread.currentThread().getName());
         }
+        */
         if(DEBUG) {
             final Exception e = new Exception("JVMUtil.initSingleton() .. initialized "+Thread.currentThread().getName());
             e.printStackTrace();
@@ -68,6 +70,6 @@ public class JVMUtil {
 
     private JVMUtil() {}
 
-    private static native boolean initialize(java.nio.ByteBuffer buffer);
+    //private static native boolean initialize(java.nio.ByteBuffer buffer);
 }
 
