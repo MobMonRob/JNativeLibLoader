@@ -514,51 +514,5 @@ public class Platform extends PlatformPropsImpl {
     public static boolean isAWTAvailable() {
         return AWT_AVAILABLE;
     }
-
-    //
-    // time / jitter
-    //
-
-    /**
-     * Returns the unix based current time in milliseconds, based on <code>gettimeofday(..)</code>.
-     * <p>
-     * This is an alternative to {@link System#currentTimeMillis()} and {@link System#nanoTime()}.
-     * While the named {@link System} methods do provide the required precision,
-     * <code>gettimeofday()</code> <i>also</i> guarantees time accuracy, i.e. update interval.
-     * </p>
-     * @see #currentTimeMicros()
-     */
-    public static native long currentTimeMillis();
-
-    /**
-     * Returns the unix based current time in microseconds, based on <code>gettimeofday(..)</code>.
-     * <p>
-     * This is an alternative to {@link System#currentTimeMillis()} and {@link System#nanoTime()}.
-     * While the named {@link System} methods do provide the required precision,
-     * <code>gettimeofday()</code> <i>also</i> guarantees time accuracy, i.e. update interval.
-     * </p>
-     * @see #currentTimeMillis()
-     */
-    public static native long currentTimeMicros();
-
-    /**
-     * Returns the estimated sleep jitter value in nanoseconds.
-     * <p>
-     * Includes a warm-up path, allowing hotspot to optimize the code.
-     * </p>
-     */
-    public static synchronized long getCurrentSleepJitter() {
-        getCurrentSleepJitterImpl(TimeUnit.MILLISECONDS.toNanos(10), 10); // warm-up
-        return getCurrentSleepJitterImpl(TimeUnit.MILLISECONDS.toNanos(10), 10);
-    }
-    private static long getCurrentSleepJitterImpl(final long nsDuration, final int splitInLoops) {
-        final long nsPeriod = nsDuration / splitInLoops;
-        final long t0_ns = System.nanoTime();
-        for(int i=splitInLoops; i>0; i--) {
-            try { TimeUnit.NANOSECONDS.sleep(nsPeriod); } catch (final InterruptedException e) { }
-        }
-        return  ( ( System.nanoTime() - t0_ns ) - nsDuration ) / splitInLoops;
-    }
-
 }
 
