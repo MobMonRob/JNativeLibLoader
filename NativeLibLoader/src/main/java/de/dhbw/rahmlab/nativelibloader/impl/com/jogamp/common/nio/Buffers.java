@@ -458,22 +458,6 @@ public class Buffers {
     }
 
     /**
-     * Helper routine to tell whether a buffer is direct or not. Null
-     * pointers <b>are</b> considered direct.
-     */
-    public static boolean isDirect(final Object buf) {
-        if (buf == null) {
-            return true;
-        }
-        if (buf instanceof Buffer) {
-            return ((Buffer) buf).isDirect();
-        } else if (buf instanceof PointerBuffer) {
-            return ((PointerBuffer) buf).isDirect();
-        }
-        throw new IllegalArgumentException("Unexpected buffer type " + buf.getClass().getName());
-    }
-
-    /**
      * Helper routine to get the Buffer byte offset by taking into
      * account the Buffer position and the underlying type.  This is
      * the total offset for Direct Buffers.
