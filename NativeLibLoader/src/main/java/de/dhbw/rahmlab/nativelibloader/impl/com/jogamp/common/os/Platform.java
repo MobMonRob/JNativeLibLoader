@@ -40,7 +40,7 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.ReflectionUti
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.VersionNumber;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.jvm.JVMUtil;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.MachineDataInfoRuntime;
+//import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.MachineDataInfoRuntime;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl;
 
 /**
@@ -274,7 +274,7 @@ public class Platform extends PlatformPropsImpl {
     // post loading native lib:
     //
 
-    private static final MachineDataInfo machineDescription;
+    //private static final MachineDataInfo machineDescription;
 
     /** <code>true</code> if AWT is available and not in headless mode, otherwise <code>false</code>. */
     public static final boolean AWT_AVAILABLE;
@@ -339,8 +339,8 @@ public class Platform extends PlatformPropsImpl {
         //
         // Validate and setup MachineDataInfo.StaticConfig
         //
-        MachineDataInfoRuntime.initialize();
-        machineDescription = MachineDataInfoRuntime.getRuntime();
+        //MachineDataInfoRuntime.initialize();
+        //machineDescription = MachineDataInfoRuntime.getRuntime();
     }
 
     private Platform() {}
@@ -506,9 +506,11 @@ public class Platform extends PlatformPropsImpl {
     /**
      * Returns the MachineDataInfo of the running machine.
      */
+    /*
     public static MachineDataInfo getMachineDataInfo() {
         return machineDescription;
     }
+    */
 
     /** Returns <code>true</code> if AWT is available and not in headless mode, otherwise <code>false</code>. */
     public static boolean isAWTAvailable() {

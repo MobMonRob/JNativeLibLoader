@@ -63,7 +63,7 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.JogampRuntimeExcep
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.net.AssetURLContext;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.net.Uri;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.nio.Buffers;
-import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.MachineDataInfo;
+//import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.MachineDataInfo;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.Platform;
 
 public class IOUtil {
@@ -179,6 +179,7 @@ public class IOUtil {
      * @return
      * @throws IOException
      */
+    /*
     public static int copyURLConn2File(final URLConnection conn, final File outFile) throws IOException {
         conn.connect();  // redundant
 
@@ -191,6 +192,7 @@ public class IOUtil {
         }
         return totalNumBytes;
     }
+    */
 
     /**
      * Copy the specified input stream to the specified output file. The total
@@ -202,6 +204,7 @@ public class IOUtil {
      * @return
      * @throws IOException
      */
+    /*
     public static int copyStream2File(final InputStream in, final File outFile, int totalNumBytes) throws IOException {
         final OutputStream out = new BufferedOutputStream(new FileOutputStream(outFile));
         try {
@@ -211,6 +214,7 @@ public class IOUtil {
         }
         return totalNumBytes;
     }
+    */
 
     /**
      * Copy the specified input stream to the specified output stream. The total
@@ -222,9 +226,11 @@ public class IOUtil {
      * @return
      * @throws IOException
      */
+    /*
     public static int copyStream2Stream(final InputStream in, final OutputStream out, final int totalNumBytes) throws IOException {
         return copyStream2Stream(Platform.getMachineDataInfo().pageSizeInBytes(), in, out, totalNumBytes);
     }
+    */
 
     /**
      * Copy the specified input stream to the specified output stream. The total
@@ -299,9 +305,11 @@ public class IOUtil {
      *
      * @param stream input stream, which will be wrapped into a BufferedInputStream, if not already done.
      */
+    /*
     public static ByteBuffer copyStream2ByteBuffer(final InputStream stream) throws IOException {
         return copyStream2ByteBuffer(stream, -1);
     }
+    */
 
     /**
      * Copy the specified input stream to a NIO ByteBuffer w/ native byte order, which is being returned.
@@ -310,6 +318,7 @@ public class IOUtil {
      * @param stream input stream, which will be wrapped into a BufferedInputStream, if not already done.
      * @param initialCapacity initial buffer capacity in bytes, if &gt; available bytes
      */
+    /*
     public static ByteBuffer copyStream2ByteBuffer(InputStream stream, int initialCapacity) throws IOException {
         if( !(stream instanceof BufferedInputStream) ) {
             stream = new BufferedInputStream(stream);
@@ -342,6 +351,7 @@ public class IOUtil {
         data.flip();
         return data;
     }
+    */
 
     /***
      *
