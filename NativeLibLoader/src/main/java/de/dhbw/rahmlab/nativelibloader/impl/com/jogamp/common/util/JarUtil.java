@@ -638,7 +638,9 @@ public class JarUtil {
                     if (isNativeLib && ( isRootEntry || !nativeLibMap.containsKey(libBaseName) ) ) {
                         nativeLibMap.put(libBaseName, destFile.getAbsolutePath());
                         addedAsNativeLib = true;
-                        fixNativeLibAttribs(destFile);
+                        
+                        //fixNativeLibAttribs(destFile);
+                        throw new IOException("not supported anymore");
                     }
                 }
                 if (DEBUG) {
@@ -655,6 +657,7 @@ public class JarUtil {
      *   <li>Bug 865: Safari >= 6.1 [OSX]: May employ xattr on 'com.apple.quarantine' on 'PluginProcess.app'</li>
      * </ul>
      */
+    /*
     private final static void fixNativeLibAttribs(final File file) {
         // We tolerate UnsatisfiedLinkError (and derived) to solve the chicken and egg problem
         // of loading gluegen's native library.
@@ -674,7 +677,8 @@ public class JarUtil {
         }
     }
     private native static boolean fixNativeLibAttribs(String fname);
-
+    */
+    
     /**
      * Validate the certificates for each native Lib in the jar file.
      * Throws an IOException if any certificate is not valid.
