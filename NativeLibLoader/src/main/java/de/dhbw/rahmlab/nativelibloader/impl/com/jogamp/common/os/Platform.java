@@ -258,7 +258,7 @@ public class Platform extends PlatformPropsImpl {
      * Fixed basename of JAR file and native library.
      * Dash replaced by underscore to allow static linkage via JEP 178.
      */
-    private static final String libBaseName = "gluegen_rt";
+    //private static final String libBaseName = "gluegen_rt";
 
     //
     // static initialization order:
@@ -309,6 +309,7 @@ public class Platform extends PlatformPropsImpl {
                                          PropertyAccess.getBooleanProperty(useTempJarCachePropName, true, true);
 
                 // load GluegenRT native library
+                /*
                 if(_USE_TEMP_JAR_CACHE[0] && TempJarCache.initSingleton() && TempJarCache.isInitialized(true) ) {
                     try {
                         JNILibLoaderBase.addNativeJarLibs(new Class<?>[] { de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug.class }, null);
@@ -318,6 +319,7 @@ public class Platform extends PlatformPropsImpl {
                     }
                 }
                 DynamicLibraryBundle.GlueJNILibLoader.loadLibrary(libBaseName, false, cl);
+                */
 
                 // JVM bug workaround
                 JVMUtil.initSingleton(); // requires gluegen_rt, one-time init.

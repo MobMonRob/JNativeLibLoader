@@ -18,48 +18,50 @@
         </dependency>
     </dependencies>
     <build>
-        <resources>
-            <resource>
-                <targetPath>${basedir}/target/classes/natives</targetPath>
-                <directory>${basedir}/natives</directory>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                        <configuration>
-                            <excludeResources>true</excludeResources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>Build natives</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>bash</executable>
-                            <commandlineArgs>${basedir}/../NativeGenerator_Linux64/generate.sh</commandlineArgs>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+        <!--
+<resources>
+    <resource>
+        <targetPath>${basedir}/target/classes/natives</targetPath>
+        <directory>${basedir}/natives</directory>
+    </resource>
+</resources>
+<plugins>
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+            <execution>
+                <id>attach-sources</id>
+                <phase>verify</phase>
+                <goals>
+                    <goal>jar-no-fork</goal>
+                </goals>
+                <configuration>
+                    <excludeResources>true</excludeResources>
+                </configuration>
+            </execution>
+        </executions>
+    </plugin>
+    <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+            <execution>
+                <id>Build natives</id>
+                <phase>generate-resources</phase>
+                <goals>
+                    <goal>exec</goal>
+                </goals>
+                <configuration>
+                    <executable>bash</executable>
+                    <commandlineArgs>${basedir}/../NativeGenerator_Linux64/generate.sh</commandlineArgs>
+                </configuration>
+            </execution>
+        </executions>
+    </plugin>
+</plugins>
+        -->
     </build>
 </project>
