@@ -35,6 +35,7 @@ import java.util.List;
 
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.jvm.JNILibLoaderBase;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.RunnableExecutor;
+import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
 
 /**
  * Provides bundling of:<br>
@@ -58,7 +59,7 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.RunnableExecu
  *  <li> resolves the Tool's {@link com.jogamp.common.os.DynamicLibraryBundleInfo#getToolGetProcAddressFuncNameList() GetProcAddress}. (optional)</li>
  * </ul>
  */
-public class DynamicLibraryBundle implements DynamicLookupHelper {
+public class DynamicLibraryBundle {
     private final DynamicLibraryBundleInfo info;
 
     protected final List<NativeLibrary> nativeLibraries;
@@ -71,11 +72,16 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
 
     private final boolean[] glueLibLoaded;
     private int glueLibLoadedNumber;
+    
+    static final boolean DEBUG;
+    static {
+        DEBUG = Debug.debug("DynamicLibraryBundle");
+    }
 
-    private long toolGetProcAddressHandle;
-    private boolean toolGetProcAddressComplete;
-    private HashSet<String> toolGetProcAddressFuncNameSet;
-    private final List<String> toolGetProcAddressFuncNameList;
+    //private long toolGetProcAddressHandle;
+    //private boolean toolGetProcAddressComplete;
+    //private HashSet<String> toolGetProcAddressFuncNameSet;
+    //private final List<String> toolGetProcAddressFuncNameList;
 
     /** Returns an AWT-EDT {@link RunnableExecutor} implementation if AWT is available, otherwise {@link RunnableExecutor#currentThreadExecutor}. */
     public static RunnableExecutor getDefaultRunnableExecutor() {
@@ -129,6 +135,7 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
             dynLinkGlobal = _dynLinkGlobal[0];
         }
 
+        /*
         toolGetProcAddressFuncNameList = info.getToolGetProcAddressFuncNameList();
         if( null != toolGetProcAddressFuncNameList ) {
             toolGetProcAddressFuncNameSet = new HashSet<String>(toolGetProcAddressFuncNameList);
@@ -139,9 +146,10 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
             toolGetProcAddressHandle = 0;
             toolGetProcAddressComplete = true;
         }
+        */
         if(DEBUG) {
             System.err.println("DynamicLibraryBundle.init Summary: "+info.getClass().getName());
-            System.err.println("     toolGetProcAddressFuncNameList: "+toolGetProcAddressFuncNameList+", complete: "+toolGetProcAddressComplete+", 0x"+Long.toHexString(toolGetProcAddressHandle));
+            //System.err.println("     toolGetProcAddressFuncNameList: "+toolGetProcAddressFuncNameList+", complete: "+toolGetProcAddressComplete+", 0x"+Long.toHexString(toolGetProcAddressHandle));
             System.err.println("     Tool Lib Names : "+toolLibNames);
             System.err.println("     Tool Lib Loaded: "+getToolLibLoadedNumber()+"/"+getToolLibNumber()+" "+Arrays.toString(toolLibLoaded)+", complete "+isToolLibComplete());
             System.err.println("     Glue Lib Names : "+glueLibNames);
@@ -156,9 +164,11 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
         if(DEBUG) {
             System.err.println(Thread.currentThread().getName()+" - DynamicLibraryBundle.destroy() START: "+info.getClass().getName());
         }
+        /*
         toolGetProcAddressFuncNameSet = null;
         toolGetProcAddressHandle = 0;
         toolGetProcAddressComplete = false;
+        */
         for(int i = 0; i<nativeLibraries.size(); i++) {
             nativeLibraries.get(i).close();
         }
@@ -190,7 +200,8 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
      */
     public final boolean isToolLibComplete() {
         final int toolLibNumber = getToolLibNumber();
-        return toolGetProcAddressComplete &&
+        //return toolGetProcAddressComplete &&
+        return
                ( 0 == toolLibNumber || null != dynLinkGlobal ) &&
                toolLibNumber == getToolLibLoadedNumber();
     }
@@ -234,6 +245,7 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
 
     public final DynamicLibraryBundleInfo getBundleInfo() { return info; }
 
+    /*
     protected final long getToolGetProcAddressHandle() throws SecurityException {
         if(!isToolLibLoaded()) {
             return 0;
@@ -248,6 +260,7 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
         }
         return aptr;
     }
+    */
 
     protected static final NativeLibrary loadFirstAvailable(final List<String> libNames,
                                                             final boolean searchSystemPath,
@@ -331,6 +344,7 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
      * @return
      * @throws SecurityException if user is not granted access for the library set.
      */
+    /*
     private final long dynamicLookupFunctionOnLibs(final String funcName) throws SecurityException {
         if(!isToolLibLoaded() || null==funcName) {
             if(DEBUG_LOOKUP && !isToolLibLoaded()) {
@@ -361,7 +375,9 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
         }
         return addr;
     }
+    */
 
+    /*
     private final long toolDynamicLookupFunction(final String funcName) {
         if(0 != toolGetProcAddressHandle) {
             final long addr = info.toolGetProcAddress(toolGetProcAddressHandle, funcName);
@@ -374,7 +390,9 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
         }
         return 0;
     }
+    */
 
+    /*
     @Override
     public final void claimAllLinkPermission() throws SecurityException {
         for (int i=0; i < nativeLibraries.size(); i++) {
@@ -387,7 +405,9 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
             nativeLibraries.get(i).releaseAllLinkPermission();
         }
     }
+    */
 
+    /*
     @Override
     public final long dynamicLookupFunction(final String funcName) throws SecurityException {
         if(!isToolLibLoaded() || null==funcName) {
@@ -415,11 +435,14 @@ public class DynamicLibraryBundle implements DynamicLookupHelper {
         }
         return addr;
     }
+    */
 
+    /*
     @Override
     public final boolean isFunctionAvailable(final String funcName) throws SecurityException {
         return 0 != dynamicLookupFunction(funcName);
     }
+    */
 
     /** Inherit access */
     static final class GlueJNILibLoader extends JNILibLoaderBase {

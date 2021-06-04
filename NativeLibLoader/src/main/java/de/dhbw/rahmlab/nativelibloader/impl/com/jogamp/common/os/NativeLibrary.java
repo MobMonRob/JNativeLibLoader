@@ -50,15 +50,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.BionicDynamicLinker32bitImpl;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.BionicDynamicLinker64BitImpl;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.MacOSXDynamicLinkerImpl;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PosixDynamicLinkerImpl;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.WindowsDynamicLinkerImpl;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.ExceptionUtils;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.IOUtil;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
+import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
 
 /** Provides low-level, relatively platform-independent access to
     shared ("native") libraries. The core library routines
@@ -73,7 +69,7 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJar
     ProcAddressTable glue code generation style without additional
     supporting code needed in the generated library. */
 
-public final class NativeLibrary implements DynamicLookupHelper {
+public final class NativeLibrary {
   private static final String[] prefixes;
   private static final String[] suffixes;
   private static final boolean isOSX;
@@ -120,6 +116,11 @@ public final class NativeLibrary implements DynamicLookupHelper {
   private final String libraryPath;
 
   private final boolean global;
+  
+  static final boolean DEBUG;
+  static {
+      DEBUG = Debug.debug("NativeLibrary");
+  }
 
   // Private constructor to prevent arbitrary instances from floating around
   private NativeLibrary(final DynamicLinker dynLink, final long libraryHandle, final String libraryPath, final boolean global) {
@@ -218,14 +219,11 @@ public final class NativeLibrary implements DynamicLookupHelper {
         if (DEBUG) {
             System.err.println("NativeLibrary.open(global "+global+"): Trying to load " + path);
         }
-        long res;
+        long res = 0;
         Throwable t = null;
         try {
-            if(global) {
-                res = dynLink.openLibraryGlobal(path, DEBUG);
-            } else {
-                res = dynLink.openLibraryLocal(path, DEBUG);
-            }
+            dynLink.openLibrary(path);
+            res = 1;
         } catch (final Throwable t1) {
             t = t1;
             res = 0;
@@ -236,11 +234,6 @@ public final class NativeLibrary implements DynamicLookupHelper {
             if( null != t ) {
                 System.err.println("NativeLibrary.open: Caught "+t.getClass().getSimpleName()+": "+t.getMessage());
             }
-            String errstr;
-            try {
-                errstr = dynLink.getLastError();
-            } catch (final Throwable t2) { errstr=null; }
-            System.err.println("NativeLibrary.open: Last error "+errstr);
             if( null != t ) {
                 t.printStackTrace();
             }
@@ -257,15 +250,7 @@ public final class NativeLibrary implements DynamicLookupHelper {
     return null;
   }
 
-  @Override
-  public final void claimAllLinkPermission() throws SecurityException {
-      dynLink.claimAllLinkPermission();
-  }
-  @Override
-  public final void releaseAllLinkPermission() throws SecurityException {
-      dynLink.releaseAllLinkPermission();
-  }
-
+  /*
   @Override
   public final long dynamicLookupFunction(final String funcName) throws SecurityException {
     if ( 0 == libraryHandle ) {
@@ -281,40 +266,22 @@ public final class NativeLibrary implements DynamicLookupHelper {
     }
     return 0 != dynLink.lookupSymbol(libraryHandle, funcName);
   }
+  */
 
   /** Looks up the given function name in all loaded libraries.
    * @throws SecurityException if user is not granted access for the named library.
    */
+  /*
   public final long dynamicLookupFunctionGlobal(final String funcName) throws SecurityException {
     return dynLink.lookupSymbolGlobal(funcName);
   }
+  */
 
   /* pp */ final DynamicLinker dynamicLinker() { return dynLink; }
 
   /* pp */ static DynamicLinker getDynamicLinker() {
       final DynamicLinker dynLink;
-      switch (PlatformPropsImpl.OS_TYPE) {
-          case WINDOWS:
-              dynLink = new WindowsDynamicLinkerImpl();
-              break;
-
-          case MACOS:
-          case IOS:
-              dynLink = new MacOSXDynamicLinkerImpl();
-              break;
-
-          case ANDROID:
-              if( PlatformPropsImpl.CPU_ARCH.is32Bit ) {
-                  dynLink = new BionicDynamicLinker32bitImpl();
-              } else {
-                  dynLink = new BionicDynamicLinker64BitImpl();
-              }
-              break;
-
-          default:
-              dynLink = new PosixDynamicLinkerImpl();
-              break;
-      }
+      dynLink = new DynamicLinker();
       return dynLink;
   }
 
@@ -343,7 +310,7 @@ public final class NativeLibrary implements DynamicLookupHelper {
     }
     final long handle = libraryHandle;
     libraryHandle = 0;
-    dynLink.closeLibrary(handle, DEBUG);
+    //dynLink.closeLibrary(handle, DEBUG);
     if (DEBUG) {
       System.err.println("NativeLibrary.close(): Successfully closed " + this);
       ExceptionUtils.dumpStack(System.err);
