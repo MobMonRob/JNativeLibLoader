@@ -25,7 +25,9 @@ public class NativeLibLoader {
      * which are wanted to be loaded.
      */
     public static void load(List<String> glueLibNames, Class MarkerClass) {
-        //System.setProperty("jogamp.debug", "true"); //Extremely helpful for debugging!
+        //Extremely helpful for debugging!
+        //System.setProperty("jogamp.debug", "true");
+        //System.setProperty("jogamp.verbose", "true");
 
         List<DynamicLibraryBundleInfo> dynamicLibraryBundleInfos = new ArrayList<>();
         dynamicLibraryBundleInfos.add(new BundleInfoImpl(glueLibNames));
