@@ -670,7 +670,7 @@ public class JarUtil {
                         addedAsNativeLib = true;
 
                         //fixNativeLibAttribs(destFile);
-                        throw new IOException("not supported anymore");
+                        //throw new IOException("not supported anymore");
                     }
                 }
                 if (DEBUG) {
