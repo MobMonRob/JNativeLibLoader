@@ -39,6 +39,7 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.InterruptSour
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
 
 public class TempFileCache {
+
     private static final boolean DEBUG = Debug.debug("TempFileCache");
 
     // Flag indicating that we got a fatal error in the static initializer.
@@ -51,6 +52,7 @@ public class TempFileCache {
 
     // Lifecycle: For one user's JVMs, ClassLoader and time.
     private static final File tmpBaseDir;
+
 
     // Get the value of the tmproot system property
     // Lifecycle: For one user's concurrently running JVMs and ClassLoader
@@ -100,13 +102,13 @@ public class TempFileCache {
 
             if (DEBUG) {
                 final String tmpBaseDirAbsPath = null != tmpBaseDir ? tmpBaseDir.getAbsolutePath() : null;
-                System.err.println("TempFileCache: Static Initialization ---------------------------------------------- OK: "+(!staticInitError));
-                System.err.println("TempFileCache: Thread: "+Thread.currentThread().getName()+
-                        ", CL 0x"+Integer.toHexString(TempFileCache.class.getClassLoader().hashCode())+
-                        ", tempBaseDir "+tmpBaseDirAbsPath+", executable "+staticTempIsExecutable);
+                System.err.println("TempFileCache: Static Initialization ---------------------------------------------- OK: " + (!staticInitError));
+                System.err.println("TempFileCache: Thread: " + Thread.currentThread().getName()
+                    + ", CL 0x" + Integer.toHexString(TempFileCache.class.getClassLoader().hashCode())
+                    + ", tempBaseDir " + tmpBaseDirAbsPath + ", executable " + staticTempIsExecutable);
             }
 
-            if(!staticInitError) {
+            if (!staticInitError) {
                 try {
                     initTmpRoot();
                 } catch (final Exception ex) {
@@ -117,13 +119,14 @@ public class TempFileCache {
                 }
             }
             if (DEBUG) {
-                System.err.println("------------------------------------------------------------------ OK: "+(!staticInitError));
+                System.err.println("------------------------------------------------------------------ OK: " + (!staticInitError));
             }
         }
     }
 
     /**
      * Documented way to kick off static initialization
+     *
      * @return true is static initialization was successful
      */
     public static boolean initSingleton() {
@@ -135,66 +138,61 @@ public class TempFileCache {
      * the temp root directory that will hold the temp directories for this
      * instance of the JVM. This is done as follows:
      *
-     *     1. Synchronize on a global lock. Note that for this purpose we will
-     *        use System.out in the absence of a true global lock facility.
-     *        We are careful not to hold this lock too long.
-     *        The global lock is claimed in the static initializer block, calling this method!
+     * 1. Synchronize on a global lock. Note that for this purpose we will use
+     * System.out in the absence of a true global lock facility. We are careful
+     * not to hold this lock too long. The global lock is claimed in the static
+     * initializer block, calling this method!
      *
-     *     2. Check for the existence of the "jnlp.jogamp.tmp.cache.root"
-     *        system property.
+     * 2. Check for the existence of the "jnlp.jogamp.tmp.cache.root" system
+     * property.
      *
-     *         a. If set, then some other thread in a different ClassLoader has
-     *            already created the tmpRootDir, so we just need to
-     *            use it. The remaining steps are skipped.
-     *            However, we check the existence of the tmpRootDir
-     *            and if non existent, we assume a new launch and continue.
+     * a. If set, then some other thread in a different ClassLoader has already
+     * created the tmpRootDir, so we just need to use it. The remaining steps
+     * are skipped. However, we check the existence of the tmpRootDir and if non
+     * existent, we assume a new launch and continue.
      *
-     *         b. If not set, then we are the first thread in this JVM to run,
-     *            and we need to create the the tmpRootDir.
+     * b. If not set, then we are the first thread in this JVM to run, and we
+     * need to create the the tmpRootDir.
      *
-     *     3. Create the tmpRootDir, along with the appropriate locks.
-     *        Note that we perform the operations in the following order,
-     *        prior to creating tmpRootDir itself, to work around the fact that
-     *        the file creation and file lock steps are not atomic, and we need
-     *        to ensure that a newly-created tmpRootDir isn't reaped by a
-     *        concurrently running JVM.
+     * 3. Create the tmpRootDir, along with the appropriate locks. Note that we
+     * perform the operations in the following order, prior to creating
+     * tmpRootDir itself, to work around the fact that the file creation and
+     * file lock steps are not atomic, and we need to ensure that a
+     * newly-created tmpRootDir isn't reaped by a concurrently running JVM.
      *
-     *            create jlnNNNN.tmp using File.createTempFile()
-     *            lock jlnNNNN.tmp
-     *            create jlnNNNN.lck while holding the lock on the .tmp file
-     *            lock jlnNNNN.lck
+     * create jlnNNNN.tmp using File.createTempFile() lock jlnNNNN.tmp create
+     * jlnNNNN.lck while holding the lock on the .tmp file lock jlnNNNN.lck
      *
-     *        Since the Reaper thread will enumerate the list of *.lck files
-     *        before starting, we can guarantee that if there exists a *.lck file
-     *        for an active process, then the corresponding *.tmp file is locked
-     *        by that active process. This guarantee lets us avoid reaping an
-     *        active process' files.
+     * Since the Reaper thread will enumerate the list of *.lck files before
+     * starting, we can guarantee that if there exists a *.lck file for an
+     * active process, then the corresponding *.tmp file is locked by that
+     * active process. This guarantee lets us avoid reaping an active process'
+     * files.
      *
-     *     4. Set the "jnlp.jogamp.tmp.cache.root" system property.
+     * 4. Set the "jnlp.jogamp.tmp.cache.root" system property.
      *
-     *     5. Add a shutdown hook to cleanup jlnNNNN.lck and jlnNNNN.tmp. We
-     *        don't actually expect that this shutdown hook will ever be called,
-     *        but the act of doing this, ensures that the locks never get
-     *        garbage-collected, which is necessary for correct behavior when
-     *        the first ClassLoader is later unloaded, while subsequent Applets
-     *        are still running.
+     * 5. Add a shutdown hook to cleanup jlnNNNN.lck and jlnNNNN.tmp. We don't
+     * actually expect that this shutdown hook will ever be called, but the act
+     * of doing this, ensures that the locks never get garbage-collected, which
+     * is necessary for correct behavior when the first ClassLoader is later
+     * unloaded, while subsequent Applets are still running.
      *
-     *     6. Start the Reaper thread to cleanup old installations.
+     * 6. Start the Reaper thread to cleanup old installations.
      */
     private static void initTmpRoot() throws IOException {
         tmpRootPropValue = System.getProperty(tmpRootPropName);
 
         if (tmpRootPropValue != null) {
             // Make sure that the property is not set to an illegal value
-            if (tmpRootPropValue.indexOf('/') >= 0 ||
-                    tmpRootPropValue.indexOf(File.separatorChar) >= 0) {
+            if (tmpRootPropValue.indexOf('/') >= 0
+                || tmpRootPropValue.indexOf(File.separatorChar) >= 0) {
                 throw new IOException("Illegal value of: " + tmpRootPropName);
             }
 
             // Set tmpRootDir = ${tmpbase}/${jnlp.applet.launcher.tmproot}
             if (DEBUG) {
-                System.err.println("TempFileCache: Trying existing value of: " +
-                        tmpRootPropName + "=" + tmpRootPropValue);
+                System.err.println("TempFileCache: Trying existing value of: "
+                    + tmpRootPropName + "=" + tmpRootPropValue);
             }
             tmpRootDir = new File(tmpBaseDir, tmpRootPropValue);
             if (DEBUG) {
@@ -207,7 +205,7 @@ public class TempFileCache {
             } else {
                 // It is possible to move to a new GlueGen version within the same JVM
                 // In case tmpBaseDir has changed, we should assume a new tmpRootDir.
-                System.err.println("TempFileCache: None existing tmpRootDir = " + tmpRootDir.getAbsolutePath()+", assuming new path due to update");
+                System.err.println("TempFileCache: None existing tmpRootDir = " + tmpRootDir.getAbsolutePath() + ", assuming new path due to update");
                 tmpRootPropValue = null;
                 tmpRootDir = null;
                 System.clearProperty(tmpRootPropName);
@@ -291,13 +289,13 @@ public class TempFileCache {
     }
 
     /**
-     * Called by the Reaper thread to delete old temp directories
-     * Only one of these threads will run per JVM invocation.
+     * Called by the Reaper thread to delete old temp directories Only one of
+     * these threads will run per JVM invocation.
      */
     private static void deleteOldTempDirs() {
         if (DEBUG) {
-            System.err.println("TempFileCache: *** Reaper: deleteOldTempDirs in " +
-                    tmpBaseDir.getAbsolutePath());
+            System.err.println("TempFileCache: *** Reaper: deleteOldTempDirs in "
+                + tmpBaseDir.getAbsolutePath());
         }
 
         // enumerate list of jnl*.lck files, ignore our own jlnNNNN file
@@ -426,13 +424,15 @@ public class TempFileCache {
         path.delete();
     }
 
-    /** Create the {@link #getTempDir()} */
-    public TempFileCache () {
+    /**
+     * Create the {@link #getTempDir()}
+     */
+    public TempFileCache() {
         if (DEBUG) {
-            System.err.println("TempFileCache: new TempFileCache() --------------------- (static ok: "+(!staticInitError)+")");
-            System.err.println("TempFileCache: Thread: "+Thread.currentThread().getName()+", CL 0x"+Integer.toHexString(TempFileCache.class.getClassLoader().hashCode())+", this 0x"+Integer.toHexString(hashCode()));
+            System.err.println("TempFileCache: new TempFileCache() --------------------- (static ok: " + (!staticInitError) + ")");
+            System.err.println("TempFileCache: Thread: " + Thread.currentThread().getName() + ", CL 0x" + Integer.toHexString(TempFileCache.class.getClassLoader().hashCode()) + ", this 0x" + Integer.toHexString(hashCode()));
         }
-        if(!staticInitError) {
+        if (!staticInitError) {
             try {
                 createTmpDir();
             } catch (final Exception ex) {
@@ -441,18 +441,20 @@ public class TempFileCache {
             }
         }
         if (DEBUG) {
-            System.err.println("TempFileCache: tempDir "+individualTmpDir+" (ok: "+(!initError)+")");
+            System.err.println("TempFileCache: tempDir " + individualTmpDir + " (ok: " + (!initError) + ")");
             System.err.println("----------------------------------------------------------");
         }
     }
 
-    /** Delete the {@link #getTempDir()} recursively and remove it's reference. */
+    /**
+     * Delete the {@link #getTempDir()} recursively and remove it's reference.
+     */
     public void destroy() {
         if (DEBUG) {
-            System.err.println("TempFileCache: destroy() --------------------- (static ok: "+(!staticInitError)+")");
-            System.err.println("TempFileCache: Thread: "+Thread.currentThread().getName()+", CL 0x"+Integer.toHexString(TempFileCache.class.getClassLoader().hashCode())+", this 0x"+Integer.toHexString(hashCode()));
+            System.err.println("TempFileCache: destroy() --------------------- (static ok: " + (!staticInitError) + ")");
+            System.err.println("TempFileCache: Thread: " + Thread.currentThread().getName() + ", CL 0x" + Integer.toHexString(TempFileCache.class.getClassLoader().hashCode()) + ", this 0x" + Integer.toHexString(hashCode()));
         }
-        if(!staticInitError) {
+        if (!staticInitError) {
             try {
                 removeAll(individualTmpDir);
             } catch (final Exception ex) {
@@ -466,13 +468,15 @@ public class TempFileCache {
     }
 
     /**
-     * @param forExecutables if {@code true}, method also tests whether the underlying {@link #getBaseDir()} is suitable to load native libraries or launch executables
+     * @param forExecutables if {@code true}, method also tests whether the
+     * underlying {@link #getBaseDir()} is suitable to load native libraries or
+     * launch executables
      * @return true if static and object initialization was successful
      * @see #isTempExecutable()
      * @see #isValid()
      */
     public boolean isValid(final boolean forExecutables) {
-        return !staticInitError && !initError && ( !forExecutables || staticTempIsExecutable );
+        return !staticInitError && !initError && (!forExecutables || staticTempIsExecutable);
     }
 
     /**
@@ -489,7 +493,9 @@ public class TempFileCache {
      *
      * @return
      */
-    public static File getBaseDir() { return tmpBaseDir; }
+    public static File getBaseDir() {
+        return tmpBaseDir;
+    }
 
     /**
      * Root temp directory for this JVM instance. Used to store individual
@@ -518,16 +524,20 @@ public class TempFileCache {
      *
      * @return
      */
-    public static File getRootDir() { return tmpRootDir; }
+    public static File getRootDir() {
+        return tmpRootDir;
+    }
 
     /**
-     * Temporary directory for individual files (eg. native libraries of one ClassLoader instance).
+     * Temporary directory for individual files (eg. native libraries of one
+     * ClassLoader instance).
      * <p>
      * This directory is a sub-folder to {@link #getRootDir()}.
      * </p>
      *
      * <p>
-     * Lifecycle: Within each JVM .. use case dependent, ie. per ClassLoader <b>and</b> per {@link TempFileCache} instance!
+     * Lifecycle: Within each JVM .. use case dependent, ie. per ClassLoader
+     * <b>and</b> per {@link TempFileCache} instance!
      * </p>
      * <p>
      * The directory name is:
@@ -542,15 +552,16 @@ public class TempFileCache {
      *
      * @return
      */
-    public File getTempDir() { return individualTmpDir; }
-
+    public File getTempDir() {
+        return individualTmpDir;
+    }
 
     /**
      * Create the temp directory in tmpRootDir. To do this, we create a temp
-     * file with a ".tmp" extension, and then create a directory of the
-     * same name but without the ".tmp". The temp file, directory, and all
-     * files in the directory will be reaped the next time this is started.
-     * We avoid deleteOnExit, because it doesn't work reliably.
+     * file with a ".tmp" extension, and then create a directory of the same
+     * name but without the ".tmp". The temp file, directory, and all files in
+     * the directory will be reaped the next time this is started. We avoid
+     * deleteOnExit, because it doesn't work reliably.
      */
     private void createTmpDir() throws IOException {
         final File tmpFile = File.createTempFile("jln", ".tmp", tmpRootDir);

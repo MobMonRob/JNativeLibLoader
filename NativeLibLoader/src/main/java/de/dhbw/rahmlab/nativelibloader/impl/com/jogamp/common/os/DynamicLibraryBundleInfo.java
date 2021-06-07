@@ -25,28 +25,32 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of JogAmp Community.
  */
-
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os;
 
 import java.util.List;
 
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.RunnableExecutor;
 
-
 public interface DynamicLibraryBundleInfo {
+
     public static final boolean DEBUG = DynamicLibraryBundle.DEBUG;
 
     /**
-     * Returns {@code true} if tool libraries shall be searched in the system path <i>(default)</i>, otherwise {@code false}.
+     * Returns {@code true} if tool libraries shall be searched in the system
+     * path <i>(default)</i>, otherwise {@code false}.
+     *
      * @since 2.4.0
      */
     public boolean searchToolLibInSystemPath();
 
     /**
-     * Returns {@code true} if system path shall be searched <i>first</i> <i>(default)</i>, rather than searching it last.
+     * Returns {@code true} if system path shall be searched <i>first</i>
+     * <i>(default)</i>, rather than searching it last.
      * <p>
-     * If {@link #searchToolLibInSystemPath()} is {@code false} the return value is ignored.
+     * If {@link #searchToolLibInSystemPath()} is {@code false} the return value
+     * is ignored.
      * </p>
+     *
      * @since 2.4.0
      */
     public boolean searchToolLibSystemPathFirst();
@@ -55,11 +59,14 @@ public interface DynamicLibraryBundleInfo {
      * If a {@link SecurityManager} is installed, user needs link permissions
      * for the named libraries.
      *
-     * @return a list of Tool library names or alternative library name lists.<br>
+     * @return a list of Tool library names or alternative library name
+     * lists.<br>
      * <ul>
-     * <li>GL/GLU example Unix:   [ [ "libGL.so.1", "libGL.so", "GL" ], [ "libGLU.so", "GLU" ] ] </li>
+     * <li>GL/GLU example Unix: [ [ "libGL.so.1", "libGL.so", "GL" ], [
+     * "libGLU.so", "GLU" ] ] </li>
      * <li>GL/GLU example Windows: [ "OpenGL32", "GLU32" ] </li>
-     * <li>Cg/CgGL example: [ [ "libCg.so", "Cg" ], [ "libCgGL.so", "CgGL" ] ] </li>
+     * <li>Cg/CgGL example: [ [ "libCg.so", "Cg" ], [ "libCgGL.so", "CgGL" ] ]
+     * </li>
      * </pre>
      */
     public List<List<String>> getToolLibNames();
@@ -70,62 +77,73 @@ public interface DynamicLibraryBundleInfo {
      *
      * @return a list of Glue library names.<br>
      * <ul>
-     * <li>GL:   [ "nativewindow_x11", "jogl_gl2es12", "jogl_desktop" ] </li>
+     * <li>GL: [ "nativewindow_x11", "jogl_gl2es12", "jogl_desktop" ] </li>
      * <li>NEWT: [ "nativewindow_x11", "newt" ] </li>
-     * <li>Cg:   [ "nativewindow_x11", "jogl_cg" ] </li>
+     * <li>Cg: [ "nativewindow_x11", "jogl_cg" ] </li>
      * </ul><br>
-     * Only the last entry is crucial, ie all other are optional preload dependencies and may generate errors,
-     * which are ignored.
+     * Only the last entry is crucial, ie all other are optional preload
+     * dependencies and may generate errors, which are ignored.
      */
     public List<String> getGlueLibNames();
 
     /**
-     * May return the native libraries <pre>GetProcAddressFunc</pre> names, the first found function is being used.<br>
-     * This could be eg: <pre> glXGetProcAddressARB, glXGetProcAddressARB </pre>.<br>
+     * May return the native libraries
+     * <pre>GetProcAddressFunc</pre> names, the first found function is being
+     * used.<br>
+     * This could be eg:
+     * <pre> glXGetProcAddressARB, glXGetProcAddressARB </pre>.<br>
      * If your Tool does not has this facility, just return null.
+     *
      * @see #toolGetProcAddress(long, String)
      */
-    public List<String> getToolGetProcAddressFuncNameList() ;
+    public List<String> getToolGetProcAddressFuncNameList();
 
     /**
      * May implement the lookup function using the Tools facility.<br>
-     * The actual function pointer is provided to allow proper bootstrapping of the ProcAddressTable,
-     * using one of the provided function names by {@link #getToolGetProcAddressFuncNameList()}.<br>
+     * The actual function pointer is provided to allow proper bootstrapping of
+     * the ProcAddressTable, using one of the provided function names by
+     * {@link #getToolGetProcAddressFuncNameList()}.<br>
      */
     public long toolGetProcAddress(long toolGetProcAddressHandle, String funcName);
 
     /**
      * @param funcName
-     * @return true if {@link #toolGetProcAddress(long, String)} shall be tried before
-     *         the system loader for the given function lookup. Otherwise false.
-     *         Default is <b>true</b>.
+     * @return true if {@link #toolGetProcAddress(long, String)} shall be tried
+     * before the system loader for the given function lookup. Otherwise false.
+     * Default is <b>true</b>.
      */
     public boolean useToolGetProcAdressFirst(String funcName);
 
-    /** @return true if the native library symbols shall be made available for symbol resolution of subsequently loaded libraries. */
+    /**
+     * @return true if the native library symbols shall be made available for
+     * symbol resolution of subsequently loaded libraries.
+     */
     public boolean shallLinkGlobal();
 
     /**
-     * If method returns <code>true</code> <i>and</i> if a {@link SecurityManager} is installed, user needs link permissions
-     * for <b>all</b> libraries, i.e. for <code>new RuntimePermission("loadLibrary.*");</code>!
+     * If method returns <code>true</code> <i>and</i> if a
+     * {@link SecurityManager} is installed, user needs link permissions for
+     * <b>all</b> libraries, i.e. for
+     * <code>new RuntimePermission("loadLibrary.*");</code>!
      *
-     * @return true if the dynamic symbol lookup shall happen system wide, over all loaded libraries.
-     * Otherwise only the loaded native libraries are used for lookup, which shall be the default.
+     * @return true if the dynamic symbol lookup shall happen system wide, over
+     * all loaded libraries. Otherwise only the loaded native libraries are used
+     * for lookup, which shall be the default.
      */
     public boolean shallLookupGlobal();
 
     /**
-     * Returns a suitable {@link RunnableExecutor} implementation, which is being used
-     * to load the <code>tool</code> and <code>glue</code> native libraries.
+     * Returns a suitable {@link RunnableExecutor} implementation, which is
+     * being used to load the <code>tool</code> and <code>glue</code> native
+     * libraries.
      * <p>
      * This allows the generic {@link DynamicLibraryBundle} implementation to
      * load the native libraries on a designated thread.
      * </p>
      * <p>
-     * An implementation may return {@link DynamicLibraryBundle#getDefaultRunnableExecutor()}.
+     * An implementation may return
+     * {@link DynamicLibraryBundle#getDefaultRunnableExecutor()}.
      * </p>
      */
     public RunnableExecutor getLibLoaderExecutor();
 }
-
-

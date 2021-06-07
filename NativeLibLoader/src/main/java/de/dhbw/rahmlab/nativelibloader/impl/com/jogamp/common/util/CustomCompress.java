@@ -41,34 +41,38 @@ import java.util.zip.Inflater;
  * <p>
  * Stream header of deflated data:
  * <ul>
- *   <li>4 bytes magic 0xDEF1A7E0 (Big Endian)</li>
- *   <li>4 bytes integer deflated-size (Big Endian)</li>
- *   <li>4 bytes integer inflated-size (Big Endian)</li>
- *   <li>deflated bytes</li>
+ * <li>4 bytes magic 0xDEF1A7E0 (Big Endian)</li>
+ * <li>4 bytes integer deflated-size (Big Endian)</li>
+ * <li>4 bytes integer inflated-size (Big Endian)</li>
+ * <li>deflated bytes</li>
  * </ul>
  * </p>
  */
 public class CustomCompress {
-    /** Start of stream header for deflated data */
+
+    /**
+     * Start of stream header for deflated data
+     */
     public static final int MAGIC = 0xDEF1A7E0;
 
     /**
      *
-     * @param in {@link InputStream} at start of stream header, i.e. position {@link #MAGIC}.
+     * @param in {@link InputStream} at start of stream header, i.e. position
+     * {@link #MAGIC}.
      * @return the inflated bytes from the stream
      * @throws IOException if an I/O or deflation exception occurs
-     * @throws IllegalArgumentException if {@code inLen} &le; 0 or {@code outLen} &le; 0, as read from header
+     * @throws IllegalArgumentException if {@code inLen} &le; 0 or
+     * {@code outLen} &le; 0, as read from header
      */
     public static byte[] inflateFromStream(final InputStream in)
-            throws IOException, ArrayIndexOutOfBoundsException, IllegalArgumentException
-    {
+        throws IOException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
         final int inLen;
         final int outLen;
         {
             final DataInputStream din = new DataInputStream(in);
             final int _magic = din.readInt();
-            if( _magic != MAGIC ) {
-                throw new IOException("wrong magic: "+Integer.toHexString(_magic)+", expected "+Integer.toHexString(MAGIC));
+            if (_magic != MAGIC) {
+                throw new IOException("wrong magic: " + Integer.toHexString(_magic) + ", expected " + Integer.toHexString(MAGIC));
             }
             inLen = din.readInt();
             outLen = din.readInt();
@@ -78,25 +82,28 @@ public class CustomCompress {
 
     /**
      *
-     * @param in {@link InputStream} at start of deflated bytes, i.e. after the stream header.
+     * @param in {@link InputStream} at start of deflated bytes, i.e. after the
+     * stream header.
      * @param inLen number of deflated bytes in stream {@code in}
      * @param outLen number of inflated {@code output} bytes at {@code outOff}
      * @param output sink for deflated bytes
      * @param outOff offset to {@code output}
-     * @return the inflated bytes from the stream, passing {@code output} for chaining
+     * @return the inflated bytes from the stream, passing {@code output} for
+     * chaining
      * @throws IOException if an I/O or deflation exception occurs
-     * @throws ArrayIndexOutOfBoundsException if {@code outOff} and {@code outLen} exceeds {@code output}
-     * @throws IllegalArgumentException if {@code inLen} &le; 0 or {@code outLen} &le; 0
+     * @throws ArrayIndexOutOfBoundsException if {@code outOff} and
+     * {@code outLen} exceeds {@code output}
+     * @throws IllegalArgumentException if {@code inLen} &le; 0 or
+     * {@code outLen} &le; 0
      */
     public static byte[] inflateFromStream(final InputStream in, final int inLen, final int outLen,
-                                           final byte[] output, final int outOff)
-                                                   throws IOException, ArrayIndexOutOfBoundsException, IllegalArgumentException
-    {
-        if (inLen <= 0 || outLen <= 0 ) {
-            throw new IllegalArgumentException("Length[input "+inLen+", output "+outLen+"]");
+        final byte[] output, final int outOff)
+        throws IOException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+        if (inLen <= 0 || outLen <= 0) {
+            throw new IllegalArgumentException("Length[input " + inLen + ", output " + outLen + "]");
         }
         if (outOff < 0 || output.length < outOff + outLen) {
-            throw new ArrayIndexOutOfBoundsException("output.length "+output.length+", offset "+outOff+", length "+outLen);
+            throw new ArrayIndexOutOfBoundsException("output.length " + output.length + ", offset " + outOff + ", length " + outLen);
         }
         final byte[] input = new byte[inLen];
         int numBytes = 0;
@@ -104,7 +111,7 @@ public class CustomCompress {
             while (true) {
                 final int remBytes = inLen - numBytes;
                 int count;
-                if ( 0 >= remBytes || (count = in.read(input, numBytes, remBytes)) == -1 ) {
+                if (0 >= remBytes || (count = in.read(input, numBytes, remBytes)) == -1) {
                     break;
                 }
                 numBytes += count;
@@ -112,18 +119,18 @@ public class CustomCompress {
         } finally {
             in.close();
         }
-        if( inLen != numBytes ) {
-            throw new IOException("Got "+numBytes+" bytes != expected "+inLen);
+        if (inLen != numBytes) {
+            throw new IOException("Got " + numBytes + " bytes != expected " + inLen);
         }
         try {
             final Inflater inflater = new Inflater();
             inflater.setInput(input, 0, inLen);
             final int outSize = inflater.inflate(output, outOff, outLen);
             inflater.end();
-            if( outLen != outSize ) {
-                throw new IOException("Got inflated "+outSize+" bytes != expected "+outLen);
+            if (outLen != outSize) {
+                throw new IOException("Got inflated " + outSize + " bytes != expected " + outLen);
             }
-        } catch(final DataFormatException dfe) {
+        } catch (final DataFormatException dfe) {
             throw new IOException(dfe);
         }
         return output;
@@ -133,20 +140,22 @@ public class CustomCompress {
      * @param input raw input bytes
      * @param inOff offset to {@code input}
      * @param inLen number of {@code input} bytes at {@code inOff}
-     * @param level compression level 0-9 or {@link Deflater#DEFAULT_COMPRESSION}
+     * @param level compression level 0-9 or
+     * {@link Deflater#DEFAULT_COMPRESSION}
      * @param out sink for deflated bytes
      * @return number of deflated bytes written, not including the header.
      * @throws IOException if an I/O or deflation exception occurs
-     * @throws ArrayIndexOutOfBoundsException if {@code inOff} and {@code inLen} exceeds {@code input}
+     * @throws ArrayIndexOutOfBoundsException if {@code inOff} and {@code inLen}
+     * exceeds {@code input}
      * @throws IllegalArgumentException if {@code inLen} &le; 0
      */
     public static int deflateToStream(final byte[] input, final int inOff, final int inLen,
-                                      final int level, final OutputStream out) throws IOException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-        if (inLen <= 0 ) {
-            throw new IllegalArgumentException("Length[input "+inLen+"]");
+        final int level, final OutputStream out) throws IOException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+        if (inLen <= 0) {
+            throw new IllegalArgumentException("Length[input " + inLen + "]");
         }
         if (inOff < 0 || input.length < inOff + inLen) {
-            throw new ArrayIndexOutOfBoundsException("input.length "+input.length+", offset "+inOff+", length "+inLen);
+            throw new ArrayIndexOutOfBoundsException("input.length " + input.length + ", offset " + inOff + ", length " + inLen);
         }
         final byte[] output = new byte[inLen];
         final Deflater deflater = new Deflater(level);

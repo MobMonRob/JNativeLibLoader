@@ -70,35 +70,37 @@ import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl;
 public class Buffers {
 
     static final boolean DEBUG;
+
     static {
         DEBUG = Debug.debug("Buffers");
     }
 
-    public static final int SIZEOF_BYTE     = 1;
-    public static final int SIZEOF_SHORT    = 2;
-    public static final int SIZEOF_CHAR     = 2;
-    public static final int SIZEOF_INT      = 4;
-    public static final int SIZEOF_FLOAT    = 4;
-    public static final int SIZEOF_LONG     = 8;
-    public static final int SIZEOF_DOUBLE   = 8;
+    public static final int SIZEOF_BYTE = 1;
+    public static final int SIZEOF_SHORT = 2;
+    public static final int SIZEOF_CHAR = 2;
+    public static final int SIZEOF_INT = 4;
+    public static final int SIZEOF_FLOAT = 4;
+    public static final int SIZEOF_LONG = 8;
+    public static final int SIZEOF_DOUBLE = 8;
 
-    protected Buffers() {}
+    protected Buffers() {
+    }
 
     /**
-     * Allocates a new direct ByteBuffer with the specified number of
-     * elements. The returned buffer will have its byte order set to
-     * the host platform's native byte order.
+     * Allocates a new direct ByteBuffer with the specified number of elements.
+     * The returned buffer will have its byte order set to the host platform's
+     * native byte order.
      */
     public static ByteBuffer newDirectByteBuffer(final int numElements) {
         return nativeOrder(ByteBuffer.allocateDirect(numElements));
     }
 
     public static ByteBuffer newDirectByteBuffer(final byte[] values, final int offset, final int length) {
-        return (ByteBuffer)newDirectByteBuffer(length).put(values, offset, length).rewind();
+        return (ByteBuffer) newDirectByteBuffer(length).put(values, offset, length).rewind();
     }
 
     public static ByteBuffer newDirectByteBuffer(final byte[] values, final int offset) {
-        return newDirectByteBuffer(values, offset, values.length-offset);
+        return newDirectByteBuffer(values, offset, values.length - offset);
     }
 
     public static ByteBuffer newDirectByteBuffer(final byte[] values) {
@@ -107,15 +109,15 @@ public class Buffers {
 
     /**
      * Allocates a new direct DoubleBuffer with the specified number of
-     * elements. The returned buffer will have its byte order set to
-     * the host platform's native byte order.
+     * elements. The returned buffer will have its byte order set to the host
+     * platform's native byte order.
      */
     public static DoubleBuffer newDirectDoubleBuffer(final int numElements) {
         return newDirectByteBuffer(numElements * SIZEOF_DOUBLE).asDoubleBuffer();
     }
 
     public static DoubleBuffer newDirectDoubleBuffer(final double[] values, final int offset, final int length) {
-        return (DoubleBuffer)newDirectDoubleBuffer(length).put(values, offset, length).rewind();
+        return (DoubleBuffer) newDirectDoubleBuffer(length).put(values, offset, length).rewind();
     }
 
     public static DoubleBuffer newDirectDoubleBuffer(final double[] values, final int offset) {
@@ -127,16 +129,16 @@ public class Buffers {
     }
 
     /**
-     * Allocates a new direct FloatBuffer with the specified number of
-     * elements. The returned buffer will have its byte order set to
-     * the host platform's native byte order.
+     * Allocates a new direct FloatBuffer with the specified number of elements.
+     * The returned buffer will have its byte order set to the host platform's
+     * native byte order.
      */
     public static FloatBuffer newDirectFloatBuffer(final int numElements) {
         return newDirectByteBuffer(numElements * SIZEOF_FLOAT).asFloatBuffer();
     }
 
     public static FloatBuffer newDirectFloatBuffer(final float[] values, final int offset, final int length) {
-        return (FloatBuffer)newDirectFloatBuffer(length).put(values, offset, length).rewind();
+        return (FloatBuffer) newDirectFloatBuffer(length).put(values, offset, length).rewind();
     }
 
     public static FloatBuffer newDirectFloatBuffer(final float[] values, final int offset) {
@@ -148,16 +150,16 @@ public class Buffers {
     }
 
     /**
-     * Allocates a new direct IntBuffer with the specified number of
-     * elements. The returned buffer will have its byte order set to
-     * the host platform's native byte order.
+     * Allocates a new direct IntBuffer with the specified number of elements.
+     * The returned buffer will have its byte order set to the host platform's
+     * native byte order.
      */
     public static IntBuffer newDirectIntBuffer(final int numElements) {
         return newDirectByteBuffer(numElements * SIZEOF_INT).asIntBuffer();
     }
 
     public static IntBuffer newDirectIntBuffer(final int[] values, final int offset, final int length) {
-        return (IntBuffer)newDirectIntBuffer(length).put(values, offset, length).rewind();
+        return (IntBuffer) newDirectIntBuffer(length).put(values, offset, length).rewind();
     }
 
     public static IntBuffer newDirectIntBuffer(final int[] values, final int offset) {
@@ -169,16 +171,16 @@ public class Buffers {
     }
 
     /**
-     * Allocates a new direct LongBuffer with the specified number of
-     * elements. The returned buffer will have its byte order set to
-     * the host platform's native byte order.
+     * Allocates a new direct LongBuffer with the specified number of elements.
+     * The returned buffer will have its byte order set to the host platform's
+     * native byte order.
      */
     public static LongBuffer newDirectLongBuffer(final int numElements) {
         return newDirectByteBuffer(numElements * SIZEOF_LONG).asLongBuffer();
     }
 
     public static LongBuffer newDirectLongBuffer(final long[] values, final int offset, final int length) {
-        return (LongBuffer)newDirectLongBuffer(length).put(values, offset, length).rewind();
+        return (LongBuffer) newDirectLongBuffer(length).put(values, offset, length).rewind();
     }
 
     public static LongBuffer newDirectLongBuffer(final long[] values, final int offset) {
@@ -190,16 +192,16 @@ public class Buffers {
     }
 
     /**
-     * Allocates a new direct ShortBuffer with the specified number of
-     * elements. The returned buffer will have its byte order set to
-     * the host platform's native byte order.
+     * Allocates a new direct ShortBuffer with the specified number of elements.
+     * The returned buffer will have its byte order set to the host platform's
+     * native byte order.
      */
     public static ShortBuffer newDirectShortBuffer(final int numElements) {
         return newDirectByteBuffer(numElements * SIZEOF_SHORT).asShortBuffer();
     }
 
     public static ShortBuffer newDirectShortBuffer(final short[] values, final int offset, final int length) {
-        return (ShortBuffer)newDirectShortBuffer(length).put(values, offset, length).rewind();
+        return (ShortBuffer) newDirectShortBuffer(length).put(values, offset, length).rewind();
     }
 
     public static ShortBuffer newDirectShortBuffer(final short[] values, final int offset) {
@@ -211,16 +213,16 @@ public class Buffers {
     }
 
     /**
-     * Allocates a new direct CharBuffer with the specified number of
-     * elements. The returned buffer will have its byte order set to
-     * the host platform's native byte order.
+     * Allocates a new direct CharBuffer with the specified number of elements.
+     * The returned buffer will have its byte order set to the host platform's
+     * native byte order.
      */
     public static CharBuffer newDirectCharBuffer(final int numElements) {
         return newDirectByteBuffer(numElements * SIZEOF_SHORT).asCharBuffer();
     }
 
     public static CharBuffer newDirectCharBuffer(final char[] values, final int offset, final int length) {
-        return (CharBuffer)newDirectCharBuffer(length).put(values, offset, length).rewind();
+        return (CharBuffer) newDirectCharBuffer(length).put(values, offset, length).rewind();
     }
 
     public static CharBuffer newDirectCharBuffer(final char[] values, final int offset) {
@@ -233,6 +235,7 @@ public class Buffers {
 
     /**
      * Calls slice on the specified buffer while maintaining the byteorder.
+     *
      * @see #slice(java.nio.Buffer, int, int)
      */
     @SuppressWarnings("unchecked")
@@ -257,10 +260,9 @@ public class Buffers {
     }
 
     /**
-     * Slices the specified buffer with offset as position and offset+size as limit
-     * while maintaining the byteorder.
-     * Concurrency warning: this method changes the buffers position and limit but
-     * will restore it before return.
+     * Slices the specified buffer with offset as position and offset+size as
+     * limit while maintaining the byteorder. Concurrency warning: this method
+     * changes the buffers position and limit but will restore it before return.
      */
     public static <B extends Buffer> B slice(final B buffer, final int offset, final int size) {
         final int pos = buffer.position();
@@ -268,7 +270,7 @@ public class Buffers {
 
         B slice = null;
         try {
-            buffer.position(offset).limit(offset+size);
+            buffer.position(offset).limit(offset + size);
             slice = slice(buffer);
         } finally {
             buffer.position(pos).limit(limit);
@@ -278,24 +280,27 @@ public class Buffers {
     }
 
     /**
-     * Slices a ByteBuffer <i>or</i> a FloatBuffer to a FloatBuffer
-     * at the given position with the given size in float-space.
+     * Slices a ByteBuffer <i>or</i> a FloatBuffer to a FloatBuffer at the given
+     * position with the given size in float-space.
      * <p>
      * The returned sliced buffer's start position is always zero.
      * </p>
      * <p>
-     * The returned sliced buffer is {@link FloatBuffer#mark() marked} at it's {@link FloatBuffer#position() start position}. Hence
-     * {@link FloatBuffer#reset()} will rewind it to start after applying relative operations like {@link FloatBuffer#get()}.
+     * The returned sliced buffer is {@link FloatBuffer#mark() marked} at it's
+     * {@link FloatBuffer#position() start position}. Hence
+     * {@link FloatBuffer#reset()} will rewind it to start after applying
+     * relative operations like {@link FloatBuffer#get()}.
      * </p>
      * <p>
-     * Using a ByteBuffer as the source guarantees
-     * keeping the source native order programmatically.
-     * This works around <a href="http://code.google.com/p/android/issues/detail?id=16434">Honeycomb / Android 3.0 Issue 16434</a>.
-     * This bug is resolved at least in Android 3.2.
+     * Using a ByteBuffer as the source guarantees keeping the source native
+     * order programmatically. This works around
+     * <a href="http://code.google.com/p/android/issues/detail?id=16434">Honeycomb
+     * / Android 3.0 Issue 16434</a>. This bug is resolved at least in Android
+     * 3.2.
      * </p>
      *
      * @param buf source Buffer, maybe ByteBuffer (recommended) or FloatBuffer.
-     *            Buffer's position is ignored and floatPos is being used.
+     * Buffer's position is ignored and floatPos is being used.
      * @param floatStartPos {@link Buffers#SIZEOF_FLOAT} position
      * @param floatSize {@link Buffers#SIZEOF_FLOAT} size
      * @return FloatBuffer w/ native byte order as given ByteBuffer
@@ -303,7 +308,7 @@ public class Buffers {
     public static final FloatBuffer slice2Float(final Buffer buf, final int floatStartPos, final int floatSize) {
         final int pos;
         final int limit;
-        if(null != buf) {
+        if (null != buf) {
             pos = buf.position();
             limit = buf.limit();
         } else {
@@ -312,21 +317,21 @@ public class Buffers {
         }
         final FloatBuffer res;
         try {
-            if(buf instanceof ByteBuffer) {
+            if (buf instanceof ByteBuffer) {
                 final ByteBuffer bb = (ByteBuffer) buf;
-                bb.position( floatStartPos * Buffers.SIZEOF_FLOAT );
-                bb.limit( (floatStartPos + floatSize) * Buffers.SIZEOF_FLOAT );
+                bb.position(floatStartPos * Buffers.SIZEOF_FLOAT);
+                bb.limit((floatStartPos + floatSize) * Buffers.SIZEOF_FLOAT);
                 res = bb.slice().order(bb.order()).asFloatBuffer(); // slice and duplicate may change byte order
-            } else if(buf instanceof FloatBuffer) {
+            } else if (buf instanceof FloatBuffer) {
                 final FloatBuffer fb = (FloatBuffer) buf;
-                fb.position( floatStartPos );
-                fb.limit( floatStartPos + floatSize );
+                fb.position(floatStartPos);
+                fb.limit(floatStartPos + floatSize);
                 res = fb.slice(); // slice and duplicate may change byte order
             } else {
                 throw new InternalError("Buffer not ByteBuffer, nor FloarBuffer, nor backing array given");
             }
         } finally {
-            if(null != buf) {
+            if (null != buf) {
                 buf.position(pos).limit(limit);
             }
         }
@@ -335,19 +340,24 @@ public class Buffers {
     }
 
     /**
-     * Slices a primitive float backing array to a FloatBuffer at the given position with the given size
-     * in float-space by {@link FloatBuffer#wrap(float[], int, int) wrapping} the backing array.
+     * Slices a primitive float backing array to a FloatBuffer at the given
+     * position with the given size in float-space by
+     * {@link FloatBuffer#wrap(float[], int, int) wrapping} the backing array.
      * <p>
-     * Due to {@link FloatBuffer#wrap(float[], int, int) wrapping} the backing array,
-     * the returned sliced buffer's {@link FloatBuffer#position() start position} equals
-     * the given <code>floatStartPos</code> within the given backing array
-     * while it's {@link FloatBuffer#arrayOffset() array-offset} is zero.
-     * This has the advantage of being able to dismiss the {@link FloatBuffer#arrayOffset() array-offset}
-     * in user code, while only being required to consider it's {@link FloatBuffer#position() position}.
+     * Due to {@link FloatBuffer#wrap(float[], int, int) wrapping} the backing
+     * array, the returned sliced buffer's
+     * {@link FloatBuffer#position() start position} equals the given
+     * <code>floatStartPos</code> within the given backing array while it's
+     * {@link FloatBuffer#arrayOffset() array-offset} is zero. This has the
+     * advantage of being able to dismiss the
+     * {@link FloatBuffer#arrayOffset() array-offset} in user code, while only
+     * being required to consider it's {@link FloatBuffer#position() position}.
      * </p>
      * <p>
-     * The returned sliced buffer is {@link FloatBuffer#mark() marked} at it's {@link FloatBuffer#position() start position}. Hence
-     * {@link FloatBuffer#reset()} will rewind it to start after applying relative operations like {@link FloatBuffer#get()}.
+     * The returned sliced buffer is {@link FloatBuffer#mark() marked} at it's
+     * {@link FloatBuffer#position() start position}. Hence
+     * {@link FloatBuffer#reset()} will rewind it to start after applying
+     * relative operations like {@link FloatBuffer#get()}.
      * </p>
      *
      * @param backing source float array
@@ -359,19 +369,17 @@ public class Buffers {
         return (FloatBuffer) FloatBuffer.wrap(backing, floatStartPos, floatSize).mark();
     }
 
-
     /**
-     * Helper routine to set a ByteBuffer to the native byte order, if
-     * that operation is supported by the underlying NIO
-     * implementation.
+     * Helper routine to set a ByteBuffer to the native byte order, if that
+     * operation is supported by the underlying NIO implementation.
      */
     public static ByteBuffer nativeOrder(final ByteBuffer buf) {
         return buf.order(ByteOrder.nativeOrder());
     }
 
     /**
-     * Returns the size of a single element of the given buffer in bytes
-     * or <code>0</code> if the given buffer is <code>null</code>.
+     * Returns the size of a single element of the given buffer in bytes or
+     * <code>0</code> if the given buffer is <code>null</code>.
      */
     public static int sizeOfBufferElem(final Object buffer) {
         if (buffer == null) {
@@ -398,11 +406,14 @@ public class Buffers {
     }
 
     /**
-     * Returns the number of remaining elements of the given anonymous <code>buffer</code>.
+     * Returns the number of remaining elements of the given anonymous
+     * <code>buffer</code>.
      *
-     * @param buffer Anonymous <i>Buffer</i> of type {@link NativeBuffer} or a derivation of {@link Buffer}.
+     * @param buffer Anonymous <i>Buffer</i> of type {@link NativeBuffer} or a
+     * derivation of {@link Buffer}.
      * @return If <code>buffer</code> is null, returns <code>0<code>, otherwise the remaining size in elements.
-     * @throws IllegalArgumentException if <code>buffer</code> is of invalid type.
+     * @throws IllegalArgumentException if <code>buffer</code> is of invalid
+     * type.
      */
     public static int remainingElem(final Object buffer) throws IllegalArgumentException {
         if (buffer == null) {
@@ -413,16 +424,19 @@ public class Buffers {
         } else if (buffer instanceof NativeBuffer) {
             return ((NativeBuffer<?>) buffer).remaining();
         } else {
-            throw new IllegalArgumentException("Unsupported anonymous buffer type: "+buffer.getClass().getCanonicalName());
+            throw new IllegalArgumentException("Unsupported anonymous buffer type: " + buffer.getClass().getCanonicalName());
         }
     }
 
     /**
-     * Returns the number of remaining bytes of the given anonymous <code>buffer</code>.
+     * Returns the number of remaining bytes of the given anonymous
+     * <code>buffer</code>.
      *
-     * @param buffer Anonymous <i>Buffer</i> of type {@link NativeBuffer} or a derivation of {@link Buffer}.
+     * @param buffer Anonymous <i>Buffer</i> of type {@link NativeBuffer} or a
+     * derivation of {@link Buffer}.
      * @return If <code>buffer</code> is null, returns <code>0<code>, otherwise the remaining size in bytes.
-     * @throws IllegalArgumentException if <code>buffer</code> is of invalid type.
+     * @throws IllegalArgumentException if <code>buffer</code> is of invalid
+     * type.
      */
     public static int remainingBytes(final Object buffer) throws IllegalArgumentException {
         if (buffer == null) {
@@ -446,21 +460,21 @@ public class Buffers {
             } else if (buffer instanceof CharBuffer) {
                 bytesRemaining = elementsRemaining * SIZEOF_CHAR;
             } else {
-                throw new InternalError("Unsupported Buffer type: "+buffer.getClass().getCanonicalName());
+                throw new InternalError("Unsupported Buffer type: " + buffer.getClass().getCanonicalName());
             }
         } else if (buffer instanceof NativeBuffer) {
             final NativeBuffer<?> nb = (NativeBuffer<?>) buffer;
             bytesRemaining = nb.remaining() * nb.elementSize();
         } else {
-            throw new IllegalArgumentException("Unsupported anonymous buffer type: "+buffer.getClass().getCanonicalName());
+            throw new IllegalArgumentException("Unsupported anonymous buffer type: " + buffer.getClass().getCanonicalName());
         }
         return bytesRemaining;
     }
 
     /**
-     * Helper routine to get the Buffer byte offset by taking into
-     * account the Buffer position and the underlying type.  This is
-     * the total offset for Direct Buffers.
+     * Helper routine to get the Buffer byte offset by taking into account the
+     * Buffer position and the underlying type. This is the total offset for
+     * Direct Buffers.
      */
     public static int getDirectBufferByteOffset(final Object buf) {
         if (buf == null) {
@@ -485,17 +499,20 @@ public class Buffers {
             }
         } else if (buf instanceof NativeBuffer) {
             final NativeBuffer<?> nb = (NativeBuffer<?>) buf;
-            return nb.position() * nb.elementSize() ;
+            return nb.position() * nb.elementSize();
         }
 
         throw new IllegalArgumentException("Disallowed array backing store type in buffer " + buf.getClass().getName());
     }
 
     /**
-     * Helper routine to return the array backing store reference from
-     * a Buffer object.
-     * @throws UnsupportedOperationException if the passed Object does not have an array backing store
-     * @throws IllegalArgumentException if the passed Object is neither of type {@link java.nio.Buffer} or {@link NativeBuffer}.
+     * Helper routine to return the array backing store reference from a Buffer
+     * object.
+     *
+     * @throws UnsupportedOperationException if the passed Object does not have
+     * an array backing store
+     * @throws IllegalArgumentException if the passed Object is neither of type
+     * {@link java.nio.Buffer} or {@link NativeBuffer}.
      */
     public static Object getArray(final Object buf) throws UnsupportedOperationException, IllegalArgumentException {
         if (buf == null) {
@@ -511,10 +528,10 @@ public class Buffers {
     }
 
     /**
-     * Helper routine to get the full byte offset from the beginning of
-     * the array that is the storage for the indirect Buffer
-     * object.  The array offset also includes the position offset
-     * within the buffer, in addition to any array offset.
+     * Helper routine to get the full byte offset from the beginning of the
+     * array that is the storage for the indirect Buffer object. The array
+     * offset also includes the position offset within the buffer, in addition
+     * to any array offset.
      */
     public static int getIndirectBufferByteOffset(final Object buf) {
         if (buf == null) {
@@ -539,23 +556,22 @@ public class Buffers {
             }
         } else if (buf instanceof NativeBuffer) {
             final NativeBuffer<?> nb = (NativeBuffer<?>) buf;
-            return nb.elementSize() * ( nb.arrayOffset() + nb.position() );
+            return nb.elementSize() * (nb.arrayOffset() + nb.position());
         }
 
         throw new IllegalArgumentException("Unknown buffer type " + buf.getClass().getName());
     }
-
 
     //----------------------------------------------------------------------
     // Copy routines (type-to-type)
     //
     /**
      * Copies the <i>remaining</i> elements (as defined by
-     * <code>limit() - position()</code>) in the passed ByteBuffer into
-     * a newly-allocated direct ByteBuffer. The returned buffer will
-     * have its byte order set to the host platform's native byte
-     * order. The position of the newly-allocated buffer will be zero,
-     * and the position of the passed buffer is unchanged.
+     * <code>limit() - position()</code>) in the passed ByteBuffer into a
+     * newly-allocated direct ByteBuffer. The returned buffer will have its byte
+     * order set to the host platform's native byte order. The position of the
+     * newly-allocated buffer will be zero, and the position of the passed
+     * buffer is unchanged.
      */
     public static ByteBuffer copyByteBuffer(final ByteBuffer orig) {
         final int op0 = orig.position();
@@ -568,11 +584,11 @@ public class Buffers {
 
     /**
      * Copies the <i>remaining</i> elements (as defined by
-     * <code>limit() - position()</code>) in the passed FloatBuffer
-     * into a newly-allocated direct FloatBuffer. The returned buffer
-     * will have its byte order set to the host platform's native byte
-     * order. The position of the newly-allocated buffer will be zero,
-     * and the position of the passed buffer is unchanged.
+     * <code>limit() - position()</code>) in the passed FloatBuffer into a
+     * newly-allocated direct FloatBuffer. The returned buffer will have its
+     * byte order set to the host platform's native byte order. The position of
+     * the newly-allocated buffer will be zero, and the position of the passed
+     * buffer is unchanged.
      */
     public static FloatBuffer copyFloatBuffer(final FloatBuffer orig) {
         return copyFloatBufferAsByteBuffer(orig).asFloatBuffer();
@@ -580,11 +596,11 @@ public class Buffers {
 
     /**
      * Copies the <i>remaining</i> elements (as defined by
-     * <code>limit() - position()</code>) in the passed IntBuffer
-     * into a newly-allocated direct IntBuffer. The returned buffer
-     * will have its byte order set to the host platform's native byte
-     * order. The position of the newly-allocated buffer will be zero,
-     * and the position of the passed buffer is unchanged.
+     * <code>limit() - position()</code>) in the passed IntBuffer into a
+     * newly-allocated direct IntBuffer. The returned buffer will have its byte
+     * order set to the host platform's native byte order. The position of the
+     * newly-allocated buffer will be zero, and the position of the passed
+     * buffer is unchanged.
      */
     public static IntBuffer copyIntBuffer(final IntBuffer orig) {
         return copyIntBufferAsByteBuffer(orig).asIntBuffer();
@@ -592,11 +608,11 @@ public class Buffers {
 
     /**
      * Copies the <i>remaining</i> elements (as defined by
-     * <code>limit() - position()</code>) in the passed ShortBuffer
-     * into a newly-allocated direct ShortBuffer. The returned buffer
-     * will have its byte order set to the host platform's native byte
-     * order. The position of the newly-allocated buffer will be zero,
-     * and the position of the passed buffer is unchanged.
+     * <code>limit() - position()</code>) in the passed ShortBuffer into a
+     * newly-allocated direct ShortBuffer. The returned buffer will have its
+     * byte order set to the host platform's native byte order. The position of
+     * the newly-allocated buffer will be zero, and the position of the passed
+     * buffer is unchanged.
      */
     public static ShortBuffer copyShortBuffer(final ShortBuffer orig) {
         return copyShortBufferAsByteBuffer(orig).asShortBuffer();
@@ -607,11 +623,11 @@ public class Buffers {
     //
     /**
      * Copies the <i>remaining</i> elements (as defined by
-     * <code>limit() - position()</code>) in the passed FloatBuffer
-     * into a newly-allocated direct ByteBuffer. The returned buffer
-     * will have its byte order set to the host platform's native byte
-     * order. The position of the newly-allocated buffer will be zero,
-     * and the position of the passed buffer is unchanged.
+     * <code>limit() - position()</code>) in the passed FloatBuffer into a
+     * newly-allocated direct ByteBuffer. The returned buffer will have its byte
+     * order set to the host platform's native byte order. The position of the
+     * newly-allocated buffer will be zero, and the position of the passed
+     * buffer is unchanged.
      */
     public static ByteBuffer copyFloatBufferAsByteBuffer(final FloatBuffer orig) {
         final int op0 = orig.position();
@@ -624,11 +640,11 @@ public class Buffers {
 
     /**
      * Copies the <i>remaining</i> elements (as defined by
-     * <code>limit() - position()</code>) in the passed IntBuffer into
-     * a newly-allocated direct ByteBuffer. The returned buffer will
-     * have its byte order set to the host platform's native byte
-     * order. The position of the newly-allocated buffer will be zero,
-     * and the position of the passed buffer is unchanged.
+     * <code>limit() - position()</code>) in the passed IntBuffer into a
+     * newly-allocated direct ByteBuffer. The returned buffer will have its byte
+     * order set to the host platform's native byte order. The position of the
+     * newly-allocated buffer will be zero, and the position of the passed
+     * buffer is unchanged.
      */
     public static ByteBuffer copyIntBufferAsByteBuffer(final IntBuffer orig) {
         final int op0 = orig.position();
@@ -641,11 +657,11 @@ public class Buffers {
 
     /**
      * Copies the <i>remaining</i> elements (as defined by
-     * <code>limit() - position()</code>) in the passed ShortBuffer
-     * into a newly-allocated direct ByteBuffer. The returned buffer
-     * will have its byte order set to the host platform's native byte
-     * order. The position of the newly-allocated buffer will be zero,
-     * and the position of the passed buffer is unchanged.
+     * <code>limit() - position()</code>) in the passed ShortBuffer into a
+     * newly-allocated direct ByteBuffer. The returned buffer will have its byte
+     * order set to the host platform's native byte order. The position of the
+     * newly-allocated buffer will be zero, and the position of the passed
+     * buffer is unchanged.
      */
     public static ByteBuffer copyShortBufferAsByteBuffer(final ShortBuffer orig) {
         final int op0 = orig.position();
@@ -659,47 +675,51 @@ public class Buffers {
     //----------------------------------------------------------------------
     // Conversion routines
     //
-
     /**
      * @param source the source array
      * @param soffset the offset
-     * @param dest the target array, if null, a new array is being created with size len.
+     * @param dest the target array, if null, a new array is being created with
+     * size len.
      * @param doffset the offset in the dest array
-     * @param len the payload of elements to be copied, if <code>len < 0</code> then <code>len = source.length - soffset</code>
+     * @param len the payload of elements to be copied, if <code>len < 0</code>
+     * then <code>len = source.length - soffset</code>
      * @return the passed or newly created target array
      */
     public static float[] getFloatArray(final double[] source, final int soffset, float[] dest, int doffset, int len) {
-        if(0>len) {
+        if (0 > len) {
             len = source.length - soffset;
         }
-        if(len > source.length - soffset) {
-            throw new IllegalArgumentException("payload ("+len+") greater than remaining source bytes [len "+source.length+", offset "+soffset+"]");
+        if (len > source.length - soffset) {
+            throw new IllegalArgumentException("payload (" + len + ") greater than remaining source bytes [len " + source.length + ", offset " + soffset + "]");
         }
-        if(null==dest) {
+        if (null == dest) {
             dest = new float[len];
             doffset = 0;
         }
-        if(len > dest.length - doffset) {
-            throw new IllegalArgumentException("payload ("+len+") greater than remaining dest bytes [len "+dest.length+", offset "+doffset+"]");
+        if (len > dest.length - doffset) {
+            throw new IllegalArgumentException("payload (" + len + ") greater than remaining dest bytes [len " + dest.length + ", offset " + doffset + "]");
         }
-        for(int i=0; i<len; i++) {
-            dest[doffset+i] = (float) source[soffset+i];
+        for (int i = 0; i < len; i++) {
+            dest[doffset + i] = (float) source[soffset + i];
         }
         return dest;
     }
 
     /**
      * No rewind or repositioning is performed.
-     * @param source the source buffer, which elements from it's current position and it's limit are being copied
-     * @param dest the target buffer, if null, a new buffer is being created with size </code>source.remaining()</code>
+     *
+     * @param source the source buffer, which elements from it's current
+     * position and it's limit are being copied
+     * @param dest the target buffer, if null, a new buffer is being created
+     * with size </code>source.remaining()</code>
      * @return the passed or newly created target buffer
      */
     public static FloatBuffer getFloatBuffer(final DoubleBuffer source, FloatBuffer dest) {
-        if(null == dest) {
+        if (null == dest) {
             dest = newDirectFloatBuffer(source.remaining());
         }
-        if( dest.remaining() < source.remaining() ) {
-            throw new IllegalArgumentException("payload ("+source.remaining()+") is greater than remaining dest bytes: "+dest.remaining());
+        if (dest.remaining() < source.remaining()) {
+            throw new IllegalArgumentException("payload (" + source.remaining() + ") is greater than remaining dest bytes: " + dest.remaining());
         }
         while (source.hasRemaining()) {
             dest.put((float) source.get());
@@ -710,43 +730,48 @@ public class Buffers {
     /**
      * @param source the source array
      * @param soffset the offset
-     * @param dest the target array, if null, a new array is being created with size len.
+     * @param dest the target array, if null, a new array is being created with
+     * size len.
      * @param doffset the offset in the dest array
-     * @param len the payload of elements to be copied, if <code>len < 0</code> then <code>len = source.length - soffset</code>
+     * @param len the payload of elements to be copied, if <code>len < 0</code>
+     * then <code>len = source.length - soffset</code>
      * @return the passed or newly created target array
      */
     public static double[] getDoubleArray(final float[] source, final int soffset, double[] dest, int doffset, int len) {
-        if(0>len) {
+        if (0 > len) {
             len = source.length - soffset;
         }
-        if(len > source.length - soffset) {
-            throw new IllegalArgumentException("payload ("+len+") greater than remaining source bytes [len "+source.length+", offset "+soffset+"]");
+        if (len > source.length - soffset) {
+            throw new IllegalArgumentException("payload (" + len + ") greater than remaining source bytes [len " + source.length + ", offset " + soffset + "]");
         }
-        if(null==dest) {
+        if (null == dest) {
             dest = new double[len];
             doffset = 0;
         }
-        if(len > dest.length - doffset) {
-            throw new IllegalArgumentException("payload ("+len+") greater than remaining dest bytes [len "+dest.length+", offset "+doffset+"]");
+        if (len > dest.length - doffset) {
+            throw new IllegalArgumentException("payload (" + len + ") greater than remaining dest bytes [len " + dest.length + ", offset " + doffset + "]");
         }
-        for(int i=0; i<len; i++) {
-            dest[doffset+i] = source[soffset+i];
+        for (int i = 0; i < len; i++) {
+            dest[doffset + i] = source[soffset + i];
         }
         return dest;
     }
 
     /**
      * No rewind or repositioning is performed.
-     * @param source the source buffer, which elements from it's current position and it's limit are being copied
-     * @param dest the target buffer, if null, a new buffer is being created with size </code>source.remaining()</code>
+     *
+     * @param source the source buffer, which elements from it's current
+     * position and it's limit are being copied
+     * @param dest the target buffer, if null, a new buffer is being created
+     * with size </code>source.remaining()</code>
      * @return the passed or newly created target buffer
      */
     public static DoubleBuffer getDoubleBuffer(final FloatBuffer source, DoubleBuffer dest) {
-        if(null == dest) {
+        if (null == dest) {
             dest = newDirectDoubleBuffer(source.remaining());
         }
-        if( dest.remaining() < source.remaining() ) {
-            throw new IllegalArgumentException("payload ("+source.remaining()+") is greater than remaining dest bytes: "+dest.remaining());
+        if (dest.remaining() < source.remaining()) {
+            throw new IllegalArgumentException("payload (" + source.remaining() + ") is greater than remaining dest bytes: " + dest.remaining());
         }
         while (source.hasRemaining()) {
             dest.put(source.get());
@@ -754,11 +779,9 @@ public class Buffers {
         return dest;
     }
 
-
     //----------------------------------------------------------------------
     // Convenient put methods with generic target Buffer w/o value range conversion, i.e. normalization
     //
-
     @SuppressWarnings("unchecked")
     public static <B extends Buffer> B put(final B dest, final Buffer src) {
         if ((dest instanceof ByteBuffer) && (src instanceof ByteBuffer)) {
@@ -838,10 +861,10 @@ public class Buffers {
             return (B) ((FloatBuffer) dest).put(v);
         } else if (dest instanceof DoubleBuffer) {
             return (B) ((DoubleBuffer) dest).put(v);
-/* TODO FixedPoint required
+            /* TODO FixedPoint required
         } else if (dest instanceof IntBuffer) {
             return (B) ((IntBuffer) dest).put(FixedPoint.toFixed(v));
-*/
+             */
         } else {
             throw new IllegalArgumentException("Float doesn't match Buffer Class: " + dest);
         }
@@ -859,97 +882,111 @@ public class Buffers {
     //----------------------------------------------------------------------
     // Convenient put methods with generic target Buffer and value range conversion, i.e. normalization
     //
-
     /**
-     * Store byte source value in given buffer after normalizing it to the destination value range
-     * considering signed and unsigned source and destination representation.
+     * Store byte source value in given buffer after normalizing it to the
+     * destination value range considering signed and unsigned source and
+     * destination representation.
      *
-     * @param dest One of {@link ByteBuffer}, {@link ShortBuffer}, {@link IntBuffer}, {@link FloatBuffer}
-     * @param dSigned  true if destination buffer holds signed values, false if destination buffer holds unsigned values
+     * @param dest One of
+     * {@link ByteBuffer}, {@link ShortBuffer}, {@link IntBuffer}, {@link FloatBuffer}
+     * @param dSigned true if destination buffer holds signed values, false if
+     * destination buffer holds unsigned values
      * @param v source byte value to be put in dest buffer
-     * @param sSigned  true if source represents a signed value, false if source represents an unsigned value
+     * @param sSigned true if source represents a signed value, false if source
+     * represents an unsigned value
      */
     @SuppressWarnings("unchecked")
     public static <B extends Buffer> B putNb(final B dest, final boolean dSigned, final byte v, final boolean sSigned) {
         if (dest instanceof ByteBuffer) {
-            return (B) ((ByteBuffer) dest).put( v );
+            return (B) ((ByteBuffer) dest).put(v);
         } else if (dest instanceof ShortBuffer) {
-            return (B) ((ShortBuffer) dest).put( ValueConv.byte_to_short(v, sSigned, dSigned) );
+            return (B) ((ShortBuffer) dest).put(ValueConv.byte_to_short(v, sSigned, dSigned));
         } else if (dest instanceof IntBuffer) {
-            return (B) ((IntBuffer) dest).put( ValueConv.byte_to_int(v, sSigned, dSigned) );
+            return (B) ((IntBuffer) dest).put(ValueConv.byte_to_int(v, sSigned, dSigned));
         } else if (dest instanceof FloatBuffer) {
-            return (B) ((FloatBuffer) dest).put( ValueConv.byte_to_float(v, sSigned) );
+            return (B) ((FloatBuffer) dest).put(ValueConv.byte_to_float(v, sSigned));
         } else {
             throw new IllegalArgumentException("Byte doesn't match Buffer Class: " + dest);
         }
     }
 
     /**
-     * Store short source value in given buffer after normalizing it to the destination value range
-     * considering signed and unsigned source and destination representation.
+     * Store short source value in given buffer after normalizing it to the
+     * destination value range considering signed and unsigned source and
+     * destination representation.
      *
-     * @param dest One of {@link ByteBuffer}, {@link ShortBuffer}, {@link IntBuffer}, {@link FloatBuffer}
-     * @param dSigned  true if destination buffer holds signed values, false if destination buffer holds unsigned values
+     * @param dest One of
+     * {@link ByteBuffer}, {@link ShortBuffer}, {@link IntBuffer}, {@link FloatBuffer}
+     * @param dSigned true if destination buffer holds signed values, false if
+     * destination buffer holds unsigned values
      * @param v source short value to be put in dest buffer
-     * @param sSigned  true if source represents a signed value, false if source represents an unsigned value
+     * @param sSigned true if source represents a signed value, false if source
+     * represents an unsigned value
      */
     @SuppressWarnings("unchecked")
     public static <B extends Buffer> B putNs(final B dest, final boolean dSigned, final short v, final boolean sSigned) {
         if (dest instanceof ByteBuffer) {
-            return (B) ((ByteBuffer) dest).put( ValueConv.short_to_byte(v, sSigned, dSigned) );
+            return (B) ((ByteBuffer) dest).put(ValueConv.short_to_byte(v, sSigned, dSigned));
         } else if (dest instanceof ShortBuffer) {
-            return (B) ((ShortBuffer) dest).put( v );
+            return (B) ((ShortBuffer) dest).put(v);
         } else if (dest instanceof IntBuffer) {
-            return (B) ((IntBuffer) dest).put( ValueConv.short_to_int(v, sSigned, dSigned) );
+            return (B) ((IntBuffer) dest).put(ValueConv.short_to_int(v, sSigned, dSigned));
         } else if (dest instanceof FloatBuffer) {
-            return (B) ((FloatBuffer) dest).put( ValueConv.short_to_float(v, sSigned) );
+            return (B) ((FloatBuffer) dest).put(ValueConv.short_to_float(v, sSigned));
         } else {
             throw new IllegalArgumentException("Byte doesn't match Buffer Class: " + dest);
         }
     }
 
     /**
-     * Store short source value in given buffer after normalizing it to the destination value range
-     * considering signed and unsigned source and destination representation.
+     * Store short source value in given buffer after normalizing it to the
+     * destination value range considering signed and unsigned source and
+     * destination representation.
      *
-     * @param dest One of {@link ByteBuffer}, {@link ShortBuffer}, {@link IntBuffer}, {@link FloatBuffer}
-     * @param dSigned  true if destination buffer holds signed values, false if destination buffer holds unsigned values
+     * @param dest One of
+     * {@link ByteBuffer}, {@link ShortBuffer}, {@link IntBuffer}, {@link FloatBuffer}
+     * @param dSigned true if destination buffer holds signed values, false if
+     * destination buffer holds unsigned values
      * @param v source short value to be put in dest buffer
-     * @param sSigned  true if source represents a signed value, false if source represents an unsigned value
+     * @param sSigned true if source represents a signed value, false if source
+     * represents an unsigned value
      */
     @SuppressWarnings("unchecked")
     public static <B extends Buffer> B putNi(final B dest, final boolean dSigned, final int v, final boolean sSigned) {
         if (dest instanceof ByteBuffer) {
-            return (B) ((ByteBuffer) dest).put( ValueConv.int_to_byte(v, sSigned, dSigned) );
+            return (B) ((ByteBuffer) dest).put(ValueConv.int_to_byte(v, sSigned, dSigned));
         } else if (dest instanceof ShortBuffer) {
-            return (B) ((ShortBuffer) dest).put( ValueConv.int_to_short(v, sSigned, dSigned) );
+            return (B) ((ShortBuffer) dest).put(ValueConv.int_to_short(v, sSigned, dSigned));
         } else if (dest instanceof IntBuffer) {
-            return (B) ((IntBuffer) dest).put( v );
+            return (B) ((IntBuffer) dest).put(v);
         } else if (dest instanceof FloatBuffer) {
-            return (B) ((FloatBuffer) dest).put( ValueConv.int_to_float(v, sSigned) );
+            return (B) ((FloatBuffer) dest).put(ValueConv.int_to_float(v, sSigned));
         } else {
             throw new IllegalArgumentException("Byte doesn't match Buffer Class: " + dest);
         }
     }
 
     /**
-     * Store float source value in given buffer after normalizing it to the destination value range
-     * considering signed and unsigned destination representation.
+     * Store float source value in given buffer after normalizing it to the
+     * destination value range considering signed and unsigned destination
+     * representation.
      *
-     * @param dest One of {@link ByteBuffer}, {@link ShortBuffer}, {@link IntBuffer}, {@link FloatBuffer}
-     * @param dSigned  true if destination buffer holds signed values, false if destination buffer holds unsigned values
+     * @param dest One of
+     * {@link ByteBuffer}, {@link ShortBuffer}, {@link IntBuffer}, {@link FloatBuffer}
+     * @param dSigned true if destination buffer holds signed values, false if
+     * destination buffer holds unsigned values
      * @param v source float value to be put in dest buffer
      */
     @SuppressWarnings("unchecked")
     public static <B extends Buffer> B putNf(final B dest, final boolean dSigned, final float v) {
         if (dest instanceof ByteBuffer) {
-            return (B) ((ByteBuffer) dest).put( ValueConv.float_to_byte(v, dSigned) );
+            return (B) ((ByteBuffer) dest).put(ValueConv.float_to_byte(v, dSigned));
         } else if (dest instanceof ShortBuffer) {
-            return (B) ((ShortBuffer) dest).put( ValueConv.float_to_short(v, dSigned) );
+            return (B) ((ShortBuffer) dest).put(ValueConv.float_to_short(v, dSigned));
         } else if (dest instanceof IntBuffer) {
-            return (B) ((IntBuffer) dest).put( ValueConv.float_to_int(v, dSigned) );
+            return (B) ((IntBuffer) dest).put(ValueConv.float_to_int(v, dSigned));
         } else if (dest instanceof FloatBuffer) {
-            return (B) ((FloatBuffer) dest).put( v );
+            return (B) ((FloatBuffer) dest).put(v);
         } else {
             throw new IllegalArgumentException("Byte doesn't match Buffer Class: " + dest);
         }
@@ -958,7 +995,6 @@ public class Buffers {
     //----------------------------------------------------------------------
     // Range check methods
     //
-
     public static void rangeCheck(final byte[] array, final int offset, final int minElementsRemaining) {
         if (array == null) {
             return;
@@ -1042,8 +1078,10 @@ public class Buffers {
     /**
      * @param buffer buffer to test for minimum
      * @param minBytesRemaining minimum bytes remaining
-     * @throws IllegalArgumentException if <code>buffer</code> is of invalid type.
-     * @throws IndexOutOfBoundsException if {@link #remainingBytes(Object)} is &lt; <code>minBytesRemaining<code>.
+     * @throws IllegalArgumentException if <code>buffer</code> is of invalid
+     * type.
+     * @throws IndexOutOfBoundsException if {@link #remainingBytes(Object)} is
+     * &lt; <code>minBytesRemaining<code>.
      */
     public static void rangeCheckBytes(final Object buffer, final int minBytesRemaining) throws IllegalArgumentException, IndexOutOfBoundsException {
         if (buffer == null) {
@@ -1057,15 +1095,18 @@ public class Buffers {
 
     /**
      * Appends Buffer details inclusive data to a StringBuilder instance.
+     *
      * @param sb optional pass through StringBuilder
-     * @param f optional format string of one element, i.e. "%10.5f" for {@link FloatBuffer}, see {@link java.util.Formatter},
-     *          or <code>null</code> for unformatted output.
-     *          <b>Note:</b> Caller is responsible to match the format string w/ the data type as expected in the given buffer.
+     * @param f optional format string of one element, i.e. "%10.5f" for
+     * {@link FloatBuffer}, see {@link java.util.Formatter}, or
+     * <code>null</code> for unformatted output.
+     * <b>Note:</b> Caller is responsible to match the format string w/ the data
+     * type as expected in the given buffer.
      * @param buffer Any valid Buffer instance
      * @return the modified StringBuilder containing the Buffer details
      */
     public static StringBuilder toString(StringBuilder sb, final String f, final Buffer buffer) {
-        if(null == sb) {
+        if (null == sb) {
             sb = new StringBuilder();
         }
         sb.append(buffer.getClass().getSimpleName());
@@ -1074,70 +1115,84 @@ public class Buffers {
         sb.append("; array ").append(buffer.hasArray()).append(", direct ").append(buffer.isDirect());
         sb.append(", r/w ").append(!buffer.isReadOnly()).append(": ");
         if (buffer instanceof ByteBuffer) {
-            final ByteBuffer b = (ByteBuffer)buffer;
-            for(int i=0; i<b.limit(); i++) {
-                if(0<i) { sb.append(", "); }
-                if(null == f) {
+            final ByteBuffer b = (ByteBuffer) buffer;
+            for (int i = 0; i < b.limit(); i++) {
+                if (0 < i) {
+                    sb.append(", ");
+                }
+                if (null == f) {
                     sb.append(b.get(i));
                 } else {
                     sb.append(String.format(f, b.get(i)));
                 }
             }
         } else if (buffer instanceof FloatBuffer) {
-            final FloatBuffer b = (FloatBuffer)buffer;
-            for(int i=0; i<b.limit(); i++) {
-                if(0<i) { sb.append(", "); }
-                if(null == f) {
+            final FloatBuffer b = (FloatBuffer) buffer;
+            for (int i = 0; i < b.limit(); i++) {
+                if (0 < i) {
+                    sb.append(", ");
+                }
+                if (null == f) {
                     sb.append(b.get(i));
                 } else {
                     sb.append(String.format(f, b.get(i)));
                 }
             }
         } else if (buffer instanceof IntBuffer) {
-            final IntBuffer b = (IntBuffer)buffer;
-            for(int i=0; i<b.limit(); i++) {
-                if(0<i) { sb.append(", "); }
-                if(null == f) {
+            final IntBuffer b = (IntBuffer) buffer;
+            for (int i = 0; i < b.limit(); i++) {
+                if (0 < i) {
+                    sb.append(", ");
+                }
+                if (null == f) {
                     sb.append(b.get(i));
                 } else {
                     sb.append(String.format(f, b.get(i)));
                 }
             }
         } else if (buffer instanceof ShortBuffer) {
-            final ShortBuffer b = (ShortBuffer)buffer;
-            for(int i=0; i<b.limit(); i++) {
-                if(0<i) { sb.append(", "); }
-                if(null == f) {
+            final ShortBuffer b = (ShortBuffer) buffer;
+            for (int i = 0; i < b.limit(); i++) {
+                if (0 < i) {
+                    sb.append(", ");
+                }
+                if (null == f) {
                     sb.append(b.get(i));
                 } else {
                     sb.append(String.format(f, b.get(i)));
                 }
             }
         } else if (buffer instanceof DoubleBuffer) {
-            final DoubleBuffer b = (DoubleBuffer)buffer;
-            for(int i=0; i<b.limit(); i++) {
-                if(0<i) { sb.append(", "); }
-                if(null == f) {
+            final DoubleBuffer b = (DoubleBuffer) buffer;
+            for (int i = 0; i < b.limit(); i++) {
+                if (0 < i) {
+                    sb.append(", ");
+                }
+                if (null == f) {
                     sb.append(b.get(i));
                 } else {
                     sb.append(String.format(f, b.get(i)));
                 }
             }
         } else if (buffer instanceof LongBuffer) {
-            final LongBuffer b = (LongBuffer)buffer;
-            for(int i=0; i<b.limit(); i++) {
-                if(0<i) { sb.append(", "); }
-                if(null == f) {
+            final LongBuffer b = (LongBuffer) buffer;
+            for (int i = 0; i < b.limit(); i++) {
+                if (0 < i) {
+                    sb.append(", ");
+                }
+                if (null == f) {
                     sb.append(b.get(i));
                 } else {
                     sb.append(String.format(f, b.get(i)));
                 }
             }
         } else if (buffer instanceof CharBuffer) {
-            final CharBuffer b = (CharBuffer)buffer;
-            for(int i=0; i<b.limit(); i++) {
-                if(0<i) { sb.append(", "); }
-                if(null == f) {
+            final CharBuffer b = (CharBuffer) buffer;
+            for (int i = 0; i < b.limit(); i++) {
+                if (0 < i) {
+                    sb.append(", ");
+                }
+                if (null == f) {
                     sb.append(b.get(i));
                 } else {
                     sb.append(String.format(f, b.get(i)));
@@ -1149,22 +1204,27 @@ public class Buffers {
     }
 
     /**
-     * Access to NIO {@link sun.misc.Cleaner}, allowing caller to deterministically clean a given {@link sun.nio.ch.DirectBuffer}.
+     * Access to NIO {@link sun.misc.Cleaner}, allowing caller to
+     * deterministically clean a given {@link sun.nio.ch.DirectBuffer}.
      */
     public static class Cleaner {
+
         private static final Method mbbCleaner;
         private static final Method cClean;
-        /** OK to be lazy on thread synchronization, just for early out **/
+        /**
+         * OK to be lazy on thread synchronization, just for early out *
+         */
         private static volatile boolean cleanerError;
+
         static {
-            final Method[] _mbbCleaner = { null };
-            final Method[] _cClean = { null };
+            final Method[] _mbbCleaner = {null};
+            final Method[] _cClean = {null};
             final boolean hasCleaner;
-            if( AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+            if (AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
                 @Override
                 public Boolean run() {
                     try {
-                        if( PlatformPropsImpl.JAVA_9 ) {
+                        if (PlatformPropsImpl.JAVA_9) {
                             return UnsafeUtil.hasInvokeCleaner();
                         } else {
                             _mbbCleaner[0] = ReflectionUtil.getMethod("sun.nio.ch.DirectBuffer", "cleaner", null, Buffers.class.getClassLoader());
@@ -1178,48 +1238,53 @@ public class Buffers {
                             _cClean[0].setAccessible(true);
                             return Boolean.TRUE;
                         }
-                    } catch(final Throwable t) {
-                        if( DEBUG ) {
+                    } catch (final Throwable t) {
+                        if (DEBUG) {
                             ExceptionUtils.dumpThrowable("Buffers", t);
                         }
                         return Boolean.FALSE;
-                    } } } ).booleanValue() ) {
+                    }
+                }
+            }).booleanValue()) {
                 mbbCleaner = _mbbCleaner[0];
                 cClean = _cClean[0];
-                hasCleaner = PlatformPropsImpl.JAVA_9 || ( null != mbbCleaner && null != cClean );
+                hasCleaner = PlatformPropsImpl.JAVA_9 || (null != mbbCleaner && null != cClean);
             } else {
                 mbbCleaner = null;
                 cClean = null;
                 hasCleaner = false;
             }
             cleanerError = !hasCleaner;
-            if( DEBUG ) {
-                System.err.print("Buffers.Cleaner.init: hasCleaner: "+hasCleaner+", cleanerError "+cleanerError);
-                if( null != mbbCleaner ) {
-                    System.err.print(", using Cleaner class: "+mbbCleaner.getReturnType().getName());
+            if (DEBUG) {
+                System.err.print("Buffers.Cleaner.init: hasCleaner: " + hasCleaner + ", cleanerError " + cleanerError);
+                if (null != mbbCleaner) {
+                    System.err.print(", using Cleaner class: " + mbbCleaner.getReturnType().getName());
                 }
                 System.err.println();
             }
         }
+
         /**
-         * If {@code b} is an direct NIO buffer, i.e {@link sun.nio.ch.DirectBuffer},
-         * calls it's {@link sun.misc.Cleaner} instance {@code clean()} method once.
+         * If {@code b} is an direct NIO buffer, i.e
+         * {@link sun.nio.ch.DirectBuffer}, calls it's {@link sun.misc.Cleaner}
+         * instance {@code clean()} method once.
+         *
          * @return {@code true} if successful, otherwise {@code false}.
          */
         public static boolean clean(final ByteBuffer bb) {
-            if( cleanerError || !bb.isDirect() ) {
+            if (cleanerError || !bb.isDirect()) {
                 return false;
             }
             try {
-                if( PlatformPropsImpl.JAVA_9 ) {
+                if (PlatformPropsImpl.JAVA_9) {
                     UnsafeUtil.invokeCleaner(bb);
                 } else {
                     cClean.invoke(mbbCleaner.invoke(bb));
                 }
                 return true;
-            } catch(final Throwable t) {
+            } catch (final Throwable t) {
                 cleanerError = true;
-                if( DEBUG ) {
+                if (DEBUG) {
                     ExceptionUtils.dumpThrowable("Buffers", t);
                 }
                 return false;

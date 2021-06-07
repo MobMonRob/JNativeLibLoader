@@ -25,7 +25,6 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of JogAmp Community.
  */
-
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os;
 
 import java.util.ArrayList;
@@ -40,26 +39,35 @@ import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
 /**
  * Provides bundling of:<br>
  * <ul>
- * <li>The to-be-glued native library, eg OpenGL32.dll. From here on this is referred as the Tool.</li>
- * <li>The JNI glue-code native library, eg jogl_desktop.dll. From here on this is referred as the Glue</li>
+ * <li>The to-be-glued native library, eg OpenGL32.dll. From here on this is
+ * referred as the Tool.</li>
+ * <li>The JNI glue-code native library, eg jogl_desktop.dll. From here on this
+ * is referred as the Glue</li>
  * </ul>
  * <p>
- * An {@link DynamicLibraryBundleInfo} instance is being passed in the constructor,
- * providing the required information about the tool and glue libraries.
- * The ClassLoader of it's implementation is also being used to help locating the native libraries.
+ * An {@link DynamicLibraryBundleInfo} instance is being passed in the
+ * constructor, providing the required information about the tool and glue
+ * libraries. The ClassLoader of it's implementation is also being used to help
+ * locating the native libraries.
  * </p>
- * An instance provides a complete {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.DynamicLookupHelper}
- * to {@link com.jogamp.gluegen.runtime.ProcAddressTable#reset(com.jogamp.common.os.DynamicLookupHelper) reset}
+ * An instance provides a complete
+ * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.DynamicLookupHelper}
+ * to
+ * {@link com.jogamp.gluegen.runtime.ProcAddressTable#reset(com.jogamp.common.os.DynamicLookupHelper) reset}
  * the {@link com.jogamp.gluegen.runtime.ProcAddressTable}.<br>
  * At construction, it:
  * <ul>
- *  <li> loads the Tool native library via
- *       {@link com.jogamp.common.os.NativeLibrary#open(java.lang.String, java.lang.ClassLoader, boolean) NativeLibrary's open method}</li>
- *  <li> loads the {@link com.jogamp.common.jvm.JNILibLoaderBase#loadLibrary(java.lang.String, java.lang.String[], boolean, ClassLoader)  Glue native library}</li>
- *  <li> resolves the Tool's {@link com.jogamp.common.os.DynamicLibraryBundleInfo#getToolGetProcAddressFuncNameList() GetProcAddress}. (optional)</li>
+ * <li> loads the Tool native library via
+ * {@link com.jogamp.common.os.NativeLibrary#open(java.lang.String, java.lang.ClassLoader, boolean) NativeLibrary's open method}</li>
+ * <li> loads the
+ * {@link com.jogamp.common.jvm.JNILibLoaderBase#loadLibrary(java.lang.String, java.lang.String[], boolean, ClassLoader)  Glue native library}</li>
+ * <li> resolves the Tool's
+ * {@link com.jogamp.common.os.DynamicLibraryBundleInfo#getToolGetProcAddressFuncNameList() GetProcAddress}.
+ * (optional)</li>
  * </ul>
  */
 public class DynamicLibraryBundle {
+
     private final DynamicLibraryBundleInfo info;
 
     protected final List<NativeLibrary> nativeLibraries;
@@ -72,8 +80,9 @@ public class DynamicLibraryBundle {
 
     private final boolean[] glueLibLoaded;
     private int glueLibLoadedNumber;
-    
+
     static final boolean DEBUG;
+
     static {
         DEBUG = Debug.debug("DynamicLibraryBundle");
     }
@@ -82,8 +91,10 @@ public class DynamicLibraryBundle {
     //private boolean toolGetProcAddressComplete;
     //private HashSet<String> toolGetProcAddressFuncNameSet;
     //private final List<String> toolGetProcAddressFuncNameList;
-
-    /** Returns an AWT-EDT {@link RunnableExecutor} implementation if AWT is available, otherwise {@link RunnableExecutor#currentThreadExecutor}. */
+    /**
+     * Returns an AWT-EDT {@link RunnableExecutor} implementation if AWT is
+     * available, otherwise {@link RunnableExecutor#currentThreadExecutor}.
+     */
     public static RunnableExecutor getDefaultRunnableExecutor() {
         return RunnableExecutor.currentThreadExecutor;
     }
@@ -91,47 +102,48 @@ public class DynamicLibraryBundle {
     /**
      * Instantiates and loads all {@link NativeLibrary}s incl. JNI libraries.
      * <p>
-     * The ClassLoader of the {@link DynamicLibraryBundleInfo} implementation class
-     * is being used to help locating the native libraries.
+     * The ClassLoader of the {@link DynamicLibraryBundleInfo} implementation
+     * class is being used to help locating the native libraries.
      * </p>
      */
     public DynamicLibraryBundle(final DynamicLibraryBundleInfo info) {
-        if(null==info) {
+        if (null == info) {
             throw new RuntimeException("Null DynamicLibraryBundleInfo");
         }
         this.info = info;
-        if(DEBUG) {
-            System.err.println(Thread.currentThread().getName()+" - DynamicLibraryBundle.init start with: "+info.getClass().getName());
+        if (DEBUG) {
+            System.err.println(Thread.currentThread().getName() + " - DynamicLibraryBundle.init start with: " + info.getClass().getName());
         }
         nativeLibraries = new ArrayList<NativeLibrary>();
         toolLibNames = info.getToolLibNames();
         glueLibNames = info.getGlueLibNames();
         toolLibLoaded = new boolean[toolLibNames.size()];
-        if(DEBUG) {
-            if( toolLibNames.size() == 0 ) {
+        if (DEBUG) {
+            if (toolLibNames.size() == 0) {
                 System.err.println("No Tool native library names given");
             }
 
-            if( glueLibNames.size() == 0 ) {
+            if (glueLibNames.size() == 0) {
                 System.err.println("No Glue native library names given");
             }
         }
 
-        for(int i=toolLibNames.size()-1; i>=0; i--) {
+        for (int i = toolLibNames.size() - 1; i >= 0; i--) {
             toolLibLoaded[i] = false;
         }
         glueLibLoaded = new boolean[glueLibNames.size()];
-        for(int i=glueLibNames.size()-1; i>=0; i--) {
+        for (int i = glueLibNames.size() - 1; i >= 0; i--) {
             glueLibLoaded[i] = false;
         }
 
         {
-            final DynamicLinker[] _dynLinkGlobal = { null };
+            final DynamicLinker[] _dynLinkGlobal = {null};
             info.getLibLoaderExecutor().invoke(true, new Runnable() {
-                    @Override
-                    public void run() {
-                        _dynLinkGlobal[0] = loadLibraries();
-                    } } ) ;
+                @Override
+                public void run() {
+                    _dynLinkGlobal[0] = loadLibraries();
+                }
+            });
             dynLinkGlobal = _dynLinkGlobal[0];
         }
 
@@ -146,42 +158,44 @@ public class DynamicLibraryBundle {
             toolGetProcAddressHandle = 0;
             toolGetProcAddressComplete = true;
         }
-        */
-        if(DEBUG) {
-            System.err.println("DynamicLibraryBundle.init Summary: "+info.getClass().getName());
+         */
+        if (DEBUG) {
+            System.err.println("DynamicLibraryBundle.init Summary: " + info.getClass().getName());
             //System.err.println("     toolGetProcAddressFuncNameList: "+toolGetProcAddressFuncNameList+", complete: "+toolGetProcAddressComplete+", 0x"+Long.toHexString(toolGetProcAddressHandle));
-            System.err.println("     Tool Lib Names : "+toolLibNames);
-            System.err.println("     Tool Lib Loaded: "+getToolLibLoadedNumber()+"/"+getToolLibNumber()+" "+Arrays.toString(toolLibLoaded)+", complete "+isToolLibComplete());
-            System.err.println("     Glue Lib Names : "+glueLibNames);
-            System.err.println("     Glue Lib Loaded: "+getGlueLibLoadedNumber()+"/"+getGlueLibNumber()+" "+Arrays.toString(glueLibLoaded)+", complete "+isGlueLibComplete());
-            System.err.println("     All Complete: "+isLibComplete());
-            System.err.println("     LibLoaderExecutor: "+info.getLibLoaderExecutor().getClass().getName());
+            System.err.println("     Tool Lib Names : " + toolLibNames);
+            System.err.println("     Tool Lib Loaded: " + getToolLibLoadedNumber() + "/" + getToolLibNumber() + " " + Arrays.toString(toolLibLoaded) + ", complete " + isToolLibComplete());
+            System.err.println("     Glue Lib Names : " + glueLibNames);
+            System.err.println("     Glue Lib Loaded: " + getGlueLibLoadedNumber() + "/" + getGlueLibNumber() + " " + Arrays.toString(glueLibLoaded) + ", complete " + isGlueLibComplete());
+            System.err.println("     All Complete: " + isLibComplete());
+            System.err.println("     LibLoaderExecutor: " + info.getLibLoaderExecutor().getClass().getName());
         }
     }
 
-    /** Unload all {@link NativeLibrary}s, and remove all references. */
+    /**
+     * Unload all {@link NativeLibrary}s, and remove all references.
+     */
     public final void destroy() {
-        if(DEBUG) {
-            System.err.println(Thread.currentThread().getName()+" - DynamicLibraryBundle.destroy() START: "+info.getClass().getName());
+        if (DEBUG) {
+            System.err.println(Thread.currentThread().getName() + " - DynamicLibraryBundle.destroy() START: " + info.getClass().getName());
         }
         /*
         toolGetProcAddressFuncNameSet = null;
         toolGetProcAddressHandle = 0;
         toolGetProcAddressComplete = false;
-        */
-        for(int i = 0; i<nativeLibraries.size(); i++) {
+         */
+        for (int i = 0; i < nativeLibraries.size(); i++) {
             nativeLibraries.get(i).close();
         }
         nativeLibraries.clear();
         toolLibNames.clear();
         glueLibNames.clear();
-        if(DEBUG) {
-            System.err.println(Thread.currentThread().getName()+" - DynamicLibraryBundle.destroy() END: "+info.getClass().getName());
+        if (DEBUG) {
+            System.err.println(Thread.currentThread().getName() + " - DynamicLibraryBundle.destroy() END: " + info.getClass().getName());
         }
     }
 
     public final boolean isLibComplete() {
-        return isToolLibComplete() && isGlueLibComplete() ;
+        return isToolLibComplete() && isGlueLibComplete();
     }
 
     public final int getToolLibNumber() {
@@ -193,17 +207,15 @@ public class DynamicLibraryBundle {
     }
 
     /**
-     * @return true if all tool libraries are loaded,
-     *         otherwise false.
+     * @return true if all tool libraries are loaded, otherwise false.
      *
      * @see DynamicLibraryBundleInfo#getToolLibNames()
      */
     public final boolean isToolLibComplete() {
         final int toolLibNumber = getToolLibNumber();
         //return toolGetProcAddressComplete &&
-        return
-               ( 0 == toolLibNumber || null != dynLinkGlobal ) &&
-               toolLibNumber == getToolLibLoadedNumber();
+        return (0 == toolLibNumber || null != dynLinkGlobal)
+            && toolLibNumber == getToolLibLoadedNumber();
     }
 
     public final boolean isToolLibLoaded() {
@@ -211,7 +223,7 @@ public class DynamicLibraryBundle {
     }
 
     public final boolean isToolLibLoaded(final int i) {
-        if(0 <= i && i < toolLibLoaded.length) {
+        if (0 <= i && i < toolLibLoaded.length) {
             return toolLibLoaded[i];
         }
         return false;
@@ -226,9 +238,8 @@ public class DynamicLibraryBundle {
     }
 
     /**
-     * @return true if the last entry has been loaded,
-     *         while ignoring the preload dependencies.
-     *         Otherwise false.
+     * @return true if the last entry has been loaded, while ignoring the
+     * preload dependencies. Otherwise false.
      *
      * @see DynamicLibraryBundleInfo#getGlueLibNames()
      */
@@ -237,13 +248,15 @@ public class DynamicLibraryBundle {
     }
 
     public final boolean isGlueLibLoaded(final int i) {
-        if(0 <= i && i < glueLibLoaded.length) {
+        if (0 <= i && i < glueLibLoaded.length) {
             return glueLibLoaded[i];
         }
         return false;
     }
 
-    public final DynamicLibraryBundleInfo getBundleInfo() { return info; }
+    public final DynamicLibraryBundleInfo getBundleInfo() {
+        return info;
+    }
 
     /*
     protected final long getToolGetProcAddressHandle() throws SecurityException {
@@ -260,13 +273,12 @@ public class DynamicLibraryBundle {
         }
         return aptr;
     }
-    */
-
+     */
     protected static final NativeLibrary loadFirstAvailable(final List<String> libNames,
-                                                            final boolean searchSystemPath,
-                                                            final boolean searchSystemPathFirst,
-                                                            final ClassLoader loader, final boolean global) throws SecurityException {
-        for (int i=0; i < libNames.size(); i++) {
+        final boolean searchSystemPath,
+        final boolean searchSystemPathFirst,
+        final ClassLoader loader, final boolean global) throws SecurityException {
+        for (int i = 0; i < libNames.size(); i++) {
             final NativeLibrary lib = NativeLibrary.open(libNames.get(i), searchSystemPath, searchSystemPathFirst, loader, global);
             if (lib != null) {
                 return lib;
@@ -282,56 +294,56 @@ public class DynamicLibraryBundle {
         NativeLibrary lib = null;
         DynamicLinker dynLinkGlobal = null;
 
-        for (i=0; i < toolLibNames.size(); i++) {
+        for (i = 0; i < toolLibNames.size(); i++) {
             final List<String> libNames = toolLibNames.get(i);
-            if( null != libNames && libNames.size() > 0 ) {
+            if (null != libNames && libNames.size() > 0) {
                 lib = loadFirstAvailable(libNames,
-                                         info.searchToolLibInSystemPath(),
-                                         info.searchToolLibSystemPathFirst(),
-                                         cl, info.shallLinkGlobal());
-                if ( null == lib ) {
-                    if(DEBUG) {
-                        System.err.println("Unable to load any Tool library of: "+libNames);
+                    info.searchToolLibInSystemPath(),
+                    info.searchToolLibSystemPathFirst(),
+                    cl, info.shallLinkGlobal());
+                if (null == lib) {
+                    if (DEBUG) {
+                        System.err.println("Unable to load any Tool library of: " + libNames);
                     }
                 } else {
-                    if( null == dynLinkGlobal ) {
+                    if (null == dynLinkGlobal) {
                         dynLinkGlobal = lib.dynamicLinker();
                     }
                     nativeLibraries.add(lib);
-                    toolLibLoaded[i]=true;
+                    toolLibLoaded[i] = true;
                     toolLibLoadedNumber++;
-                    if(DEBUG) {
-                        System.err.println("Loaded Tool library: "+lib);
+                    if (DEBUG) {
+                        System.err.println("Loaded Tool library: " + lib);
                     }
                 }
             }
         }
-        if( toolLibNames.size() > 0 && !isToolLibLoaded() ) {
-            if(DEBUG) {
+        if (toolLibNames.size() > 0 && !isToolLibLoaded()) {
+            if (DEBUG) {
                 System.err.println("No Tool libraries loaded");
             }
             return dynLinkGlobal;
         }
 
         glueLibLoadedNumber = 0;
-        for (i=0; i < glueLibNames.size(); i++) {
+        for (i = 0; i < glueLibNames.size(); i++) {
             final String libName = glueLibNames.get(i);
             final boolean ignoreError = true;
             boolean res;
             try {
                 res = GlueJNILibLoader.loadLibrary(libName, ignoreError, cl);
-                if(DEBUG && !res) {
-                    System.err.println("Info: Could not load JNI/Glue library: "+libName);
+                if (DEBUG && !res) {
+                    System.err.println("Info: Could not load JNI/Glue library: " + libName);
                 }
             } catch (final UnsatisfiedLinkError e) {
                 res = false;
-                if(DEBUG) {
-                    System.err.println("Unable to load JNI/Glue library: "+libName);
+                if (DEBUG) {
+                    System.err.println("Unable to load JNI/Glue library: " + libName);
                     e.printStackTrace();
                 }
             }
             glueLibLoaded[i] = res;
-            if(res) {
+            if (res) {
                 glueLibLoadedNumber++;
             }
         }
@@ -342,7 +354,8 @@ public class DynamicLibraryBundle {
     /**
      * @param funcName
      * @return
-     * @throws SecurityException if user is not granted access for the library set.
+     * @throws SecurityException if user is not granted access for the library
+     * set.
      */
     /*
     private final long dynamicLookupFunctionOnLibs(final String funcName) throws SecurityException {
@@ -375,9 +388,9 @@ public class DynamicLibraryBundle {
         }
         return addr;
     }
-    */
+     */
 
-    /*
+ /*
     private final long toolDynamicLookupFunction(final String funcName) {
         if(0 != toolGetProcAddressHandle) {
             final long addr = info.toolGetProcAddress(toolGetProcAddressHandle, funcName);
@@ -390,9 +403,9 @@ public class DynamicLibraryBundle {
         }
         return 0;
     }
-    */
+     */
 
-    /*
+ /*
     @Override
     public final void claimAllLinkPermission() throws SecurityException {
         for (int i=0; i < nativeLibraries.size(); i++) {
@@ -405,9 +418,9 @@ public class DynamicLibraryBundle {
             nativeLibraries.get(i).releaseAllLinkPermission();
         }
     }
-    */
+     */
 
-    /*
+ /*
     @Override
     public final long dynamicLookupFunction(final String funcName) throws SecurityException {
         if(!isToolLibLoaded() || null==funcName) {
@@ -435,20 +448,21 @@ public class DynamicLibraryBundle {
         }
         return addr;
     }
-    */
+     */
 
-    /*
+ /*
     @Override
     public final boolean isFunctionAvailable(final String funcName) throws SecurityException {
         return 0 != dynamicLookupFunction(funcName);
     }
-    */
-
-    /** Inherit access */
+     */
+    /**
+     * Inherit access
+     */
     static final class GlueJNILibLoader extends JNILibLoaderBase {
-      protected static synchronized boolean loadLibrary(final String libname, final boolean ignoreError, final ClassLoader cl) {
-        return JNILibLoaderBase.loadLibrary(libname, ignoreError, cl);
-      }
+
+        protected static synchronized boolean loadLibrary(final String libname, final boolean ignoreError, final ClassLoader cl) {
+            return JNILibLoaderBase.loadLibrary(libname, ignoreError, cl);
+        }
     }
 }
-

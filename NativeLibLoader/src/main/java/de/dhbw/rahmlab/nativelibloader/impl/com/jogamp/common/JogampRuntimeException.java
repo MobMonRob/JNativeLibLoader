@@ -25,35 +25,42 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of JogAmp Community.
  */
-
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common;
 
 /**
- * A generic <i>unchecked exception</i> for Jogamp errors used throughout the binding
- * as a substitute for {@link RuntimeException}.
+ * A generic <i>unchecked exception</i> for Jogamp errors used throughout the
+ * binding as a substitute for {@link RuntimeException}.
  */
 @SuppressWarnings("serial")
 public class JogampRuntimeException extends RuntimeException {
-  /** Constructs a JogampRuntimeException object. */
-  public JogampRuntimeException() {
-    super();
-  }
 
-  /** Constructs a JogampRuntimeException object with the specified detail
-      message. */
-  public JogampRuntimeException(final String message) {
-    super(message);
-  }
+    /**
+     * Constructs a JogampRuntimeException object.
+     */
+    public JogampRuntimeException() {
+        super();
+    }
 
-  /** Constructs a JogampRuntimeException object with the specified detail
-      message and root cause. */
-  public JogampRuntimeException(final String message, final Throwable cause) {
-    super(message, cause);
-  }
+    /**
+     * Constructs a JogampRuntimeException object with the specified detail
+     * message.
+     */
+    public JogampRuntimeException(final String message) {
+        super(message);
+    }
 
-  /** Constructs a JogampRuntimeException object with the specified root
-      cause. */
-  public JogampRuntimeException(final Throwable cause) {
-    super(cause);
-  }
+    /**
+     * Constructs a JogampRuntimeException object with the specified detail
+     * message and root cause.
+     */
+    public JogampRuntimeException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * Constructs a JogampRuntimeException object with the specified root cause.
+     */
+    public JogampRuntimeException(final Throwable cause) {
+        super(cause);
+    }
 }

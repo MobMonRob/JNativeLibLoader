@@ -38,7 +38,7 @@ public class PatchGluegenClasses {
         String fullFileName = javaFilePath + fileName + ".java";
         String fullPatchName = patchPath + fileName + ".patch";
 
-        ProcessBuilder builder = new ProcessBuilder("patch", "-u", "-N",fullFileName, fullPatchName);
+        ProcessBuilder builder = new ProcessBuilder("patch", "-u", "-N", fullFileName, fullPatchName);
         Process process = builder.start();
 
         StringBuilder out = new StringBuilder();

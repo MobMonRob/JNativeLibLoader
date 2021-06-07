@@ -25,23 +25,25 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of JogAmp Community.
  */
-
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os;
 
-/** dynamic linker access. */
+/**
+ * dynamic linker access.
+ */
 public class DynamicLinker {
-  /**
-   * <p>
-   * Opens the named library
-   * </p>
-   *
-   * @param pathname the full pathname for the library to open
-   * @throws SecurityException if user is not granted access for the named library.
-   * @throws UnsatisfiedLinkError if linking problems occur.
-   * @throws NullPointerException if pathname is null.
-   */
-  public void openLibrary(String pathname) throws SecurityException, UnsatisfiedLinkError, NullPointerException
-  {
-      System.load(pathname);
-  }
+
+    /**
+     * <p>
+     * Opens the named library
+     * </p>
+     *
+     * @param pathname the full pathname for the library to open
+     * @throws SecurityException if user is not granted access for the named
+     * library.
+     * @throws UnsatisfiedLinkError if linking problems occur.
+     * @throws NullPointerException if pathname is null.
+     */
+    public void openLibrary(String pathname) throws SecurityException, UnsatisfiedLinkError, NullPointerException {
+        System.load(pathname);
+    }
 }

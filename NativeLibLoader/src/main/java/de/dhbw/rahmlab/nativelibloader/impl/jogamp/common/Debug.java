@@ -25,7 +25,6 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of JogAmp Community.
  */
-
 package de.dhbw.rahmlab.nativelibloader.impl.jogamp.common;
 
 import java.security.AccessController;
@@ -33,37 +32,44 @@ import java.security.PrivilegedAction;
 
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.PropertyAccess;
 
-/** Helper routines for logging and debugging. */
-
+/**
+ * Helper routines for logging and debugging.
+ */
 public class Debug extends PropertyAccess {
-  // Some common properties
-  private static final boolean verbose;
-  private static final boolean debugAll;
+    // Some common properties
 
-  static {
-    AccessController.doPrivileged(new PrivilegedAction<Object>() {
-        @Override
-        public Object run() {
-            PropertyAccess.addTrustedPrefix("jogamp.");
-            return null;
-    } } );
+    private static final boolean verbose;
+    private static final boolean debugAll;
 
-    verbose = isPropertyDefined("jogamp.verbose", true);
-    debugAll = isPropertyDefined("jogamp.debug", true);
-  }
+    static {
+        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+            @Override
+            public Object run() {
+                PropertyAccess.addTrustedPrefix("jogamp.");
+                return null;
+            }
+        });
 
-  /** Ensures static init block has been issues, i.e. if calling through to {@link PropertyAccess#isPropertyDefined(String, boolean)}. */
-  public static final void initSingleton() {}
+        verbose = isPropertyDefined("jogamp.verbose", true);
+        debugAll = isPropertyDefined("jogamp.debug", true);
+    }
 
-  public static final boolean verbose() {
-    return verbose;
-  }
+    /**
+     * Ensures static init block has been issues, i.e. if calling through to
+     * {@link PropertyAccess#isPropertyDefined(String, boolean)}.
+     */
+    public static final void initSingleton() {
+    }
 
-  public static final boolean debugAll() {
-    return debugAll;
-  }
+    public static final boolean verbose() {
+        return verbose;
+    }
 
-  public static final boolean debug(final String subcomponent) {
-    return debugAll() || isPropertyDefined("jogamp.debug." + subcomponent, true);
-  }
+    public static final boolean debugAll() {
+        return debugAll;
+    }
+
+    public static final boolean debug(final String subcomponent) {
+        return debugAll() || isPropertyDefined("jogamp.debug." + subcomponent, true);
+    }
 }

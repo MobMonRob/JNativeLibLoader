@@ -25,47 +25,53 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of JogAmp Community.
  */
-
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util;
 
 /**
- * Interface exposing {@link java.lang.Thread#interrupt()} source,
- * intended for {@link java.lang.Thread} specializations.
+ * Interface exposing {@link java.lang.Thread#interrupt()} source, intended for
+ * {@link java.lang.Thread} specializations.
+ *
  * @since 2.3.2
  */
 public interface InterruptSource {
+
     /**
      * Returns the source of the last {@link #interrupt()} call.
+     *
      * @param clear if true, issues {@link #clearInterruptSource()}
      */
     Throwable getInterruptSource(final boolean clear);
 
     /**
      * Returns the count of {@link java.lang.Thread#interrupt()} calls.
+     *
      * @param clear if true, issues {@link #clearInterruptSource()}
      */
     int getInterruptCounter(final boolean clear);
 
     /**
-     * Clears source and count of {@link java.lang.Thread#interrupt()} calls, if any.
+     * Clears source and count of {@link java.lang.Thread#interrupt()} calls, if
+     * any.
      */
     void clearInterruptSource();
 
     public static class Util {
+
         /**
-         * Casts given {@link java.lang.Thread} to {@link InterruptSource}
-         * if applicable, otherwise returns {@code null}.
+         * Casts given {@link java.lang.Thread} to {@link InterruptSource} if
+         * applicable, otherwise returns {@code null}.
          */
         public static InterruptSource get(final java.lang.Thread t) {
-            if(t instanceof InterruptSource) {
-                return (InterruptSource)t;
+            if (t instanceof InterruptSource) {
+                return (InterruptSource) t;
             } else {
                 return null;
             }
         }
+
         /**
-         * Casts current {@link java.lang.Thread} to {@link InterruptSource}
-         * if applicable, otherwise returns {@code null}.
+         * Casts current {@link java.lang.Thread} to {@link InterruptSource} if
+         * applicable, otherwise returns {@code null}.
          */
         public static InterruptSource currentThread() {
             return get(java.lang.Thread.currentThread());
@@ -73,11 +79,14 @@ public interface InterruptSource {
     }
 
     /**
-     * {@link java.lang.Thread} specialization implementing {@link InterruptSource}
-     * to track {@link java.lang.Thread#interrupt()} calls.
+     * {@link java.lang.Thread} specialization implementing
+     * {@link InterruptSource} to track {@link java.lang.Thread#interrupt()}
+     * calls.
+     *
      * @since 2.3.2
      */
     public static class Thread extends java.lang.Thread implements InterruptSource {
+
         volatile Throwable interruptSource = null;
         volatile int interruptCounter = 0;
         final Object sync = new Object();
@@ -88,16 +97,20 @@ public interface InterruptSource {
         public Thread() {
             super();
         }
+
         /**
          * See {@link Thread#Thread(ThreadGroup, Runnable)} for details.
+         *
          * @param tg explicit {@link ThreadGroup}, may be {@code null}
          * @param target explicit {@link Runnable}, may be {@code null}
          */
         public Thread(final ThreadGroup tg, final Runnable target) {
             super(tg, target);
         }
+
         /**
          * See {@link Thread#Thread(ThreadGroup, Runnable, String)} for details.
+         *
          * @param tg explicit {@link ThreadGroup}, may be {@code null}
          * @param target explicit {@link Runnable}, may be {@code null}
          * @param name explicit name of thread, must not be {@code null}
@@ -110,6 +123,7 @@ public interface InterruptSource {
          * Depending on whether {@code name} is null, either
          * {@link #Thread(ThreadGroup, Runnable, String)} or
          * {@link #Thread(ThreadGroup, Runnable)} is being utilized.
+         *
          * @param tg explicit {@link ThreadGroup}, may be {@code null}
          * @param target explicit {@link Runnable}, may be {@code null}
          * @param name explicit name of thread, may be {@code null}
@@ -120,36 +134,39 @@ public interface InterruptSource {
 
         @Override
         public final Throwable getInterruptSource(final boolean clear) {
-            synchronized(sync) {
+            synchronized (sync) {
                 final Throwable r = interruptSource;
-                if( clear ) {
+                if (clear) {
                     clearInterruptSource();
                 }
                 return r;
             }
         }
+
         @Override
         public final int getInterruptCounter(final boolean clear) {
-            synchronized(sync) {
+            synchronized (sync) {
                 final int r = interruptCounter;
-                if( clear ) {
+                if (clear) {
                     clearInterruptSource();
                 }
                 return r;
             }
         }
+
         @Override
         public final void clearInterruptSource() {
-            synchronized(sync) {
+            synchronized (sync) {
                 interruptCounter = 0;
                 interruptSource = null;
             }
         }
+
         @Override
         public final void interrupt() {
-            synchronized(sync) {
+            synchronized (sync) {
                 interruptCounter++;
-                interruptSource = new Throwable(getName()+".interrupt() #"+interruptCounter);
+                interruptSource = new Throwable(getName() + ".interrupt() #" + interruptCounter);
             }
             super.interrupt();
         }

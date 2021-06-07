@@ -25,38 +25,41 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of JogAmp Community.
  */
-
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util;
 
 import java.util.regex.Matcher;
 
 /**
- * Simple version number class containing a version number
- * either being {@link #VersionNumber(int, int, int) defined explicit}
- * or {@link #VersionNumber(String, String) derived from a string}.
+ * Simple version number class containing a version number either being
+ * {@link #VersionNumber(int, int, int) defined explicit} or
+ * {@link #VersionNumber(String, String) derived from a string}.
  * <p>
- * For the latter case, you can query whether a component has been defined explicitly by the given <code>versionString</code>,
- * via {@link #hasMajor()}, {@link #hasMinor()} and {@link #hasSub()}.
+ * For the latter case, you can query whether a component has been defined
+ * explicitly by the given <code>versionString</code>, via
+ * {@link #hasMajor()}, {@link #hasMinor()} and {@link #hasSub()}.
  * </p>
  * <p>
  * The state whether a component is defined explicitly <i>is not considered</i>
- * in the {@link #hashCode()}, {@link #equals(Object)} or {@link #compareTo(Object)} methods,
- * since the version number itself is treated regardless.
+ * in the {@link #hashCode()}, {@link #equals(Object)} or
+ * {@link #compareTo(Object)} methods, since the version number itself is
+ * treated regardless.
  * </p>
  */
 public class VersionNumber implements Comparable<Object> {
 
     /**
-     * A {@link #isZero() zero} version instance, w/o any component defined explicitly.
+     * A {@link #isZero() zero} version instance, w/o any component defined
+     * explicitly.
+     *
      * @see #hasMajor()
      * @see #hasMinor()
      * @see #hasSub()
      */
-    public static final VersionNumber zeroVersion = new VersionNumber(0, 0, 0, -1, (short)0);
+    public static final VersionNumber zeroVersion = new VersionNumber(0, 0, 0, -1, (short) 0);
 
     /**
-     * Returns the {@link java.util.regex.Pattern pattern}
-     * with Perl regular expression:
+     * Returns the {@link java.util.regex.Pattern pattern} with Perl regular
+     * expression:
      * <pre>
      *   "\\D*(\\d+)[^\\"+delim+"\\s]*(?:\\"+delim+"\\D*(\\d+)[^\\"+delim+"\\s]*(?:\\"+delim+"\\D*(\\d+))?)?"
      * </pre>
@@ -65,28 +68,31 @@ public class VersionNumber implements Comparable<Object> {
      * A whitespace within the version number will end the parser.
      * </p>
      * <p>
-     * Capture groups represent the major (1), optional minor (2) and optional sub version number (3) component in this order.
+     * Capture groups represent the major (1), optional minor (2) and optional
+     * sub version number (3) component in this order.
      * </p>
      * <p>
-     * Each capture group ignores any leading non-digit and uses only contiguous digits, i.e. ignores pending non-digits.
+     * Each capture group ignores any leading non-digit and uses only contiguous
+     * digits, i.e. ignores pending non-digits.
      * </p>
+     *
      * @param delim the delimiter, e.g. "."
      */
     public static java.util.regex.Pattern getVersionNumberPattern(final String delim) {
-        return java.util.regex.Pattern.compile("\\D*(\\d+)[^\\"+delim+"\\s]*(?:\\"+delim+"\\D*(\\d+)[^\\"+delim+"\\s]*(?:\\"+delim+"\\D*(\\d+))?)?");
+        return java.util.regex.Pattern.compile("\\D*(\\d+)[^\\" + delim + "\\s]*(?:\\" + delim + "\\D*(\\d+)[^\\" + delim + "\\s]*(?:\\" + delim + "\\D*(\\d+))?)?");
     }
 
     /**
-     * Returns the default {@link java.util.regex.Pattern pattern} using {@link #getVersionNumberPattern(String)}
-     * with delimiter "<b>.</b>".
+     * Returns the default {@link java.util.regex.Pattern pattern} using
+     * {@link #getVersionNumberPattern(String)} with delimiter "<b>.</b>".
      * <p>
      * Instance is cached.
      * </p>
      */
     public static java.util.regex.Pattern getDefaultVersionNumberPattern() {
-        if( null == defPattern ) { // volatile dbl-checked-locking OK
-            synchronized( VersionNumber.class ) {
-                if( null == defPattern ) {
+        if (null == defPattern) { // volatile dbl-checked-locking OK
+            synchronized (VersionNumber.class) {
+                if (null == defPattern) {
                     defPattern = getVersionNumberPattern(".");
                 }
             }
@@ -98,37 +104,42 @@ public class VersionNumber implements Comparable<Object> {
     protected final int major, minor, sub, strEnd;
 
     protected final short state;
-    protected final static short HAS_MAJOR = 1 << 0 ;
-    protected final static short HAS_MINOR = 1 << 1 ;
-    protected final static short HAS_SUB   = 1 << 2 ;
+    protected final static short HAS_MAJOR = 1 << 0;
+    protected final static short HAS_MINOR = 1 << 1;
+    protected final static short HAS_SUB = 1 << 2;
 
     protected VersionNumber(final int majorRev, final int minorRev, final int subMinorRev, final int _strEnd, final short _state) {
         major = majorRev;
         minor = minorRev;
-        sub   = subMinorRev;
+        sub = subMinorRev;
         strEnd = _strEnd;
         state = _state;
     }
 
     /**
-     * Explicit version number instantiation, with all components defined explicitly.
+     * Explicit version number instantiation, with all components defined
+     * explicitly.
+     *
      * @see #hasMajor()
      * @see #hasMinor()
      * @see #hasSub()
      */
     public VersionNumber(final int majorRev, final int minorRev, final int subMinorRev) {
-        this(majorRev, minorRev, subMinorRev, -1, (short)(HAS_MAJOR | HAS_MINOR | HAS_SUB));
+        this(majorRev, minorRev, subMinorRev, -1, (short) (HAS_MAJOR | HAS_MINOR | HAS_SUB));
     }
 
     /**
      * String derived version number instantiation.
      * <p>
-     * Utilizing the default {@link java.util.regex.Pattern pattern} parser with delimiter "<b>.</b>", see {@link #getDefaultVersionNumberPattern()}.
+     * Utilizing the default {@link java.util.regex.Pattern pattern} parser with
+     * delimiter "<b>.</b>", see {@link #getDefaultVersionNumberPattern()}.
      * </p>
      * <p>
-     * You can query whether a component has been defined explicitly by the given <code>versionString</code>,
-     * via {@link #hasMajor()}, {@link #hasMinor()} and {@link #hasSub()}.
+     * You can query whether a component has been defined explicitly by the
+     * given <code>versionString</code>, via
+     * {@link #hasMajor()}, {@link #hasMinor()} and {@link #hasSub()}.
      * </p>
+     *
      * @param versionString should be given as [MAJOR[.MINOR[.SUB]]]
      *
      * @see #hasMajor()
@@ -142,12 +153,15 @@ public class VersionNumber implements Comparable<Object> {
     /**
      * String derived version number instantiation.
      * <p>
-     * Utilizing {@link java.util.regex.Pattern pattern} parser created via {@link #getVersionNumberPattern(String)}.
+     * Utilizing {@link java.util.regex.Pattern pattern} parser created via
+     * {@link #getVersionNumberPattern(String)}.
      * </p>
      * <p>
-     * You can query whether a component has been defined explicitly by the given <code>versionString</code>,
-     * via {@link #hasMajor()}, {@link #hasMinor()} and {@link #hasSub()}.
+     * You can query whether a component has been defined explicitly by the
+     * given <code>versionString</code>, via
+     * {@link #hasMajor()}, {@link #hasMinor()} and {@link #hasSub()}.
      * </p>
+     *
      * @param versionString should be given as [MAJOR[.MINOR[.SUB]]]
      * @param delim the delimiter, e.g. "."
      *
@@ -162,11 +176,14 @@ public class VersionNumber implements Comparable<Object> {
     /**
      * String derived version number instantiation.
      * <p>
-     * You can query whether a component has been defined explicitly by the given <code>versionString</code>,
-     * via {@link #hasMajor()}, {@link #hasMinor()} and {@link #hasSub()}.
+     * You can query whether a component has been defined explicitly by the
+     * given <code>versionString</code>, via
+     * {@link #hasMajor()}, {@link #hasMinor()} and {@link #hasSub()}.
      * </p>
+     *
      * @param versionString should be given as [MAJOR[.MINOR[.SUB]]]
-     * @param versionPattern the {@link java.util.regex.Pattern pattern} parser, must be compatible w/ {@link #getVersionNumberPattern(String)}
+     * @param versionPattern the {@link java.util.regex.Pattern pattern} parser,
+     * must be compatible w/ {@link #getVersionNumberPattern(String)}
      *
      * @see #hasMajor()
      * @see #hasMinor()
@@ -180,49 +197,76 @@ public class VersionNumber implements Comparable<Object> {
         int _strEnd = 0;
         short _state = 0;
         try {
-            final Matcher matcher = versionPattern.matcher( versionString );
-            if( matcher.lookingAt() ) {
+            final Matcher matcher = versionPattern.matcher(versionString);
+            if (matcher.lookingAt()) {
                 _strEnd = matcher.end();
                 final int groupCount = matcher.groupCount();
-                if( 1 <= groupCount ) {
+                if (1 <= groupCount) {
                     val[0] = Integer.parseInt(matcher.group(1));
                     _state = HAS_MAJOR;
-                    if( 2 <= groupCount ) {
+                    if (2 <= groupCount) {
                         val[1] = Integer.parseInt(matcher.group(2));
                         _state |= HAS_MINOR;
-                        if( 3 <= groupCount ) {
+                        if (3 <= groupCount) {
                             val[2] = Integer.parseInt(matcher.group(3));
                             _state |= HAS_SUB;
                         }
                     }
                 }
             }
-        } catch (final Exception e) { }
+        } catch (final Exception e) {
+        }
 
         major = val[0];
         minor = val[1];
-        sub   = val[2];
+        sub = val[2];
         strEnd = _strEnd;
         state = _state;
     }
 
-    /** Returns <code>true</code>, if all version components are zero, otherwise <code>false</code>. */
+    /**
+     * Returns <code>true</code>, if all version components are zero, otherwise
+     * <code>false</code>.
+     */
     public final boolean isZero() {
         return major == 0 && minor == 0 && sub == 0;
     }
 
-    /** Returns <code>true</code>, if the major component is defined explicitly, otherwise <code>false</code>. Undefined components has the value <code>0</code>. */
-    public final boolean hasMajor() { return 0 != ( HAS_MAJOR & state ); }
-    /** Returns <code>true</code>, if the optional minor component is defined explicitly, otherwise <code>false</code>. Undefined components has the value <code>0</code>. */
-    public final boolean hasMinor() { return 0 != ( HAS_MINOR & state ); }
-    /** Returns <code>true</code>, if the optional sub component is defined explicitly, otherwise <code>false</code>. Undefined components has the value <code>0</code>. */
-    public final boolean hasSub()   { return 0 != ( HAS_SUB & state ); }
+    /**
+     * Returns <code>true</code>, if the major component is defined explicitly,
+     * otherwise <code>false</code>. Undefined components has the value
+     * <code>0</code>.
+     */
+    public final boolean hasMajor() {
+        return 0 != (HAS_MAJOR & state);
+    }
 
     /**
-     * If constructed with <code>version-string</code>, returns the string offset <i>after</i> the last matching character,
-     * or <code>0</code> if none matched, or <code>-1</code> if not constructed with a string.
+     * Returns <code>true</code>, if the optional minor component is defined
+     * explicitly, otherwise <code>false</code>. Undefined components has the
+     * value <code>0</code>.
      */
-    public final int endOfStringMatch() { return strEnd; }
+    public final boolean hasMinor() {
+        return 0 != (HAS_MINOR & state);
+    }
+
+    /**
+     * Returns <code>true</code>, if the optional sub component is defined
+     * explicitly, otherwise <code>false</code>. Undefined components has the
+     * value <code>0</code>.
+     */
+    public final boolean hasSub() {
+        return 0 != (HAS_SUB & state);
+    }
+
+    /**
+     * If constructed with <code>version-string</code>, returns the string
+     * offset <i>after</i> the last matching character, or <code>0</code> if
+     * none matched, or <code>-1</code> if not constructed with a string.
+     */
+    public final int endOfStringMatch() {
+        return strEnd;
+    }
 
     @Override
     public final int hashCode() {
@@ -234,19 +278,19 @@ public class VersionNumber implements Comparable<Object> {
 
     @Override
     public final boolean equals(final Object o) {
-        if ( o instanceof VersionNumber ) {
-            return 0 == compareTo( (VersionNumber) o );
+        if (o instanceof VersionNumber) {
+            return 0 == compareTo((VersionNumber) o);
         }
         return false;
     }
 
     @Override
     public final int compareTo(final Object o) {
-        if ( ! ( o instanceof VersionNumber ) ) {
-            final Class<?> c = (null != o) ? o.getClass() : null ;
+        if (!(o instanceof VersionNumber)) {
+            final Class<?> c = (null != o) ? o.getClass() : null;
             throw new ClassCastException("Not a VersionNumber object: " + c);
         }
-        return compareTo( (VersionNumber) o );
+        return compareTo((VersionNumber) o);
     }
 
     public final int compareTo(final VersionNumber vo) {
@@ -280,6 +324,6 @@ public class VersionNumber implements Comparable<Object> {
 
     @Override
     public String toString() {
-        return major + "." + minor + "." + sub ;
+        return major + "." + minor + "." + sub;
     }
 }

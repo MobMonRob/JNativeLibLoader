@@ -40,7 +40,7 @@ public class AndroidUtils {
     private static final Method androidGetTempRootMethod;
 
     static {
-        if(AndroidVersion.isAvailable) {
+        if (AndroidVersion.isAvailable) {
             final ClassLoader cl = AndroidUtils.class.getClassLoader();
             final Class<?> androidAndroidUtilsImplClz = ReflectionUtil.getClass("jogamp.common.os.android.AndroidUtilsImpl", true, cl);
             androidGetPackageInfoVersionCodeMethod = ReflectionUtil.getMethod(androidAndroidUtilsImplClz, "getPackageInfoVersionCode", String.class);
@@ -54,37 +54,43 @@ public class AndroidUtils {
     }
 
     /**
-     * @return null if platform is not Android or no Android Context is registered
-     *         via {@link jogamp.common.os.android.StaticContext#init(android.content.Context) StaticContext.init(..)},
-     *         otherwise the found package version code of <code>packageName</code> is returned.
+     * @return null if platform is not Android or no Android Context is
+     * registered via
+     * {@link jogamp.common.os.android.StaticContext#init(android.content.Context) StaticContext.init(..)},
+     * otherwise the found package version code of <code>packageName</code> is
+     * returned.
      */
     public static final int getPackageInfoVersionCode(final String packageName) {
-        if(null != androidGetPackageInfoVersionCodeMethod) {
+        if (null != androidGetPackageInfoVersionCodeMethod) {
             return ((Integer) ReflectionUtil.callMethod(null, androidGetPackageInfoVersionCodeMethod, packageName)).intValue();
         }
         return -1;
     }
 
     /**
-     * @return null if platform is not Android or no Android Context is registered
-     *         via {@link jogamp.common.os.android.StaticContext#init(android.content.Context) StaticContext.init(..)},
-     *         otherwise the found package version name of <code>packageName</code> is returned.
+     * @return null if platform is not Android or no Android Context is
+     * registered via
+     * {@link jogamp.common.os.android.StaticContext#init(android.content.Context) StaticContext.init(..)},
+     * otherwise the found package version name of <code>packageName</code> is
+     * returned.
      */
     public static final String getPackageInfoVersionName(final String packageName) {
-        if(null != androidGetPackageInfoVersionNameMethod) {
+        if (null != androidGetPackageInfoVersionNameMethod) {
             return (String) ReflectionUtil.callMethod(null, androidGetPackageInfoVersionNameMethod, packageName);
         }
         return null;
     }
 
     /**
-     * @return null if platform is not Android or no Android Context is registered
-     *         via {@link jogamp.common.os.android.StaticContext#init(android.content.Context) StaticContext.init(..)},
-     *         otherwise the context relative world readable <code>temp</code> directory returned.
+     * @return null if platform is not Android or no Android Context is
+     * registered via
+     * {@link jogamp.common.os.android.StaticContext#init(android.content.Context) StaticContext.init(..)},
+     * otherwise the context relative world readable <code>temp</code> directory
+     * returned.
      */
     public static File getTempRoot()
         throws RuntimeException {
-        if(null != androidGetTempRootMethod) {
+        if (null != androidGetTempRootMethod) {
             return (File) ReflectionUtil.callMethod(null, androidGetTempRootMethod);
         }
         return null;

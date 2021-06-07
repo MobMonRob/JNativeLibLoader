@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GenericURLStreamHandlerFactory implements URLStreamHandlerFactory {
+
     private static GenericURLStreamHandlerFactory factory = null;
 
     private final Map<String, URLStreamHandler> protocolHandlers;
@@ -27,8 +28,8 @@ public class GenericURLStreamHandlerFactory implements URLStreamHandlerFactory {
     }
 
     /**
-     * Returns the <code>protocol</code> handler previously set via {@link #setHandler(String, URLStreamHandler)},
-     * or null if none was set.
+     * Returns the <code>protocol</code> handler previously set via
+     * {@link #setHandler(String, URLStreamHandler)}, or null if none was set.
      */
     public synchronized final URLStreamHandler getHandler(final String protocol) {
         return protocolHandlers.get(protocol);
@@ -40,14 +41,15 @@ public class GenericURLStreamHandlerFactory implements URLStreamHandlerFactory {
     }
 
     /**
-     * Returns the singleton instance of the registered GenericURLStreamHandlerFactory
-     * or null if registration was not successful.
+     * Returns the singleton instance of the registered
+     * GenericURLStreamHandlerFactory or null if registration was not
+     * successful.
      * <p>
      * Registration is only performed once.
      * </p>
      */
     public synchronized static GenericURLStreamHandlerFactory register() {
-        if(null == factory) {
+        if (null == factory) {
             factory = AccessController.doPrivileged(new PrivilegedAction<GenericURLStreamHandlerFactory>() {
                 @Override
                 public GenericURLStreamHandlerFactory run() {
@@ -57,10 +59,11 @@ public class GenericURLStreamHandlerFactory implements URLStreamHandlerFactory {
                         URL.setURLStreamHandlerFactory(f);
                         ok = true;
                     } catch (final Throwable e) {
-                        System.err.println("GenericURLStreamHandlerFactory: Setting URLStreamHandlerFactory failed: "+e.getMessage());
+                        System.err.println("GenericURLStreamHandlerFactory: Setting URLStreamHandlerFactory failed: " + e.getMessage());
                     }
                     return ok ? f : null;
-                } } );
+                }
+            });
         }
         return factory;
     }

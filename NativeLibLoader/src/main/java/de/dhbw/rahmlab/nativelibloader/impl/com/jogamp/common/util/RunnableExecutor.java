@@ -28,19 +28,24 @@
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util;
 
 public interface RunnableExecutor {
-    /** This {@link RunnableExecutor} implementation simply invokes {@link Runnable#run()}
-     *  on the current thread.
+
+    /**
+     * This {@link RunnableExecutor} implementation simply invokes
+     * {@link Runnable#run()} on the current thread.
      */
     public static final RunnableExecutor currentThreadExecutor = new CurrentThreadExecutor();
 
     /**
-     * @param wait if true method waits until {@link Runnable#run()} is completed, otherwise don't wait.
+     * @param wait if true method waits until {@link Runnable#run()} is
+     * completed, otherwise don't wait.
      * @param r the {@link Runnable} to be executed.
      */
     void invoke(boolean wait, Runnable r);
 
     static class CurrentThreadExecutor implements RunnableExecutor {
-        private CurrentThreadExecutor() {}
+
+        private CurrentThreadExecutor() {
+        }
 
         @Override
         public void invoke(final boolean wait, final Runnable r) {

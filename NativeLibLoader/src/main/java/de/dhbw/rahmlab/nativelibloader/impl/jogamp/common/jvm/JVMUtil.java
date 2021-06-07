@@ -29,7 +29,6 @@
  * ARISING OUT OF THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF
  * SUN HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
  */
-
 package de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.jvm;
 
 import java.nio.ByteBuffer;
@@ -37,19 +36,19 @@ import java.nio.ByteBuffer;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.nio.Buffers;
 
-
 /**
  * Currently this tool works around the Hotspot race condition bugs:
- <PRE>
-     4395095 JNI access to java.nio DirectBuffer constructor/accessor
-     6852404 Race condition in JNI Direct Buffer access and creation routines
- </PRE>
+ * <PRE>
+ * 4395095 JNI access to java.nio DirectBuffer constructor/accessor
+ * 6852404 Race condition in JNI Direct Buffer access and creation routines
+ * </PRE>
  *
- * Make sure to initialize this class as soon as possible,
- * before doing any multithreading work.
+ * Make sure to initialize this class as soon as possible, before doing any
+ * multithreading work.
  *
  */
 public class JVMUtil {
+
     private static final boolean DEBUG = Debug.debug("JVMUtil");
 
     static {
@@ -58,18 +57,22 @@ public class JVMUtil {
         if( ! initialize(buffer) ) {
             throw new RuntimeException("Failed to initialize the JVMUtil "+Thread.currentThread().getName());
         }
-        */
-        if(DEBUG) {
-            final Exception e = new Exception("JVMUtil.initSingleton() .. initialized "+Thread.currentThread().getName());
+         */
+        if (DEBUG) {
+            final Exception e = new Exception("JVMUtil.initSingleton() .. initialized " + Thread.currentThread().getName());
             e.printStackTrace();
         }
     }
 
-    /** Kicks of one-time static initialization of this class. See {@link JVMUtil}. */
-    public static void initSingleton() { }
+    /**
+     * Kicks of one-time static initialization of this class. See
+     * {@link JVMUtil}.
+     */
+    public static void initSingleton() {
+    }
 
-    private JVMUtil() {}
+    private JVMUtil() {
+    }
 
     //private static native boolean initialize(java.nio.ByteBuffer buffer);
 }
-

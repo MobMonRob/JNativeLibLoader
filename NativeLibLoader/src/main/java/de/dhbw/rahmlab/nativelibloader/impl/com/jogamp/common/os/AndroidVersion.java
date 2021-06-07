@@ -35,31 +35,48 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.IntObjectHash
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.ReflectionUtil;
 
 public class AndroidVersion {
+
     public static final boolean isAvailable;
 
-    /** The name of the instruction set (CPU type + ABI convention) of native code. API-4. All lower case.*/
+    /**
+     * The name of the instruction set (CPU type + ABI convention) of native
+     * code. API-4. All lower case.
+     */
     public static final String CPU_ABI;
     public static final CPUType CPU_TYPE;
     public static final ABIType ABI_TYPE;
 
-    /** The name of the second instruction set (CPU type + ABI convention) of native code. API-8. All lower case.*/
+    /**
+     * The name of the second instruction set (CPU type + ABI convention) of
+     * native code. API-8. All lower case.
+     */
     public static final String CPU_ABI2;
     public static final CPUType CPU_TYPE2;
     public static final ABIType ABI_TYPE2;
 
-    /** Development codename, or the string "REL" for official release */
+    /**
+     * Development codename, or the string "REL" for official release
+     */
     public static final String CODENAME;
 
-    /** internal build value used by the underlying source control. */
+    /**
+     * internal build value used by the underlying source control.
+     */
     public static final String INCREMENTAL;
 
-    /** official build version string */
+    /**
+     * official build version string
+     */
     public static final String RELEASE;
 
-    /** SDK Version number, key to VERSION_CODES */
+    /**
+     * SDK Version number, key to VERSION_CODES
+     */
     public static final int SDK_INT;
 
-    /** SDK Version string */
+    /**
+     * SDK Version string
+     */
     public static final String SDK_NAME;
 
     private static final String androidBuild = "android.os.Build";
@@ -69,26 +86,27 @@ public class AndroidVersion {
     static {
         final ClassLoader cl = AndroidVersion.class.getClassLoader();
         Class<?> abClass = null;
-        Object abObject= null;
+        Object abObject = null;
         Class<?> abvClass = null;
-        Object abvObject= null;
+        Object abvObject = null;
         Class<?> abvcClass = null;
-        Object abvcObject= null;
+        Object abvcObject = null;
 
         final boolean isDalvikVm = "Dalvik".equals(System.getProperty("java.vm.name"));
 
         if (isDalvikVm) {
-          try {
-              abClass = ReflectionUtil.getClass(androidBuild, true, cl);
-              abObject = abClass.newInstance();
-              abvClass = ReflectionUtil.getClass(androidBuildVersion, true, cl);
-              abvObject = abvClass.newInstance();
-              abvcClass = ReflectionUtil.getClass(androidBuildVersionCodes, true, cl);
-              abvcObject = abvcClass.newInstance();
-          } catch (final Exception e) { /* n/a */ }
+            try {
+                abClass = ReflectionUtil.getClass(androidBuild, true, cl);
+                abObject = abClass.newInstance();
+                abvClass = ReflectionUtil.getClass(androidBuildVersion, true, cl);
+                abvObject = abvClass.newInstance();
+                abvcClass = ReflectionUtil.getClass(androidBuildVersionCodes, true, cl);
+                abvcObject = abvcClass.newInstance();
+            } catch (final Exception e) {
+                /* n/a */ }
         }
         isAvailable = isDalvikVm && null != abObject && null != abvObject;
-        if(isAvailable) {
+        if (isAvailable) {
             CPU_ABI = getString(abClass, abObject, "CPU_ABI", true);
             CPU_ABI2 = getString(abClass, abObject, "CPU_ABI2", true);
             CODENAME = getString(abvClass, abvObject, "CODENAME", false);
@@ -96,18 +114,21 @@ public class AndroidVersion {
             RELEASE = getString(abvClass, abvObject, "RELEASE", false);
             SDK_INT = getInt(abvClass, abvObject, "SDK_INT");
             final String sdk_name;
-            if( null != abvcObject ) {
+            if (null != abvcObject) {
                 final IntObjectHashMap version_codes = getVersionCodes(abvcClass, abvcObject);
                 sdk_name = (String) version_codes.get(SDK_INT);
             } else {
                 sdk_name = null;
             }
-            SDK_NAME = ( null != sdk_name ) ? sdk_name : "SDK_"+SDK_INT ;
+            SDK_NAME = (null != sdk_name) ? sdk_name : "SDK_" + SDK_INT;
 
             /**
              * <p>
-             * FIXME: Where is a comprehensive list of known 'android.os.Build.CPU_ABI' and 'android.os.Build.CPU_ABI2' strings ?<br/>
-             * Fount this one: <code>http://www.kandroid.org/ndk/docs/CPU-ARCH-ABIS.html</code>
+             * FIXME: Where is a comprehensive list of known
+             * 'android.os.Build.CPU_ABI' and 'android.os.Build.CPU_ABI2'
+             * strings ?<br/>
+             * Fount this one:
+             * <code>http://www.kandroid.org/ndk/docs/CPU-ARCH-ABIS.html</code>
              * <pre>
              *  lib/armeabi/libfoo.so
              *  lib/armeabi-v7a/libfoo.so
@@ -119,7 +140,7 @@ public class AndroidVersion {
              */
             CPU_TYPE = Platform.CPUType.query(CPU_ABI);
             ABI_TYPE = Platform.ABIType.query(CPU_TYPE, CPU_ABI);
-            if( null != CPU_ABI2 && CPU_ABI2.length() > 0 ) {
+            if (null != CPU_ABI2 && CPU_ABI2.length() > 0) {
                 CPU_TYPE2 = Platform.CPUType.query(CPU_ABI2);
                 ABI_TYPE2 = Platform.ABIType.query(CPU_TYPE2, CPU_ABI2);
             } else {
@@ -143,14 +164,16 @@ public class AndroidVersion {
 
     private static final IntObjectHashMap getVersionCodes(final Class<?> cls, final Object obj) {
         final Field[] fields = cls.getFields();
-        final IntObjectHashMap map = new IntObjectHashMap( 3 * fields.length / 2, 0.75f );
-        for(int i=0; i<fields.length; i++) {
+        final IntObjectHashMap map = new IntObjectHashMap(3 * fields.length / 2, 0.75f);
+        for (int i = 0; i < fields.length; i++) {
             try {
                 final int version = fields[i].getInt(obj);
                 final String version_name = fields[i].getName();
                 // System.err.println(i+": "+version+": "+version_name);
                 map.put(new Integer(version), version_name);
-            } catch (final Exception e) { e.printStackTrace(); /* n/a */ }
+            } catch (final Exception e) {
+                e.printStackTrace();
+                /* n/a */ }
         }
         return map;
     }
@@ -159,12 +182,14 @@ public class AndroidVersion {
         try {
             final Field f = cls.getField(name);
             final String s = (String) f.get(obj);
-            if( lowerCase && null != s ) {
+            if (lowerCase && null != s) {
                 return s.toLowerCase();
             } else {
                 return s;
             }
-        } catch (final Exception e) { e.printStackTrace(); /* n/a */ }
+        } catch (final Exception e) {
+            e.printStackTrace();
+            /* n/a */ }
         return null;
     }
 
@@ -172,7 +197,9 @@ public class AndroidVersion {
         try {
             final Field f = cls.getField(name);
             return f.getInt(obj);
-        } catch (final Exception e) { e.printStackTrace(); /* n/a */ }
+        } catch (final Exception e) {
+            e.printStackTrace();
+            /* n/a */ }
         return -1;
     }
 

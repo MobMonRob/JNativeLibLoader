@@ -25,7 +25,6 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of JogAmp Community.
  */
-
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os;
 
 import java.security.AccessController;
@@ -46,10 +45,10 @@ import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl;
 /**
  * Utility class for querying platform specific properties.
  * <p>
- * Some field declarations and it's static initialization has been delegated
- * to it's super class {@link PlatformPropsImpl} to solve
- * static initialization interdependencies w/ the GlueGen native library loading
- * and it's derived information {@link #getMachineDataInfo()}, {@link #is32Bit()}, ..<br>
+ * Some field declarations and it's static initialization has been delegated to
+ * it's super class {@link PlatformPropsImpl} to solve static initialization
+ * interdependencies w/ the GlueGen native library loading and it's derived
+ * information {@link #getMachineDataInfo()}, {@link #is32Bit()}, ..<br>
  * This mechanism is preferred in this case to avoid synchronization and locking
  * and allow better performance accessing the mentioned fields/methods.
  * </p>
@@ -61,144 +60,195 @@ public class Platform extends PlatformPropsImpl {
     }
 
     public enum CPUFamily {
-        /** AMD/Intel */
+        /**
+         * AMD/Intel
+         */
         X86,
-        /** ARM */
+        /**
+         * ARM
+         */
         ARM,
-        /** Power PC */
+        /**
+         * Power PC
+         */
         PPC,
-        /** SPARC */
+        /**
+         * SPARC
+         */
         SPARC,
-        /** Mips */
+        /**
+         * Mips
+         */
         MIPS,
-        /** PA RISC */
+        /**
+         * PA RISC
+         */
         PA_RISC,
-        /** Itanium */
+        /**
+         * Itanium
+         */
         IA64,
-        /** Hitachi SuperH */
+        /**
+         * Hitachi SuperH
+         */
         SuperH;
     }
 
     public enum CPUType {
-        /** ARM 32bit default, usually little endian */
-        ARM(       CPUFamily.ARM,     true),
-        /** ARM7EJ, ARM9E, ARM10E, XScale, usually little endian */
-        ARMv5(     CPUFamily.ARM,     true),
-        /** ARM11, usually little endian */
-        ARMv6(     CPUFamily.ARM,     true),
-        /** ARM Cortex, usually little endian */
-        ARMv7(     CPUFamily.ARM,     true),
+        /**
+         * ARM 32bit default, usually little endian
+         */
+        ARM(CPUFamily.ARM, true),
+        /**
+         * ARM7EJ, ARM9E, ARM10E, XScale, usually little endian
+         */
+        ARMv5(CPUFamily.ARM, true),
+        /**
+         * ARM11, usually little endian
+         */
+        ARMv6(CPUFamily.ARM, true),
+        /**
+         * ARM Cortex, usually little endian
+         */
+        ARMv7(CPUFamily.ARM, true),
         // 4
 
-        /** X86 32bit, little endian */
-        X86_32(    CPUFamily.X86,     true),
-        /** PPC 32bit default, usually big endian */
-        PPC(       CPUFamily.PPC,     true),
-        /** MIPS 32bit, big endian (mips) or little endian (mipsel) */
-        MIPS_32(   CPUFamily.MIPS,    true),
-        /** Hitachi SuperH 32bit default, ??? endian */
-        SuperH(    CPUFamily.SuperH,  true),
-        /** SPARC 32bit, big endian */
-        SPARC_32(  CPUFamily.SPARC,   true),
+        /**
+         * X86 32bit, little endian
+         */
+        X86_32(CPUFamily.X86, true),
+        /**
+         * PPC 32bit default, usually big endian
+         */
+        PPC(CPUFamily.PPC, true),
+        /**
+         * MIPS 32bit, big endian (mips) or little endian (mipsel)
+         */
+        MIPS_32(CPUFamily.MIPS, true),
+        /**
+         * Hitachi SuperH 32bit default, ??? endian
+         */
+        SuperH(CPUFamily.SuperH, true),
+        /**
+         * SPARC 32bit, big endian
+         */
+        SPARC_32(CPUFamily.SPARC, true),
         // 9
 
-        /** ARM64 default (64bit), usually little endian */
-        ARM64(     CPUFamily.ARM,     false),
-        /** ARM AArch64 (64bit), usually little endian */
-        ARMv8_A(   CPUFamily.ARM,     false),
-        /** X86 64bit, little endian */
-        X86_64(    CPUFamily.X86,     false),
-        /** PPC 64bit default, usually big endian */
-        PPC64(     CPUFamily.PPC,     false),
-        /** MIPS 64bit, big endian (mips64) or little endian (mipsel64) ? */
-        MIPS_64(   CPUFamily.MIPS,    false),
-        /** Itanium 64bit default, little endian */
-        IA64(      CPUFamily.IA64,    false),
-        /** SPARC 64bit, big endian */
-        SPARCV9_64(CPUFamily.SPARC,   false),
-        /** PA_RISC2_0 64bit, ??? endian */
+        /**
+         * ARM64 default (64bit), usually little endian
+         */
+        ARM64(CPUFamily.ARM, false),
+        /**
+         * ARM AArch64 (64bit), usually little endian
+         */
+        ARMv8_A(CPUFamily.ARM, false),
+        /**
+         * X86 64bit, little endian
+         */
+        X86_64(CPUFamily.X86, false),
+        /**
+         * PPC 64bit default, usually big endian
+         */
+        PPC64(CPUFamily.PPC, false),
+        /**
+         * MIPS 64bit, big endian (mips64) or little endian (mipsel64) ?
+         */
+        MIPS_64(CPUFamily.MIPS, false),
+        /**
+         * Itanium 64bit default, little endian
+         */
+        IA64(CPUFamily.IA64, false),
+        /**
+         * SPARC 64bit, big endian
+         */
+        SPARCV9_64(CPUFamily.SPARC, false),
+        /**
+         * PA_RISC2_0 64bit, ??? endian
+         */
         PA_RISC2_0(CPUFamily.PA_RISC, false);
         // 17
 
         public final CPUFamily family;
         public final boolean is32Bit;
 
-        CPUType(final CPUFamily type, final boolean is32Bit){
+        CPUType(final CPUFamily type, final boolean is32Bit) {
             this.family = type;
             this.is32Bit = is32Bit;
         }
 
         /**
-         * Returns {@code true} if the given {@link CPUType} is compatible
-         * w/ this one, i.e. at least {@link #family} and {@link #is32Bit} is equal.
+         * Returns {@code true} if the given {@link CPUType} is compatible w/
+         * this one, i.e. at least {@link #family} and {@link #is32Bit} is
+         * equal.
          */
         public final boolean isCompatible(final CPUType other) {
-            if( null == other ) {
+            if (null == other) {
                 return false;
-            } else if( other == this ) {
+            } else if (other == this) {
                 return true;
             } else {
-                return this.family == other.family &&
-                       this.is32Bit == other.is32Bit;
+                return this.family == other.family
+                    && this.is32Bit == other.is32Bit;
             }
         }
 
         public static final CPUType query(final String cpuABILower) {
-            if( null == cpuABILower ) {
+            if (null == cpuABILower) {
                 throw new IllegalArgumentException("Null cpuABILower arg");
             }
-            if(        cpuABILower.equals("x86")  ||
-                       cpuABILower.equals("i386") ||
-                       cpuABILower.equals("i486") ||
-                       cpuABILower.equals("i586") ||
-                       cpuABILower.equals("i686") ) {
+            if (cpuABILower.equals("x86")
+                || cpuABILower.equals("i386")
+                || cpuABILower.equals("i486")
+                || cpuABILower.equals("i586")
+                || cpuABILower.equals("i686")) {
                 return X86_32;
-            } else if( cpuABILower.equals("x86_64") ||
-                       cpuABILower.equals("amd64")  ) {
+            } else if (cpuABILower.equals("x86_64")
+                || cpuABILower.equals("amd64")) {
                 return X86_64;
-            } else if( cpuABILower.equals("ia64") ) {
+            } else if (cpuABILower.equals("ia64")) {
                 return IA64;
-            } else if( cpuABILower.equals("aarch64") ) {
+            } else if (cpuABILower.equals("aarch64")) {
                 return ARM64;
-            } else if( cpuABILower.startsWith("arm") ) {
-                if(        cpuABILower.equals("armv8-a")   ||
-                           cpuABILower.equals("arm-v8-a") ||
-                           cpuABILower.equals("arm-8-a") ||
-                           cpuABILower.equals("arm64-v8a") ) {
+            } else if (cpuABILower.startsWith("arm")) {
+                if (cpuABILower.equals("armv8-a")
+                    || cpuABILower.equals("arm-v8-a")
+                    || cpuABILower.equals("arm-8-a")
+                    || cpuABILower.equals("arm64-v8a")) {
                     return ARMv8_A;
-                } else if( cpuABILower.startsWith("arm64") ) {
+                } else if (cpuABILower.startsWith("arm64")) {
                     return ARM64;
-                } else if( cpuABILower.startsWith("armv7") ||
-                           cpuABILower.startsWith("arm-v7") ||
-                           cpuABILower.startsWith("arm-7") ||
-                           cpuABILower.startsWith("armeabi-v7") ) {
+                } else if (cpuABILower.startsWith("armv7")
+                    || cpuABILower.startsWith("arm-v7")
+                    || cpuABILower.startsWith("arm-7")
+                    || cpuABILower.startsWith("armeabi-v7")) {
                     return ARMv7;
-                } else if( cpuABILower.startsWith("armv5") ||
-                           cpuABILower.startsWith("arm-v5") ||
-                           cpuABILower.startsWith("arm-5") ) {
+                } else if (cpuABILower.startsWith("armv5")
+                    || cpuABILower.startsWith("arm-v5")
+                    || cpuABILower.startsWith("arm-5")) {
                     return ARMv5;
-                } else if( cpuABILower.startsWith("armv6") ||
-                           cpuABILower.startsWith("arm-v6") ||
-                           cpuABILower.startsWith("arm-6") ) {
+                } else if (cpuABILower.startsWith("armv6")
+                    || cpuABILower.startsWith("arm-v6")
+                    || cpuABILower.startsWith("arm-6")) {
                     return ARMv6;
                 } else {
                     return ARM;
                 }
-            } else if( cpuABILower.equals("sparcv9") ) {
+            } else if (cpuABILower.equals("sparcv9")) {
                 return SPARCV9_64;
-            } else if( cpuABILower.equals("sparc") ) {
+            } else if (cpuABILower.equals("sparc")) {
                 return SPARC_32;
-            } else if( cpuABILower.equals("pa_risc2.0") ) {
+            } else if (cpuABILower.equals("pa_risc2.0")) {
                 return PA_RISC2_0;
-            } else if( cpuABILower.startsWith("ppc64") ) {
+            } else if (cpuABILower.startsWith("ppc64")) {
                 return PPC64;
-            } else if( cpuABILower.startsWith("ppc") ) {
+            } else if (cpuABILower.startsWith("ppc")) {
                 return PPC;
-            } else if( cpuABILower.startsWith("mips64") ) {
+            } else if (cpuABILower.startsWith("mips64")) {
                 return MIPS_64;
-            } else if( cpuABILower.startsWith("mips") ) {
+            } else if (cpuABILower.startsWith("mips")) {
                 return MIPS_32;
-            } else if( cpuABILower.startsWith("superh") ) {
+            } else if (cpuABILower.startsWith("superh")) {
                 return SuperH;
             } else {
                 throw new RuntimeException("Please port CPUType detection to your platform (CPU_ABI string '" + cpuABILower + "')");
@@ -207,26 +257,32 @@ public class Platform extends PlatformPropsImpl {
     }
 
     public enum ABIType {
-        GENERIC_ABI       ( 0x00 ),
-        /** ARM GNU-EABI ARMEL -mfloat-abi=softfp */
-        EABI_GNU_ARMEL    ( 0x01 ),
-        /** ARM GNU-EABI ARMHF -mfloat-abi=hard */
-        EABI_GNU_ARMHF    ( 0x02 ),
-        /** ARM EABI AARCH64 (64bit) */
-        EABI_AARCH64      ( 0x03 );
+        GENERIC_ABI(0x00),
+        /**
+         * ARM GNU-EABI ARMEL -mfloat-abi=softfp
+         */
+        EABI_GNU_ARMEL(0x01),
+        /**
+         * ARM GNU-EABI ARMHF -mfloat-abi=hard
+         */
+        EABI_GNU_ARMHF(0x02),
+        /**
+         * ARM EABI AARCH64 (64bit)
+         */
+        EABI_AARCH64(0x03);
 
         public final int id;
 
-        ABIType(final int id){
+        ABIType(final int id) {
             this.id = id;
         }
 
         /**
-         * Returns {@code true} if the given {@link ABIType} is compatible
-         * w/ this one, i.e. they are equal.
+         * Returns {@code true} if the given {@link ABIType} is compatible w/
+         * this one, i.e. they are equal.
          */
         public final boolean isCompatible(final ABIType other) {
-            if( null == other ) {
+            if (null == other) {
                 return false;
             } else {
                 return other == this;
@@ -234,14 +290,14 @@ public class Platform extends PlatformPropsImpl {
         }
 
         public static final ABIType query(final CPUType cpuType, final String cpuABILower) {
-            if( null == cpuType ) {
+            if (null == cpuType) {
                 throw new IllegalArgumentException("Null cpuType");
-            } else if( null == cpuABILower ) {
+            } else if (null == cpuABILower) {
                 throw new IllegalArgumentException("Null cpuABILower");
-            } else if( CPUFamily.ARM == cpuType.family ) {
-                if( !cpuType.is32Bit ) {
+            } else if (CPUFamily.ARM == cpuType.family) {
+                if (!cpuType.is32Bit) {
                     return EABI_AARCH64;
-                } else if( cpuABILower.equals("armeabi-v7a-hard") ) {
+                } else if (cpuABILower.equals("armeabi-v7a-hard")) {
                     return EABI_GNU_ARMHF;
                 } else {
                     return EABI_GNU_ARMEL;
@@ -255,36 +311,34 @@ public class Platform extends PlatformPropsImpl {
     private static final String useTempJarCachePropName = "jogamp.gluegen.UseTempJarCache";
 
     /**
-     * Fixed basename of JAR file and native library.
-     * Dash replaced by underscore to allow static linkage via JEP 178.
+     * Fixed basename of JAR file and native library. Dash replaced by
+     * underscore to allow static linkage via JEP 178.
      */
     //private static final String libBaseName = "gluegen_rt";
-
     //
     // static initialization order:
     //
-
     /**
-     * System property: 'jogamp.gluegen.UseTempJarCache',
-     * defaults to true if {@link #OS_TYPE} is not {@link OSType#ANDROID}.
+     * System property: 'jogamp.gluegen.UseTempJarCache', defaults to true if
+     * {@link #OS_TYPE} is not {@link OSType#ANDROID}.
      */
     public static final boolean USE_TEMP_JAR_CACHE;
 
     //
     // post loading native lib:
     //
-
     //private static final MachineDataInfo machineDescription;
-
-    /** <code>true</code> if AWT is available and not in headless mode, otherwise <code>false</code>. */
+    /** <code>true</code> if AWT is available and not in headless mode,
+     * otherwise <code>false</code>.
+     */
     public static final boolean AWT_AVAILABLE;
 
     private static final boolean isRunningFromJarURL;
 
     static {
-        final boolean[] _isRunningFromJarURL = new boolean[] { false };
-        final boolean[] _USE_TEMP_JAR_CACHE = new boolean[] { false };
-        final boolean[] _AWT_AVAILABLE = new boolean[] { false };
+        final boolean[] _isRunningFromJarURL = new boolean[]{false};
+        final boolean[] _USE_TEMP_JAR_CACHE = new boolean[]{false};
+        final boolean[] _AWT_AVAILABLE = new boolean[]{false};
 
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
             @Override
@@ -299,14 +353,15 @@ public class Platform extends PlatformPropsImpl {
                     Uri _platformClassJarURI = null;
                     try {
                         _platformClassJarURI = JarUtil.getJarUri(Platform.class.getName(), cl);
-                    } catch (final Exception e) { }
+                    } catch (final Exception e) {
+                    }
                     platformClassJarURI = _platformClassJarURI;
                 }
                 _isRunningFromJarURL[0] = null != platformClassJarURI;
 
-                _USE_TEMP_JAR_CACHE[0] = ( OS_TYPE != OSType.ANDROID ) && ( OS_TYPE != OSType.IOS ) &&
-                                         ( null != platformClassJarURI ) &&
-                                         PropertyAccess.getBooleanProperty(useTempJarCachePropName, true, true);
+                _USE_TEMP_JAR_CACHE[0] = (OS_TYPE != OSType.ANDROID) && (OS_TYPE != OSType.IOS)
+                    && (null != platformClassJarURI)
+                    && PropertyAccess.getBooleanProperty(useTempJarCachePropName, true, true);
 
                 // load GluegenRT native library
                 /*
@@ -319,21 +374,22 @@ public class Platform extends PlatformPropsImpl {
                     }
                 }
                 DynamicLibraryBundle.GlueJNILibLoader.loadLibrary(libBaseName, false, cl);
-                */
-
+                 */
                 // JVM bug workaround
                 JVMUtil.initSingleton(); // requires gluegen_rt, one-time init.
 
                 // AWT Headless determination
-                if( !PropertyAccess.getBooleanProperty("java.awt.headless", true) &&
-                    ReflectionUtil.isClassAvailable(ReflectionUtil.AWTNames.ComponentClass, cl) &&
-                    ReflectionUtil.isClassAvailable(ReflectionUtil.AWTNames.GraphicsEnvironmentClass, cl) ) {
+                if (!PropertyAccess.getBooleanProperty("java.awt.headless", true)
+                    && ReflectionUtil.isClassAvailable(ReflectionUtil.AWTNames.ComponentClass, cl)
+                    && ReflectionUtil.isClassAvailable(ReflectionUtil.AWTNames.GraphicsEnvironmentClass, cl)) {
                     try {
-                        _AWT_AVAILABLE[0] = false == ((Boolean)ReflectionUtil.callStaticMethod(ReflectionUtil.AWTNames.GraphicsEnvironmentClass, ReflectionUtil.AWTNames.isHeadlessMethod, null, null, cl)).booleanValue();
-                    } catch (final Throwable t) { }
+                        _AWT_AVAILABLE[0] = false == ((Boolean) ReflectionUtil.callStaticMethod(ReflectionUtil.AWTNames.GraphicsEnvironmentClass, ReflectionUtil.AWTNames.isHeadlessMethod, null, null, cl)).booleanValue();
+                    } catch (final Throwable t) {
+                    }
                 }
                 return null;
-            } } );
+            }
+        });
         isRunningFromJarURL = _isRunningFromJarURL[0];
         USE_TEMP_JAR_CACHE = _USE_TEMP_JAR_CACHE[0];
         AWT_AVAILABLE = _AWT_AVAILABLE[0];
@@ -345,7 +401,8 @@ public class Platform extends PlatformPropsImpl {
         //machineDescription = MachineDataInfoRuntime.getRuntime();
     }
 
-    private Platform() {}
+    private Platform() {
+    }
 
     /**
      * @return true if we're running from a Jar URL, otherwise false
@@ -355,9 +412,11 @@ public class Platform extends PlatformPropsImpl {
     }
 
     /**
-     * kick off static initialization of <i>platform property information</i> and <i>native gluegen_rt lib loading</i>
+     * kick off static initialization of <i>platform property information</i>
+     * and <i>native gluegen_rt lib loading</i>
      */
-    public static void initSingleton() { }
+    public static void initSingleton() {
+    }
 
     /**
      * Returns true if this machine is little endian, otherwise false.
@@ -368,7 +427,9 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the OS name.
-     * <p>In case of {@link OSType#ANDROID}, see {@link #getOSType()}, the OS name is Linux</p>
+     * <p>
+     * In case of {@link OSType#ANDROID}, see {@link #getOSType()}, the OS name
+     * is Linux</p>
      */
     public static String getOSName() {
         return OS;
@@ -397,7 +458,9 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the OS type.
-     * <p>In case of {@link OSType#ANDROID} the {@link #getOSName() OS name}, is Linux</p>
+     * <p>
+     * In case of {@link OSType#ANDROID} the {@link #getOSName() OS name}, is
+     * Linux</p>
      */
     public static OSType getOSType() {
         return OS_TYPE;
@@ -419,7 +482,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns true if this JVM/ARCH is 32bit.
-     * <p>Shortcut to {@link #getCPUType()}.{@link CPUType#is32Bit is32Bit}</p>
+     * <p>
+     * Shortcut to {@link #getCPUType()}.{@link CPUType#is32Bit is32Bit}</p>
      */
     public static boolean is32Bit() {
         return CPU_ARCH.is32Bit; // used very often
@@ -427,7 +491,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns true if this JVM/ARCH is 64bit.
-     * <p>Shortcut to !{@link #getCPUType()}.{@link CPUType#is32Bit is32Bit}</p>
+     * <p>
+     * Shortcut to !{@link #getCPUType()}.{@link CPUType#is32Bit is32Bit}</p>
      */
     public static boolean is64Bit() {
         return !CPU_ARCH.is32Bit; // used very often
@@ -436,7 +501,8 @@ public class Platform extends PlatformPropsImpl {
     /**
      * Returns the ABI type.
      * <p>
-     * In case of {@link CPUFamily#ARM}, the value is determined by parsing the <i>Elf Headers</i> of the running VM.
+     * In case of {@link CPUFamily#ARM}, the value is determined by parsing the
+     * <i>Elf Headers</i> of the running VM.
      * </p>
      * <p>
      * Otherwise the value is {@link ABIType#GENERIC_ABI}.
@@ -447,8 +513,9 @@ public class Platform extends PlatformPropsImpl {
     }
 
     /**
-     * Returns the GlueGen common name for the currently running OSType and CPUType
-     * as implemented in the build system in 'gluegen-cpptasks-base.xml'.<br>
+     * Returns the GlueGen common name for the currently running OSType and
+     * CPUType as implemented in the build system in
+     * 'gluegen-cpptasks-base.xml'.<br>
      *
      * @see #getOSAndArch(OSType, CPUType)
      */
@@ -512,11 +579,12 @@ public class Platform extends PlatformPropsImpl {
     public static MachineDataInfo getMachineDataInfo() {
         return machineDescription;
     }
-    */
-
-    /** Returns <code>true</code> if AWT is available and not in headless mode, otherwise <code>false</code>. */
+     */
+    /**
+     * Returns <code>true</code> if AWT is available and not in headless mode,
+     * otherwise <code>false</code>.
+     */
     public static boolean isAWTAvailable() {
         return AWT_AVAILABLE;
     }
 }
-

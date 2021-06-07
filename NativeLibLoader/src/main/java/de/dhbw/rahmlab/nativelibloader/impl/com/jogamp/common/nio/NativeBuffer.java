@@ -62,19 +62,20 @@ public interface NativeBuffer<B extends NativeBuffer> {
     public boolean hasArray();
 
     /**
-     * @return the array offset of the optional primitive backup array of the buffer if {@link #hasArray()} is true,
-     *         otherwise 0.
+     * @return the array offset of the optional primitive backup array of the
+     * buffer if {@link #hasArray()} is true, otherwise 0.
      */
     public int arrayOffset();
 
     /**
-     * @return the primitive backup array of the buffer if {@link #hasArray()} is true,
-     *         otherwise it throws {@link java.lang.UnsupportedOperationException}.
-     *         The returned primitive array maybe of type <code>int[]</code> or <code>long[]</code>, etc ..
+     * @return the primitive backup array of the buffer if {@link #hasArray()}
+     * is true, otherwise it throws
+     * {@link java.lang.UnsupportedOperationException}. The returned primitive
+     * array maybe of type <code>int[]</code> or <code>long[]</code>, etc ..
      * @throws UnsupportedOperationException if this object has no backup array
      * @see #hasArray()
      */
-    public Object array() throws UnsupportedOperationException ;
+    public Object array() throws UnsupportedOperationException;
 
     public Buffer getBuffer();
 

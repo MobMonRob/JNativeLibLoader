@@ -31,7 +31,6 @@
  */
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.nio;
 
-
 import java.nio.Buffer;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.Platform;
 
@@ -52,13 +51,16 @@ public abstract class AbstractBuffer<B extends AbstractBuffer> implements Native
     }
 
     /**
-     * capacity and elementSize should be match the equation w/ target buffer type
+     * capacity and elementSize should be match the equation w/ target buffer
+     * type
      * <pre>
      *    capacity = elementSizeInBytes(buffer) * buffer.capacity() ) / elementSize
      * </pre>
+     *
      * @param buffer shall be in target format.
      * @param elementSize the target element size in bytes.
-     * @param capacity the target capacity in elements of size <code>elementSize</code>.
+     * @param capacity the target capacity in elements of size
+     * <code>elementSize</code>.
      */
     protected AbstractBuffer(final Buffer buffer, final int elementSize, final int capacity) {
         this.buffer = buffer;
@@ -91,11 +93,11 @@ public abstract class AbstractBuffer<B extends AbstractBuffer> implements Native
     @Override
     public final B position(final int newPos) {
         if (0 > newPos || newPos >= capacity) {
-            throw new IndexOutOfBoundsException("Sorry to interrupt, but the position "+newPos+" was out of bounds. " +
-                                                "My capacity is "+capacity()+".");
+            throw new IndexOutOfBoundsException("Sorry to interrupt, but the position " + newPos + " was out of bounds. "
+                + "My capacity is " + capacity() + ".");
         }
         position = newPos;
-        return (B)this;
+        return (B) this;
     }
 
     @Override
@@ -131,7 +133,7 @@ public abstract class AbstractBuffer<B extends AbstractBuffer> implements Native
 
     @Override
     public final int arrayOffset() {
-        if( hasArray() ) {
+        if (hasArray()) {
             return buffer.arrayOffset();
         } else {
             return 0;
@@ -145,7 +147,7 @@ public abstract class AbstractBuffer<B extends AbstractBuffer> implements Native
 
     @Override
     public String toString() {
-        return "AbstractBuffer[direct "+isDirect()+", hasArray "+hasArray()+", capacity "+capacity+", position "+position+", elementSize "+elementSize+", buffer[capacity "+buffer.capacity()+", lim "+buffer.limit()+", pos "+buffer.position()+"]]";
+        return "AbstractBuffer[direct " + isDirect() + ", hasArray " + hasArray() + ", capacity " + capacity + ", position " + position + ", elementSize " + elementSize + ", buffer[capacity " + buffer.capacity() + ", lim " + buffer.limit() + ", pos " + buffer.position() + "]]";
     }
 
 }

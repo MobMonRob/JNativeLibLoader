@@ -11,15 +11,15 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.net.AssetURLConnec
  * {@link URLStreamHandler} to handle the asset protocol.
  *
  * <p>
- * This is the <i>asset</i> URLStreamHandler variation
- * for manual use.
+ * This is the <i>asset</i> URLStreamHandler variation for manual use.
  * </p>
  * <p>
- * It requires passing a valid {@link AssetURLContext}
- * for construction, hence it's not suitable for the pkg factory model.
+ * It requires passing a valid {@link AssetURLContext} for construction, hence
+ * it's not suitable for the pkg factory model.
  * </p>
  */
 public class AssetURLStreamHandler extends URLStreamHandler {
+
     AssetURLContext ctx;
 
     public AssetURLStreamHandler(final AssetURLContext ctx) {
@@ -32,6 +32,5 @@ public class AssetURLStreamHandler extends URLStreamHandler {
         c.connect();
         return c;
     }
-
 
 }

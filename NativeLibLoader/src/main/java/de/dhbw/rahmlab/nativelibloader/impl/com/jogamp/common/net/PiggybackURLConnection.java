@@ -6,23 +6,26 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * Generic resource location protocol connection,
- * using another sub-protocol as the vehicle for a piggyback protocol.
+ * Generic resource location protocol connection, using another sub-protocol as
+ * the vehicle for a piggyback protocol.
  * <p>
- * The details of the sub-protocol can be queried using {@link #getSubProtocol()}.
+ * The details of the sub-protocol can be queried using
+ * {@link #getSubProtocol()}.
  * </p>
  * <p>
  * See example in {@link AssetURLConnection}.
  * </p>
  */
 public abstract class PiggybackURLConnection<I extends PiggybackURLContext> extends URLConnection {
+
     protected URL subUrl;
     protected URLConnection subConn;
     protected I context;
 
     /**
      * @param url the specific URL for this instance
-     * @param context the piggyback context, defining state independent code and constants
+     * @param context the piggyback context, defining state independent code and
+     * constants
      */
     protected PiggybackURLConnection(final URL url, final I context) {
         super(url);
@@ -31,15 +34,15 @@ public abstract class PiggybackURLConnection<I extends PiggybackURLContext> exte
 
     /**
      * <p>
-     * Resolves the URL via {@link PiggybackURLContext#resolve(String)},
-     * see {@link AssetURLContext#resolve(String)} for an example.
+     * Resolves the URL via {@link PiggybackURLContext#resolve(String)}, see
+     * {@link AssetURLContext#resolve(String)} for an example.
      * </p>
      *
      * {@inheritDoc}
      */
     @Override
     public synchronized void connect() throws IOException {
-        if(!connected) {
+        if (!connected) {
             subConn = context.resolve(url.getPath());
             subUrl = subConn.getURL();
             connected = true;
@@ -48,7 +51,7 @@ public abstract class PiggybackURLConnection<I extends PiggybackURLContext> exte
 
     @Override
     public InputStream getInputStream() throws IOException {
-        if(!connected) {
+        if (!connected) {
             throw new IOException("not connected");
         }
         return subConn.getInputStream();
@@ -61,8 +64,10 @@ public abstract class PiggybackURLConnection<I extends PiggybackURLContext> exte
      * Resolved  asset:jar:file:/data/app/jogamp.test.apk!/assets/test/lala.txt
      * Result          test/lala.txt
      * </pre>
+     *
      * @throws IOException is not connected
-     **/
+     *
+     */
     public abstract String getEntryName() throws IOException;
 
     /**
@@ -76,7 +81,7 @@ public abstract class PiggybackURLConnection<I extends PiggybackURLContext> exte
      * @throws IOException is not connected
      */
     public URL getSubProtocol() throws IOException {
-        if(!connected) {
+        if (!connected) {
             throw new IOException("not connected");
         }
         return subUrl;

@@ -25,7 +25,6 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of JogAmp Community.
  */
-
 /**
  * Created on Sunday, March 28 2010 21:01
  */
@@ -43,10 +42,10 @@ import java.util.Iterator;
 /*
  * Note: this map is used as template for other maps.
  */
-
 /**
- * Fast HashMap for primitive data. Optimized for being GC friendly.
- * Original code is based on the <a href="http://code.google.com/p/skorpios/"> skorpios project</a>
+ * Fast HashMap for primitive data. Optimized for being GC friendly. Original
+ * code is based on the <a href="http://code.google.com/p/skorpios/"> skorpios
+ * project</a>
  * released under new BSD license.
  *
  * @author Michael Bien
@@ -59,8 +58,9 @@ import java.util.Iterator;
  * @see LongLongHashMap
  * @see LongIntHashMap
  */
-public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
-                                                      Iterable< /*name*/IntObjectHashMap/*name*/.Entry > {
+public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
+    Iterable< /*name*/IntObjectHashMap/*name*/.Entry> {
+
     private final float loadFactor;
 
     private Entry[] table;
@@ -75,7 +75,15 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
     private static final Constructor</*name*/IntObjectHashMap/*name*/.Entry> entryConstructor;
     private static final Method equalsMethod;
 
-    static class EntryCM { EntryCM() { c = null; m1 = null; } Constructor<Entry> c; Method m1; }
+    static class EntryCM {
+
+        EntryCM() {
+            c = null;
+            m1 = null;
+        }
+        Constructor<Entry> c;
+        Method m1;
+    }
 
     static {
         final Class<?> valueClazz = Object.class;
@@ -83,22 +91,22 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
 
         isPrimitive = valueClazz.isPrimitive();
 
-        if(!isPrimitive) {
+        if (!isPrimitive) {
             final EntryCM cm = AccessController.doPrivileged(new PrivilegedAction<EntryCM>() {
                 @Override
                 @SuppressWarnings("unchecked")
                 public EntryCM run() {
                     final EntryCM r = new EntryCM();
-                    r.c = (Constructor<Entry>)
-                            ReflectionUtil.getConstructor(Entry.class,
-                                                          new Class[] { keyClazz, valueClazz, Entry.class } );
+                    r.c = (Constructor<Entry>) ReflectionUtil.getConstructor(Entry.class,
+                        new Class[]{keyClazz, valueClazz, Entry.class});
                     try {
                         r.m1 = valueClazz.getDeclaredMethod("equals", Object.class);
                     } catch (final NoSuchMethodException ex) {
-                        throw new JogampRuntimeException("Class "+valueClazz+" doesn't support equals(Object)");
+                        throw new JogampRuntimeException("Class " + valueClazz + " doesn't support equals(Object)");
                     }
                     return r;
-                } } );
+                }
+            });
             entryConstructor = cm.c;
             equalsMethod = cm.m1;
         } else {
@@ -107,15 +115,15 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
         }
     }
 
-    public /*name*/IntObjectHashMap/*name*/() {
+    public /*name*/ IntObjectHashMap/*name*/() {
         this(16, 0.75f);
     }
 
-    public /*name*/IntObjectHashMap/*name*/(final int initialCapacity) {
+    public /*name*/ IntObjectHashMap/*name*/(final int initialCapacity) {
         this(initialCapacity, 0.75f);
     }
 
-    public /*name*/IntObjectHashMap/*name*/(final int initialCapacity, final float loadFactor) {
+    public /*name*/ IntObjectHashMap/*name*/(final int initialCapacity, final float loadFactor) {
         if (initialCapacity > 1 << 30) {
             throw new IllegalArgumentException("initialCapacity is too large.");
         }
@@ -135,9 +143,9 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
         this.mask = capacity - 1;
     }
 
-    private /*name*/IntObjectHashMap/*name*/(final float loadFactor, final int table_size, final int size,
-                                          final int mask, final int capacity, final int threshold,
-                                          final Object keyNotFoundValue) {
+    private /*name*/ IntObjectHashMap/*name*/(final float loadFactor, final int table_size, final int size,
+            final int mask, final int capacity, final int threshold,
+            final Object keyNotFoundValue) {
         this.loadFactor = loadFactor;
         this.table = new Entry[table_size];
         this.size = size;
@@ -150,35 +158,36 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
     }
 
     /**
-     * Disclaimer: If the value type doesn't implement {@link Object#clone() clone()}, only the reference is copied.
-     * Note: Due to private fields we cannot implement a copy constructor, sorry.
+     * Disclaimer: If the value type doesn't implement
+     * {@link Object#clone() clone()}, only the reference is copied. Note: Due
+     * to private fields we cannot implement a copy constructor, sorry.
      *
      * @param source the primitive hash map to copy
      */
     @Override
     public Object clone() {
-        final /*name*/IntObjectHashMap/*name*/ n =
-                new /*name*/IntObjectHashMap/*name*/(loadFactor, table.length, size,
-                                                  mask, capacity, threshold,
-                                                  keyNotFoundValue);
+        final /*name*/ IntObjectHashMap/*name*/ n
+            = new /*name*/ IntObjectHashMap/*name*/(loadFactor, table.length, size,
+                mask, capacity, threshold,
+                keyNotFoundValue);
 
         final ArrayList<Entry> entries = new ArrayList<Entry>();
-        for(int i=table.length-1; i>=0; i--) {
+        for (int i = table.length - 1; i >= 0; i--) {
             // single linked list -> ArrayList
             Entry se = table[i];
-            while(null != se) {
+            while (null != se) {
                 entries.add(se);
                 se = se.next;
             }
             // clone ArrayList -> single linked list (bwd)
             final int count = entries.size();
             Entry de_next = null;
-            for(int j=count-1; j>=0; j--) {
+            for (int j = count - 1; j >= 0; j--) {
                 se = entries.remove(j);
-                if( isPrimitive ) {
+                if (isPrimitive) {
                     de_next = new Entry(se.key, se.value, de_next);
                 } else {
-                    final Object v = ReflectionUtil.callMethod( se.value, getCloneMethod(se.value) );
+                    final Object v = ReflectionUtil.callMethod(se.value, getCloneMethod(se.value));
                     de_next = (Entry) ReflectionUtil.createInstance(entryConstructor, se.key, v, de_next);
                 }
             }
@@ -192,13 +201,13 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
         final Entry[] t = this.table;
         for (int i = t.length; i-- > 0;) {
             for (Entry e = t[i]; e != null; e = e.next) {
-                if( isPrimitive ) {
+                if (isPrimitive) {
                     if (e.value == value) {
                         return true;
                     }
                 } else {
                     final Boolean b = (Boolean) ReflectionUtil.callMethod(value, equalsMethod, e.value);
-                    if(b.booleanValue()) {
+                    if (b.booleanValue()) {
                         return true;
                     }
                 }
@@ -220,8 +229,8 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
     }
 
     /**
-     * Returns the value to which the specified key is mapped,
-     * or {@link #getKeyNotFoundValue} if this map contains no mapping for the key.
+     * Returns the value to which the specified key is mapped, or
+     * {@link #getKeyNotFoundValue} if this map contains no mapping for the key.
      */
 //    @SuppressWarnings(value="cast")
     public Object get(final int key) {
@@ -236,8 +245,9 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
     }
 
     /**
-     * Maps the key to the specified value. If a mapping to this key already exists,
-     * the previous value will be returned (otherwise {@link #getKeyNotFoundValue}).
+     * Maps the key to the specified value. If a mapping to this key already
+     * exists, the previous value will be returned (otherwise
+     * {@link #getKeyNotFoundValue}).
      */
 //    @SuppressWarnings(value="cast")
     public Object put(final int key, final Object value) {
@@ -283,17 +293,17 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
     /**
      * Copies all of the mappings from the specified map to this map.
      */
-    public void putAll(final /*name*/IntObjectHashMap/*name*/ source) {
+    public void putAll(final /*name*/ IntObjectHashMap/*name*/ source) {
         final Iterator<Entry> itr = source.iterator();
-        while(itr.hasNext()) {
+        while (itr.hasNext()) {
             final Entry e = itr.next();
             put(e.key, e.value);
         }
     }
 
     /**
-     * Removes the key-value mapping from this map.
-     * Returns the previously mapped value or {@link #getKeyNotFoundValue} if no such mapping exists.
+     * Removes the key-value mapping from this map. Returns the previously
+     * mapped value or {@link #getKeyNotFoundValue} if no such mapping exists.
      */
 //    @SuppressWarnings(value="cast")
     public Object remove(final int key) {
@@ -342,8 +352,8 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
     }
 
     /**
-     * Returns a new {@link Iterator}.
-     * Note: this Iterator does not yet support removal of elements.
+     * Returns a new {@link Iterator}. Note: this Iterator does not yet support
+     * removal of elements.
      */
     @Override
     public Iterator<Entry> iterator() {
@@ -351,9 +361,8 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
     }
 
     /**
-     * Sets the new key not found value.
-     * For primitive types (int, long) the default is -1,
-     * for Object types, the default is null.
+     * Sets the new key not found value. For primitive types (int, long) the
+     * default is -1, for Object types, the default is null.
      *
      * @return the previous key not found value
      * @see #get
@@ -366,7 +375,9 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
     }
 
     /**
-     * Returns the value which is returned if no value has been found for the specified key.
+     * Returns the value which is returned if no value has been found for the
+     * specified key.
+     *
      * @see #get
      * @see #put
      */
@@ -376,17 +387,18 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
 
     /**
      * @param sb if null, a new StringBuilder is created
-     * @return StringBuilder instance with appended string information of this Entry
+     * @return StringBuilder instance with appended string information of this
+     * Entry
      */
     public StringBuilder toString(StringBuilder sb) {
-        if(null == sb) {
+        if (null == sb) {
             sb = new StringBuilder();
         }
         sb.append("{");
         final Iterator<Entry> itr = iterator();
-        while(itr.hasNext()) {
+        while (itr.hasNext()) {
             itr.next().toString(sb);
-            if(itr.hasNext()) {
+            if (itr.hasNext()) {
                 sb.append(", ");
             }
         }
@@ -406,7 +418,7 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
         private int index;
         private Entry next;
 
-        private EntryIterator(final Entry[] entries){
+        private EntryIterator(final Entry[] entries) {
             this.entries = entries;
             // load next
             next();
@@ -421,12 +433,12 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
         public Entry next() {
             final Entry current = next;
 
-            if(current != null && current.next != null) {
+            if (current != null && current.next != null) {
                 next = current.next;
-            }else{
-                while(index < entries.length) {
+            } else {
+                while (index < entries.length) {
                     final Entry e = entries[index++];
-                    if(e != null) {
+                    if (e != null) {
                         next = e;
                         return current;
                     }
@@ -483,10 +495,11 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
 
         /**
          * @param sb if null, a new StringBuilder is created
-         * @return StringBuilder instance with appended string information of this Entry
+         * @return StringBuilder instance with appended string information of
+         * this Entry
          */
         public StringBuilder toString(StringBuilder sb) {
-            if(null == sb) {
+            if (null == sb) {
                 sb = new StringBuilder();
             }
             sb.append("[").append(key).append(":").append(value).append("]");
@@ -503,13 +516,14 @@ public class /*name*/IntObjectHashMap/*name*/ implements Cloneable,
     private static Method getCloneMethod(final Object obj) {
         final Class<?> clazz = obj.getClass();
         return AccessController.doPrivileged(new PrivilegedAction<Method>() {
-                @Override
-                public Method run() {
-                    try {
-                        return clazz.getDeclaredMethod("clone");
-                    } catch (final NoSuchMethodException ex) {
-                        throw new JogampRuntimeException("Class "+clazz+" doesn't support clone()", ex);
-                    }
-                } } );
+            @Override
+            public Method run() {
+                try {
+                    return clazz.getDeclaredMethod("clone");
+                } catch (final NoSuchMethodException ex) {
+                    throw new JogampRuntimeException("Class " + clazz + " doesn't support clone()", ex);
+                }
+            }
+        });
     }
 }
