@@ -5,6 +5,7 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.jvm.JNILibLoaderBa
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.DynamicLibraryBundle;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.DynamicLibraryBundleInfo;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.Platform;
+import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +33,9 @@ public class NativeLibLoader {
         List<DynamicLibraryBundleInfo> dynamicLibraryBundleInfos = new ArrayList<>();
         dynamicLibraryBundleInfos.add(new BundleInfoImpl(glueLibNames));
 
-        //Inits JarCache. Fetches gluegen_rt.so
-        Platform.initSingleton(); //Init wird nur beim ersten Aufruf tatsächlich ausgeführt
+        //Init
+        Platform.initSingleton();
+        TempJarCache.initSingleton();
 
         /**
          * Hier werden die .so Dateien aus einem JAR in den JarCache geladen.
