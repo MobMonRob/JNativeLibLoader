@@ -75,17 +75,24 @@ public final class NativeLibrary {
     private static final boolean isOSX;
 
     static {
+        /*
+            prefix "" needs always to be at the end and not before.
+            this ensures that it will be only matched, if no other
+            possible prefix can be matched.
+         */
+        final String[] standardPrefixes = new String[]{"lib", ""};
+
         // Instantiate dynamic linker implementation
         switch (PlatformPropsImpl.OS_TYPE) {
             case WINDOWS:
-                prefixes = new String[]{""};
+                prefixes = standardPrefixes;
                 suffixes = new String[]{".dll"};
                 isOSX = false;
                 break;
 
             case MACOS:
             case IOS:
-                prefixes = new String[]{"lib"};
+                prefixes = standardPrefixes;
                 suffixes = new String[]{".dylib"};
                 isOSX = true;
                 break;
@@ -98,7 +105,7 @@ public final class NativeLibrary {
       case OPENKODE:
       case LINUX: */
             default:
-                prefixes = new String[]{"lib"};
+                prefixes = standardPrefixes;
                 suffixes = new String[]{".so"};
                 isOSX = false;
                 break;
@@ -361,7 +368,13 @@ public final class NativeLibrary {
         } catch (final URISyntaxException uriEx) {
             throw new IllegalArgumentException(uriEx);
         }
+
         final String libBaseNameLC = isLowerCaseAlready ? libBaseName : libBaseName.toLowerCase();
+        // Directory
+        if (libBaseNameLC.isEmpty()) {
+            return null;
+        }
+
         int prefixIdx = -1;
         for (int i = 0; i < prefixes.length && 0 > prefixIdx; i++) {
             if (libBaseNameLC.startsWith(prefixes[i])) {
@@ -370,20 +383,12 @@ public final class NativeLibrary {
         }
         if (0 <= prefixIdx) {
             for (int i = 0; i < suffixes.length; i++) {
-                /*
-            if (libBaseNameLC.endsWith(suffixes[i])) {
-                final int s = prefixes[prefixIdx].length();
-                final int e = suffixes[i].length();
-                return libBaseName.substring(s, libBaseName.length()-e);
-            }
-                 */
-
-                //.so files can also be named as follows: libboost_log-mt.so.1.58.0 !!
-                String[] infixSplit = libBaseNameLC.split(suffixes[i]);
-                if (infixSplit.length != 0) {
+                //.so files can also be named as follows: libboost_log-mt.so.1.58.0
+                final int end = libBaseNameLC.indexOf(suffixes[i]);
+                if (end != -1) {
                     final int start = prefixes[prefixIdx].length();
-                    final int end = infixSplit[0].length();
-                    return libBaseName.substring(start, end);
+                    String theBaseName = libBaseName.substring(start, end);
+                    return theBaseName;
                 }
             }
         }
