@@ -52,12 +52,21 @@ import java.util.List;
 import java.util.Locale;
 
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.net.Uri;
+import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.DynamicLinker;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.NativeLibrary;
+import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.IOUtil;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.JarUtil;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.PropertyAccess;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.MethodType;
+import java.lang.invoke.VarHandle;
+import java.lang.reflect.Field;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JNILibLoaderBase {
 
@@ -627,7 +636,9 @@ public class JNILibLoaderBase {
                 if (DEBUG) {
                     System.err.println("JNILibLoaderBase: System.load(" + libraryPath + ") - mode 2");
                 }
+
                 System.load(libraryPath);
+
                 mode = 2;
             } else {
                 if (DEBUG) {

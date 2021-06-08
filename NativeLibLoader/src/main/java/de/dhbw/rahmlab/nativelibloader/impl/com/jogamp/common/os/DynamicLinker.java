@@ -27,6 +27,11 @@
  */
 package de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os;
 
+import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.IOUtil;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * dynamic linker access.
  */
