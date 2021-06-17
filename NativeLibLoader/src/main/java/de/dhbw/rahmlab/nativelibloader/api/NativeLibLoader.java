@@ -16,11 +16,14 @@ import java.util.List;
  */
 public class NativeLibLoader {
 
-    private static final List<DynamicLibraryBundle> dynamicLibraryBundles = new ArrayList<>();
+    private final List<DynamicLibraryBundle> dynamicLibraryBundles = new ArrayList<>();
 
     private static NativeLibLoader instance = null;
 
     private NativeLibLoader() {
+        //Init
+        Platform.initSingleton();
+        TempJarCache.initSingleton();
     }
 
     public static NativeLibLoader getInstanceAndSetDebugIfFirstInvokation(boolean debug) {
@@ -38,12 +41,10 @@ public class NativeLibLoader {
     }
 
     public boolean onWindows() {
-        Platform.initSingleton();
         return Platform.OS_TYPE == Platform.OSType.WINDOWS;
     }
 
     public boolean onLinux() {
-        Platform.initSingleton();
         return Platform.OS_TYPE == Platform.OSType.LINUX;
     }
 
@@ -60,10 +61,6 @@ public class NativeLibLoader {
         // Prepare parameter
         DynamicLibraryBundleInfo dynamicLibraryBundleInfo = new BundleInfoImpl(libNames);
         final Class[] classesFromJavaJars = new Class[]{MarkerClass};
-
-        //Init
-        Platform.initSingleton();
-        TempJarCache.initSingleton();
 
         // Loads all natives from JAR which contains classesFromJavaJars into TempJarCache.
         JNILibLoaderBase.addNativeJarLibs(classesFromJavaJars, null);
