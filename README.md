@@ -19,14 +19,14 @@ The following folders contain customized, extracted Gluegen code:
 ## Documentation for all
 Tested with Netbeans 12, Maven, Java SDK 11, GCC 7.5.0
 
-## Dokumentation für Nutzer
-Beispiel für ein funktionierendes abhängiges Projekt: https://github.com/MobMonRob/JViconDataStream2
+## User documentation
+Example to use the JNativeLibLoader by depending on this project: https://github.com/MobMonRob/JViconDataStream2
 
-### Verwendendes Projekt konfigurieren
-Das Repository dieses Projektes dem Repository des verwendenden Projektes als `git submodule` hinzufügen.
+### User project configuration
+Make your project depended on this project to load native libs: `git submodule` hinzufügen.
 
-#### Dependency konfigurieren
-In pom.xml hinzufügen:
+#### Dependency configuration
+In your pom.xml add the following:
 
         <dependency>
             <groupId>de.dhbw.rahmlab</groupId>
@@ -34,7 +34,7 @@ In pom.xml hinzufügen:
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-#### .so Dateien laden konfigurieren
+#### Load and configure .so files
 Damit die .so Dateien geladen werdem können, müssen sie sich unter `<Projektpfad>/target/classes/natives/linux-amd64/` befinden. Damit landen sie innerhalb des JARs in `/natives/linux-amd64/`. Das Kopieren lässt sich mit Maven bewerkstelligen:
 
             <resource>
