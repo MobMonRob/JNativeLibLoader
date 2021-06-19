@@ -7,7 +7,7 @@ This includes:
 3. loading the binary native library files into the jvm depending on the platform
 
 ## Credits
-Most of the source code in this repository is a more ore less customized extraction from the Gluegen project of the Jogamp community from 15. September 2020. \
+Most of the source code in this repository is a more or less customized extraction from the Gluegen project of the Jogamp community from 15. September 2020. \
 You can find the full source code of the Gluegen project here: https://github.com/JogAmp/gluegen. \
 The copy of the Gluegen license is in the file `Gluegen_LICENSE.txt`. \
 The following folders contain customized, extracted Gluegen code:
