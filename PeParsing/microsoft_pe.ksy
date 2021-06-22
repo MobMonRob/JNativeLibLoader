@@ -355,6 +355,8 @@ types:
       body:
         pos: pointer_to_raw_data
         size: size_of_raw_data
+      offset:
+        value: pointer_to_raw_data - virtual_address
       import_section:
         pos: pointer_to_raw_data
         size: size_of_raw_data
@@ -367,8 +369,10 @@ types:
         repeat: until
         repeat-until: _.characteristics == 0
     instances:
+      import_table_instance_offset:
+        value: _parent.offset + _root.pe.optional_hdr.data_dirs.import_table.virtual_address
       import_table_instance:
-        pos: _parent.pointer_to_raw_data +(_root.pe.optional_hdr.data_dirs.import_table.virtual_address - _parent.virtual_address)
+        pos: import_table_instance_offset
         size: _root.pe.optional_hdr.data_dirs.import_table.size
   image_import_descriptor:
     seq:
@@ -382,6 +386,16 @@ types:
         type: u4
       - id: first_thunk
         type: u4
+    instances:
+      name_offset:
+        value: _parent._parent.offset + name_rva
+      name:
+        #pos: name_offset - _parent._parent.pointer_to_raw_data
+        pos: name_rva - _parent._parent.virtual_address
+        type: str
+        size: 50
+        terminator: 0
+        encoding: ASCII
   certificate_table:
     seq:
       - id: items
