@@ -48,7 +48,7 @@ types:
       - id: optional_hdr
         type: optional_header
         size: coff_hdr.size_of_optional_header
-      - id: sections
+      - id: section_header_table
         repeat: expr
         repeat-expr: coff_hdr.number_of_sections
         type: section
@@ -148,7 +148,7 @@ types:
       #  terminator: 0
       #  encoding: ascii
       section:
-        value: _root.pe.sections[section_number - 1]
+        value: _root.pe.section_header_table[section_number - 1]
       data:
         pos: section.pointer_to_raw_data + value
         size: 1

@@ -4,6 +4,8 @@ scriptPath="$(realpath -s "${BASH_SOURCE[0]}")"
 scriptDir="$(dirname "$scriptPath")"
 cd "$scriptDir"
 
+source "./_bash_config.sh"
+
 run() {
 	ksc -t java --java-package de.dhbw.rahmlab.nativelibloader.impl.dependencies ./microsoft_pe.ksy
 
@@ -15,5 +17,5 @@ run() {
 	rm -rdf ./de
 }
 
-run $@
+run_bash run $@
 
