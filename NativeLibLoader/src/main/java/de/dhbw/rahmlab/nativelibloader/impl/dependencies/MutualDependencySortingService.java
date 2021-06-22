@@ -83,6 +83,8 @@ public class MutualDependencySortingService {
         String formatString2 = String.format("0x%08X", iDataRawAddress);
         System.out.println(formatString2); //Korrekt
 
+        System.out.println("----");
+
         MicrosoftPe.ImportSection importSection = peFile.pe().sectionHeaderTable().stream()
             .map(MicrosoftPe.SectionHeader::importSection)
             .filter(Objects::nonNull)
@@ -94,26 +96,26 @@ public class MutualDependencySortingService {
         List<Long> names = imageImportDescriptors.stream()
             .map(MicrosoftPe.ImageImportDescriptor::nameRva)
             .collect(Collectors.toList());
-        
+
         names.stream()
             .map(nameRVA -> String.format("0x%08X", nameRVA))
             .forEach(s -> System.out.println(s));
-        
+
         /*
         imageImportDescriptors.stream()
             .map(iid -> iid.name())
             .filter(Objects::nonNull)
             .forEach(s -> System.out.println(s));
-        */
-        
+         */
         System.out.println("----");
-        Integer i = imageImportDescriptors.get(0).nameOffset();
-        System.out.println(String.format("0x%08X", i));
-        
-        String name = imageImportDescriptors.get(0).name();
-        System.out.println(name);
-        
-        
+        imageImportDescriptors.stream()
+            .map(iid -> iid.nameOffset())
+            .forEach(no -> System.out.println(String.format("0x%08X", no)));
+
+        System.out.println("----");
+        imageImportDescriptors.stream()
+            .map(iid -> iid.name())
+            .forEach(name -> System.out.println(name));
 
         /*
         PE pe = PEParser.parse(path);
