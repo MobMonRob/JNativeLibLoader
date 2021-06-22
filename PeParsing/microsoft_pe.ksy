@@ -359,7 +359,7 @@ types:
         pos: pointer_to_raw_data
         size: size_of_raw_data
         type: import_section
-        if: name == '.idata'
+        if: (virtual_address <= _root.pe.optional_hdr.data_dirs.import_table.virtual_address) and ((virtual_address + virtual_size) > _root.pe.optional_hdr.data_dirs.import_table.virtual_address)
   import_section:
     seq:
       - id: import_table
