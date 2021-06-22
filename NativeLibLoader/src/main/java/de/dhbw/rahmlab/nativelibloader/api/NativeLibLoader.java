@@ -57,7 +57,7 @@ public class NativeLibLoader {
      * @param MarkerClass A class which is in the same JAR as the native libs
      * which are wanted to be loaded.
      */
-    public void load(List<String> libNames, Class MarkerClass) {
+    public void load(List<String> libNames, Class MarkerClass) throws Exception {
         // Prepare parameter
         DynamicLibraryBundleInfo dynamicLibraryBundleInfo = new BundleInfoImpl(libNames);
         final Class[] classesFromJavaJars = new Class[]{MarkerClass};
@@ -71,7 +71,7 @@ public class NativeLibLoader {
         dynamicLibraryBundles.add(dynamicLibraryBundle);
 
         if (!dynamicLibraryBundle.isLibComplete()) {
-            System.err.println("Native lib loading failed");
+            throw new Exception("Native lib loading failed");
         } else if (Debug.debugAll()) {
             System.err.println("Native lib loading succeeded");
         }
