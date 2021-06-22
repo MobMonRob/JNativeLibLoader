@@ -51,7 +51,7 @@ types:
       - id: section_header_table
         repeat: expr
         repeat-expr: coff_hdr.number_of_sections
-        type: section
+        type: section_header
     instances:
       certificate_table:
         pos: optional_hdr.data_dirs.certificate_table.virtual_address
@@ -325,7 +325,7 @@ types:
         type: u4
       - id: size
         type: u4
-  section:
+  section_header:
     -webide-representation: "{name}"
     seq:
       - id: name
