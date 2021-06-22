@@ -371,9 +371,9 @@ types:
     instances:
       import_table_instance_offset:
         value: _parent.offset + _root.pe.optional_hdr.data_dirs.import_table.virtual_address
-      import_table_instance:
-        pos: import_table_instance_offset
-        size: _root.pe.optional_hdr.data_dirs.import_table.size
+      #import_table_instance:
+        #pos: import_table_instance_offset
+        #size: _root.pe.optional_hdr.data_dirs.import_table.size
   image_import_descriptor:
     seq:
       - id: characteristics
