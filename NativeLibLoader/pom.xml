@@ -22,11 +22,6 @@
             <artifactId>kaitai-struct-runtime</artifactId>
             <version>0.9</version>
         </dependency>
-        <dependency>
-            <groupId>com.kichik.pecoff4j</groupId>
-            <artifactId>pecoff4j</artifactId>
-            <version>0.3.2</version>
-        </dependency>
     </dependencies>
     <build>
         <!--
