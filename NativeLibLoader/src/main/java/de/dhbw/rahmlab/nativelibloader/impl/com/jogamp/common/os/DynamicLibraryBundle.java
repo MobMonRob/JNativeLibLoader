@@ -174,15 +174,16 @@ public class DynamicLibraryBundle {
     /**
      * Unload all {@link NativeLibrary}s, and remove all references.
      */
+    /*
     public final void destroy() {
         if (DEBUG) {
             System.err.println(Thread.currentThread().getName() + " - DynamicLibraryBundle.destroy() START: " + info.getClass().getName());
         }
-        /*
-        toolGetProcAddressFuncNameSet = null;
-        toolGetProcAddressHandle = 0;
-        toolGetProcAddressComplete = false;
-         */
+
+        //toolGetProcAddressFuncNameSet = null;
+        //toolGetProcAddressHandle = 0;
+        //toolGetProcAddressComplete = false;
+
         for (int i = 0; i < nativeLibraries.size(); i++) {
             nativeLibraries.get(i).close();
         }
@@ -193,6 +194,7 @@ public class DynamicLibraryBundle {
             System.err.println(Thread.currentThread().getName() + " - DynamicLibraryBundle.destroy() END: " + info.getClass().getName());
         }
     }
+     */
 
     public final boolean isLibComplete() {
         return isToolLibComplete() && isGlueLibComplete();

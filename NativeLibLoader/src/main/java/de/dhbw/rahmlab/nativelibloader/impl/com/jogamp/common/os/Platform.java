@@ -38,7 +38,6 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.PropertyAcces
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.ReflectionUtil;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.VersionNumber;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.jvm.JVMUtil;
 //import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.MachineDataInfoRuntime;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl;
 
@@ -376,7 +375,7 @@ public class Platform extends PlatformPropsImpl {
                 DynamicLibraryBundle.GlueJNILibLoader.loadLibrary(libBaseName, false, cl);
                  */
                 // JVM bug workaround
-                JVMUtil.initSingleton(); // requires gluegen_rt, one-time init.
+                //JVMUtil.initSingleton(); // requires gluegen_rt, one-time init.
 
                 // AWT Headless determination
                 if (!PropertyAccess.getBooleanProperty("java.awt.headless", true)

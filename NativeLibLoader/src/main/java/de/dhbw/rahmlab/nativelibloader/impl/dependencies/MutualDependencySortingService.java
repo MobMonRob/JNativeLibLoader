@@ -5,12 +5,14 @@
  */
 package de.dhbw.rahmlab.nativelibloader.impl.dependencies;
 
+import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.Platform;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -19,22 +21,47 @@ import java.util.stream.Collectors;
  */
 public class MutualDependencySortingService {
 
-    public List<String> sortLibs(List<String> libNames) throws Exception {
-        //Vorbedingung: Im TempJarCache liegen nur Dateien der aktuellen Plattform
+    static MutualDependencySortingService instance;
 
-        //SortLibs nur für Windows aufrufen? ->Check einbauen
-        //Oder hier drin umschalten? ->Not implemented für Linux einbauen
-        //Unschön. Wäre besser als Klasse "NativeLib{Name, Path, ...}"
-        Map<String, String> libPaths = new HashMap<String, String>(libNames.size());
+    static {
+        instance = new MutualDependencySortingService();
+    }
 
+    private MutualDependencySortingService() {
+    }
+
+    public static MutualDependencySortingService getInstance() {
+        return instance;
+    }
+
+    /**
+     *
+     * @param libNames must be already added into
+     * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache TempJarCache}
+     * via
+     * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.jvm.JNILibLoaderBase#addNativeJarLibs(Class, String) addNativeJarLibs}
+     *
+     */
+    public List<String> windowsMutualDependencyTopologicalSorting(Set<String> libNames) throws Exception {
+        if (Platform.OS_TYPE != Platform.OSType.WINDOWS) {
+            throw new Exception("Sorting currently only for windows implemented!");
+        }
+
+        Map<String, String> libNameToPaths = new HashMap<String, String>(libNames.size());
+
+        // Precondition: libNames must be already added into TempJarCache
         for (String lib : libNames) {
             String path = TempJarCache.findLibrary(lib);
             if (path == null) {
                 throw new Exception(lib + " not found in TempJarCache");
             }
-            libPaths.put(lib, path);
+            libNameToPaths.put(lib, path);
         }
 
+        
+        // Debug
+        libNameToPaths.keySet().forEach(name -> System.out.println(name));
+        
         //Deps holen
         //Deps Namen anpassen
         //Deps filtern
@@ -43,6 +70,7 @@ public class MutualDependencySortingService {
         return new ArrayList<String>();
     }
 
+    // TODO: private machen
     public List<String> getWindowsDeps(String path) throws Exception {
         MicrosoftPe peFile = MicrosoftPe.fromFile(path);
 

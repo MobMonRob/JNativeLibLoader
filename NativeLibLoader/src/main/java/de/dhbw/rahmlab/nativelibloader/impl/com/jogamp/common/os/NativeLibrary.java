@@ -335,6 +335,7 @@ public final class NativeLibrary {
      * @throws SecurityException if user is not granted access for the named
      * library.
      */
+    /*
     public final void close() throws SecurityException {
         if (DEBUG) {
             System.err.println("NativeLibrary.close(): closing " + this);
@@ -350,6 +351,7 @@ public final class NativeLibrary {
             ExceptionUtils.dumpStack(System.err);
         }
     }
+    */
 
     /**
      * Comparison of prefix and suffix of the given libName's basename is

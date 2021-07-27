@@ -41,6 +41,9 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.net.Uri;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.NativeLibrary;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.JarUtil;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.SecurityUtil;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Static Jar file cache handler using an underlying instance of
@@ -263,7 +266,7 @@ public class TempJarCache {
      * @throws JogampRuntimeException if not
      * {@link #isInitialized(boolean) isInitialized(true)}
      */
-    public synchronized static final boolean addNativeLibs(final Class<?> certClass, final Uri jarUri, final String nativeLibraryPath) throws IOException, SecurityException, IllegalArgumentException, URISyntaxException {
+    public synchronized static final Optional<Set<String>> addNativeLibs(final Class<?> certClass, final Uri jarUri, final String nativeLibraryPath) throws IOException, SecurityException, IllegalArgumentException, URISyntaxException {
         checkInitialized(true);
         final LoadState nativeLibJarsLS = nativeLibJars.get(jarUri);
         if (!testLoadState(nativeLibJarsLS, LoadState.LOOKED_UP)) {
@@ -273,14 +276,20 @@ public class TempJarCache {
                 System.err.println("TempJarCache: addNativeLibs: " + jarUri + ": nativeJar " + jarFile.getName() + " (NEW)");
             }
             validateCertificates(certClass, jarFile);
+
+            HashSet<String> oldLibs = new HashSet(nativeLibMap.keySet());
             final int num = JarUtil.extract(tmpFileCache.getTempDir(), nativeLibMap, jarFile, nativeLibraryPath, true, false, false);
+            HashSet<String> newLibs = new HashSet(nativeLibMap.keySet());
+            newLibs.removeAll(oldLibs);
+
             nativeLibJars.put(jarUri, LoadState.LOADED);
-            return num > 0;
+
+            return Optional.of(newLibs);
         } else if (testLoadState(nativeLibJarsLS, LoadState.LOADED)) {
             if (DEBUG) {
                 System.err.println("TempJarCache: addNativeLibs: " + jarUri + ": nativeJar " + jarUri + " (REUSE)");
             }
-            return true;
+            return Optional.empty();
         }
         throw new IOException("TempJarCache: addNativeLibs: " + jarUri + ", previous load attempt failed");
     }
