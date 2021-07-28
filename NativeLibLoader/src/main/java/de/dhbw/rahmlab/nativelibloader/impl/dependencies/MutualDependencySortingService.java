@@ -7,6 +7,7 @@ package de.dhbw.rahmlab.nativelibloader.impl.dependencies;
 
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.Platform;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
+import de.dhbw.rahmlab.nativelibloader.impl.dependencies.Elf.EndianElf.SectionHeader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,10 +59,9 @@ public class MutualDependencySortingService {
             libNameToPaths.put(lib, path);
         }
 
-        
         // Debug
         libNameToPaths.keySet().forEach(name -> System.out.println(name));
-        
+
         //Deps holen
         //Deps Namen anpassen
         //Deps filtern
@@ -85,6 +85,34 @@ public class MutualDependencySortingService {
 
         ArrayList<String> depsNames = imageImportDescriptors.stream()
             .map(iid -> iid.name())
+            .collect(Collectors.toCollection(ArrayList<String>::new));
+
+        return depsNames;
+    }
+
+    // TODO: private machen
+    public List<String> getLinuxDeps(String path) throws Exception {
+        Elf elfFile = Elf.fromFile(path);
+
+        SectionHeader dynamicSectionHeader = elfFile.header().sectionHeaders().stream()
+            .filter(Objects::nonNull)
+            .filter(sh -> sh.type() == Elf.ShType.DYNAMIC)
+            .findAny()
+            .orElseThrow();
+
+        Elf.EndianElf.DynamicSection dynamicSection = (Elf.EndianElf.DynamicSection) dynamicSectionHeader.body();
+
+        if (!dynamicSection.isStringTableLinked()) {
+            throw new Exception("String table is not linked!");
+        }
+
+        ArrayList<Elf.EndianElf.DynamicSectionEntry> dynamicSectionEntries = dynamicSection.entries().stream()
+            .filter(Objects::nonNull)
+            .filter(se -> se.tagEnum() == Elf.DynamicArrayTags.NEEDED)
+            .collect(Collectors.toCollection(ArrayList<Elf.EndianElf.DynamicSectionEntry>::new));
+
+        ArrayList<String> depsNames = dynamicSectionEntries.stream()
+            .map(e -> e.name())
             .collect(Collectors.toCollection(ArrayList<String>::new));
 
         return depsNames;
