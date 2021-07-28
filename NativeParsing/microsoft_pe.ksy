@@ -392,10 +392,8 @@ types:
       name:
         #pos: name_offset - _parent._parent.pointer_to_raw_data
         pos: name_rva - _parent._parent.virtual_address
-        type: str
-        size: 50
-        terminator: 0
-        encoding: ASCII
+        type: strz
+        encoding: UTF-8
   certificate_table:
     seq:
       - id: items

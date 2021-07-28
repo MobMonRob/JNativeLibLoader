@@ -690,7 +690,7 @@ public class MicrosoftPe extends KaitaiStruct {
                 return this.name;
             long _pos = this._io.pos();
             this._io.seek((nameRva() - _parent()._parent().virtualAddress()));
-            this.name = new String(KaitaiStream.bytesTerminate(this._io.readBytes(50), (byte) 0, false), Charset.forName("ASCII"));
+            this.name = new String(this._io.readBytesTerm(0, false, true, true), Charset.forName("UTF-8"));
             this._io.seek(_pos);
             return this.name;
         }

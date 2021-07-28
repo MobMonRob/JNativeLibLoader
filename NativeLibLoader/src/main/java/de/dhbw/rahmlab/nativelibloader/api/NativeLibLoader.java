@@ -51,8 +51,8 @@ public class NativeLibLoader {
     /**
      * OS must be Windows or Linux
      *
-     * @param MarkerClass A class which is in the same JAR as the native libs
-     * which are wanted to be loaded.
+     * @param MarkerClass A class within the same JAR as the native libs which
+     * are wanted to be loaded.
      */
     public void load(Class MarkerClass) throws Exception {
         // Loads all natives from JAR which contains classesFromJavaJars into TempJarCache.
@@ -63,15 +63,16 @@ public class NativeLibLoader {
             throw new Exception("No libs could be added.");
         }
 
+        /**
+         * To load correctly on windows, libs which depends on each other needs
+         * to be given in the order of the topological sorting of their
+         * dependency graph with the deepest dependency at the beginning.
+         * Otherwise dependend libs will not be found.
+         */
         MutualBundleDependencySortingService depService = MutualBundleDependencySortingService.getInstance();
         List<String> sortedLibs = depService.mutualBundleDependencyTopologicalSorting(addedLibs.get());
 
         // Loads LibNames from TempJarCache into the JVM
-        /**
-         * Important: To load correctly on windows, libs which depends on each
-         * other needs to be given in the order of the topological sorting of
-         * their dependency graph with the deepest dependency at the beginning.
-         */
         DynamicLibraryBundle dynamicLibraryBundle = new DynamicLibraryBundle(new BundleInfoImpl(sortedLibs));
 
         if (!dynamicLibraryBundle.isLibComplete()) {

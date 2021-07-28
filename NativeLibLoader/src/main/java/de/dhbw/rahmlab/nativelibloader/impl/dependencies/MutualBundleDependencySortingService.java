@@ -9,7 +9,9 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.Platform;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
 import de.dhbw.rahmlab.nativelibloader.impl.dependencies.Elf.EndianElf.SectionHeader;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.NativeLibrary;
+import de.dhbw.rahmlab.nativelibloader.impl.dependencies.MicrosoftPe.ImageImportDescriptor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -99,8 +101,8 @@ public class MutualBundleDependencySortingService {
                     DebugService.print("Adding edge failed between '" + libNameToPath.getKey() + "' and '" + libBaseName + "'.");
                 }
 
-                DebugService.print("from: " + libNameToPath.getKey());
-                DebugService.print("to: " + libBaseName);
+                DebugService.print("dependent : " + libNameToPath.getKey());
+                DebugService.print("dependency: " + libBaseName);
                 DebugService.print("----");
             }
         }
@@ -109,6 +111,11 @@ public class MutualBundleDependencySortingService {
 
         // Already in topological order
         depsGraph.iterator().forEachRemaining(topologicalSortedBundleLibNames::add);
+
+        // Actually we need reverse topological sorting.
+        // Shallowest dependent / deepest dependency / least dependend lib at the beginning.
+        // Deepest dependent / shallowest dependency / most dependend lib at the end.
+        Collections.reverse(topologicalSortedBundleLibNames);
 
         topologicalSortedBundleLibNames.forEach(libName -> DebugService.print(libName));
         DebugService.print("----");
