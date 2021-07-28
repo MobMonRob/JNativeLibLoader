@@ -4,18 +4,9 @@ import de.dhbw.rahmlab.nativelibloader.impl.BundleInfoImpl;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.jvm.JNILibLoaderBase;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.DynamicLibraryBundle;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.Platform;
-import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.VersionNumber;
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
-import de.dhbw.rahmlab.nativelibloader.impl.dependencies.MutualDependencySortingService;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl;
-import static de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl.OS;
-import static de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl.OS_TYPE;
-import static de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl.OS_VERSION;
-import static de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl.OS_VERSION_NUMBER;
-import static de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl.OS_lower;
-
-import java.util.ArrayList;
+import de.dhbw.rahmlab.nativelibloader.impl.dependencies.DebugService;
+import de.dhbw.rahmlab.nativelibloader.impl.dependencies.MutualBundleDependencySortingService;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -72,8 +63,8 @@ public class NativeLibLoader {
             throw new Exception("No libs could be added.");
         }
 
-        MutualDependencySortingService depService = MutualDependencySortingService.getInstance();
-        List<String> sortedLibs = depService.mutualDependencyTopologicalSorting(addedLibs.get());
+        MutualBundleDependencySortingService depService = MutualBundleDependencySortingService.getInstance();
+        List<String> sortedLibs = depService.mutualBundleDependencyTopologicalSorting(addedLibs.get());
 
         // Loads LibNames from TempJarCache into the JVM
         /**
@@ -85,8 +76,8 @@ public class NativeLibLoader {
 
         if (!dynamicLibraryBundle.isLibComplete()) {
             throw new Exception("Native lib loading failed.");
-        } else if (Debug.debugAll()) {
-            System.err.println("Native lib loading succeeded.");
+        } else {
+            DebugService.print("Native lib loading succeeded.");
         }
     }
 }
