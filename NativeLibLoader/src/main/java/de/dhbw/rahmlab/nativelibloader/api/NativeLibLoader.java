@@ -58,6 +58,8 @@ public class NativeLibLoader {
     }
 
     /**
+     * OS must be Windows or Linux
+     *
      * @param MarkerClass A class which is in the same JAR as the native libs
      * which are wanted to be loaded.
      */
@@ -67,31 +69,24 @@ public class NativeLibLoader {
 
         // Can occur if the JAR which contains the MarkerClass was already processed.
         if (addedLibs.isEmpty()) {
-            throw new Exception("Native lib loading failed");
+            throw new Exception("No libs could be added.");
         }
 
-        List<String> sortedLibs;
-
-        if (Platform.OS_TYPE == Platform.OSType.WINDOWS) {
-            MutualDependencySortingService depService = MutualDependencySortingService.getInstance();
-            sortedLibs = depService.windowsMutualDependencyTopologicalSorting(addedLibs.get());
-        } else {
-            sortedLibs = new ArrayList<String>(addedLibs.get());
-        }
+        MutualDependencySortingService depService = MutualDependencySortingService.getInstance();
+        List<String> sortedLibs = depService.mutualDependencyTopologicalSorting(addedLibs.get());
 
         // Loads LibNames from TempJarCache into the JVM
         /**
          * Important: To load correctly on windows, libs which depends on each
          * other needs to be given in the order of the topological sorting of
          * their dependency graph with the deepest dependency at the beginning.
-         *
          */
         DynamicLibraryBundle dynamicLibraryBundle = new DynamicLibraryBundle(new BundleInfoImpl(sortedLibs));
 
         if (!dynamicLibraryBundle.isLibComplete()) {
-            throw new Exception("Native lib loading failed");
+            throw new Exception("Native lib loading failed.");
         } else if (Debug.debugAll()) {
-            System.err.println("Native lib loading succeeded");
+            System.err.println("Native lib loading succeeded.");
         }
     }
 }

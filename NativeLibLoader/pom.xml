@@ -12,15 +12,14 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.thoughtworks.qdox</groupId>
-            <artifactId>qdox</artifactId>
-            <version>2.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>io.kaitai</groupId>
             <artifactId>kaitai-struct-runtime</artifactId>
             <version>0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jgrapht</groupId>
+            <artifactId>jgrapht-core</artifactId>
+            <version>1.5.1</version>
         </dependency>
     </dependencies>
     <build>

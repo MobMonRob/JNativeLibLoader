@@ -43,11 +43,7 @@ public class MutualDependencySortingService {
      * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.jvm.JNILibLoaderBase#addNativeJarLibs(Class, String) addNativeJarLibs}
      *
      */
-    public List<String> windowsMutualDependencyTopologicalSorting(Set<String> libNames) throws Exception {
-        if (Platform.OS_TYPE != Platform.OSType.WINDOWS) {
-            throw new Exception("Sorting currently only for windows implemented!");
-        }
-
+    public List<String> mutualDependencyTopologicalSorting(Set<String> libNames) throws Exception {
         Map<String, String> libNameToPaths = new HashMap<String, String>(libNames.size());
 
         // Precondition: libNames must be already added into TempJarCache
@@ -70,8 +66,18 @@ public class MutualDependencySortingService {
         return new ArrayList<String>();
     }
 
-    // TODO: private machen
-    public List<String> getWindowsDeps(String path) throws Exception {
+    private List<String> getDeps(String path) throws Exception {
+        switch (Platform.OS_TYPE) {
+            case WINDOWS:
+                return getWindowsDeps(path);
+            case LINUX:
+                return getLinuxDeps(path);
+            default:
+                throw new Exception("OS not supported.");
+        }
+    }
+
+    private List<String> getWindowsDeps(String path) throws Exception {
         MicrosoftPe peFile = MicrosoftPe.fromFile(path);
 
         MicrosoftPe.ImportSection importSection = peFile.pe().sectionHeaderTable().stream()
@@ -90,8 +96,7 @@ public class MutualDependencySortingService {
         return depsNames;
     }
 
-    // TODO: private machen
-    public List<String> getLinuxDeps(String path) throws Exception {
+    private List<String> getLinuxDeps(String path) throws Exception {
         Elf elfFile = Elf.fromFile(path);
 
         SectionHeader dynamicSectionHeader = elfFile.header().sectionHeaders().stream()
