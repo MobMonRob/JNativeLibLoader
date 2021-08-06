@@ -1,109 +1,94 @@
-# JNativeLibLoader
 ## Description
-The aim of JNativeLibLoader is to offer a mighty and easy to use library to load native libraries from JAR files. \
-This includes:
-1. unpacking binary native library files from the JAR to a cache
-2. recognizing the platform the using application is running at
-3. loading the binary native library files into the jvm depending on the platform
+JNativeLibLoader' is a powerful library with a simple API to load native libraries (.dll, . so) from JAR files into the JVM for JNI applications.
+
+This includes: \
+1. unpacking binary native library files from the JAR to a cache. \
+2. recognizing the platform the using application is running at. \
+3. loading the binary native library files into the jvm depending on the platform. \
+
+The native libs bundled within the JAR will be loaded in the right sequence if they mutually depend on each other. But loading will fail if their dependency graph contains cycles.
+
+Supported systems: Linux x86-64, Windows x86-64
+
+More Developer Info [here](DEVELOPER_INFO.md).
+
 
 ## Credits
-Most of the source code in this repository is a more or less customized extraction from the Gluegen project of the Jogamp community from 15. September 2020.
+Much source code originates in an extraction of the Gluegen project from 15.09.2020. \
+Customized Gluegen source code is located within folders named “jogamp”. \
 You can find the full source code of the Gluegen project here: https://github.com/JogAmp/gluegen. \
 The copy of the Gluegen license is in the file `Gluegen_LICENSE.txt`. \
-The following folders contain customized, extracted Gluegen code:
-* `/NativeLibLoader/src/main/java/de/dhbw/rahmlab/nativelibloader/impl/com/jogamp/common`
-* `/NativeLibLoader/src/main/java/de/dhbw/rahmlab/nativelibloader/impl/jogamp/common`
-* `/NativeGenerator_Linux64/include`
-* `/NativeGenerator_Linux64/src`
-
-## Documentation for all
-Tested with Netbeans 12, Maven, Java SDK 11, GCC 7.5.0
-
-## User documentation
-Example to use the JNativeLibLoader by depending on this project: https://github.com/MobMonRob/JViconDataStream2
-
-### User project configuration
-Make your project depended on this project to load native libs: `git submodule` hinzufügen.
-
-#### Dependency configuration
-In your pom.xml add the following:
-
-        <dependency>
-            <groupId>de.dhbw.rahmlab</groupId>
-            <artifactId>NativeLibLoader</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-#### Load and configure .so files
-Damit die .so Dateien geladen werdem können, müssen sie sich unter `<Projektpfad>/target/classes/natives/linux-amd64/` befinden. Damit landen sie innerhalb des JARs in `/natives/linux-amd64/`. Das Kopieren lässt sich mit Maven bewerkstelligen:
-
-            <resource>
-                <targetPath>${basedir}/target/classes/natives</targetPath>
-                <directory>${basedir}/natives</directory>
-            </resource>
 
 
-#### .so Dateien laden vorbereiten
-So eine ähnliche Klasse anlegen:
+## Tested prerequisites
+* Netbeans 12
+* Java SDK 11
+* Maven
 
-    package de.dhbw.rahmlab.vicon.datastream.nativelib;
-    
-    import de.dhbw.rahmlab.vicon.datastream.impl.ViconDataStreamSDKSwigJNI;
-    import java.util.ArrayList;
-    import java.util.List;
-    
-    public class NativeLibLoader {
-    
-        private static boolean isLoaded = false;
-    
-        public static void load() {
-            if (!isLoaded) {
-                loadActually();
-                isLoaded = true;
-            }
-        }
-    
-        private static void loadActually() {
-		//Useful, if .so loading fails
-		//System.setProperty("jogamp.debug", "true");
-	
-            List<String> glueLibNames = new ArrayList<>();
-            glueLibNames.add("jViconDataStreamSDK");
-    
-            de.dhbw.rahmlab.nativelibloader.api.NativeLibLoader.load(glueLibNames, ViconDataStreamSDKSwigJNI.class);
-        }
-    }
 
-#### .so Dateien laden
-Innerhalb einer Klasse, die die Bibliothek benötigt. Am besten natürlich die Klasse, die die `native` Aufrufe definiert. Geht zur Not aber auch in einer diese aufrufenden Klasse. Wichtig ist lediglich, dass die native Bibliothek geladen wird, bevor versucht wird, derer Funktionen aufzurufen.
+## How to use it
+Clone the repository and build the project. This will add JNativeLibLoader to the local Maven cache.
+You only need to rebuild JNativeLibLoader if you change it's codebase.
 
-	import de.dhbw.rahmlab.vicon.datastream.NativeLibLoader;
-	
-	public class YourClassWhichUsesNativeFunctions
-	{
-		static {
-			NativeLibLoader.load();
-		}
-	}
+Then follow the steps in the next section to configure your project.
 
-#### Fehlerbehebung
-Falls man das Quelltextprojekt benutzt und das Laden des JARs debuggen möchte:
-In Netbeans "compile on save" deaktiveren. ->Siehe [StackOverflow Frage](https://web.archive.org/web/20201113173334/https://stackoverflow.com/questions/1304149/disabling-automatic-build-in-netbeans/1313691#1313691) \
-Netbeans gibt sonst im Run Output folgenden Hinweis:
-> Running NetBeans Compile On Save execution. Phase execution is skipped
-> and output directories of dependency projects (with Compile on Save
-> turned on) will be used instead of their jar artifacts.
+Exemplary project: [JViconDataStream2](https://github.com/MobMonRob/JViconDataStream2).
 
-Das verhindert folgenden Fehler:
 
-> Exception in thread "main" java.lang.UnsatisfiedLinkError: Can't load
-> library:
-> `<path to project>`/`<project name>`/natives/linux-amd64/libgluegen_rt.so
+## Configure your project
+#### Add to Maven pom
+If you are not familiar with Maven, search the internet how to properly include these snippets:
 
-Die Ursache ist, dass Netbeans standardmäßig ("compile on save" aktiviert) die .class Dateien einer Dependency lädt, sofern die Dependency ein Netbeans Projekt ist. Mit der Deaktivierung dieser Funktion wird die JAR benutzt. \
-**Achtung: Man darauf achten, dass das JAR Artefakt des NativeLibLoader Projekts erstellt worden ist bevor man das aufrufende Projekt baut.**
+~~~xml
+<dependency>
+	<groupId>de.dhbw.rahmlab</groupId>
+	<artifactId>NativeLibLoader</artifactId>
+	<version>1.0-SNAPSHOT</version>
+</dependency>
+~~~
+~~~xml
+<resource>
+	<targetPath>${basedir}/target/classes/natives</targetPath>
+	<directory>${basedir}/natives</directory>
+</resource>
+~~~
 
-## Dokumentation für Entwickler
-#### Interessante ähnliche Projekte
-https://github.com/KeepSafe/ReLinker \
-https://github.com/scijava/native-lib-loader
+
+#### Add native files
+Your project structur should look something like this:
+~~~
+Myproject
+	|- natives
+		|- linux-amd64
+			|- <.so files here>
+		|- windows-amd64
+			|- <.dll files here>
+	|- src
+	|- ...
+~~~
+
+
+#### Load them in your code
+Make sure that you load the native files before you invoke any jni code and that you load them only once.
+
+Snippets:
+
+~~~java
+import de.dhbw.rahmlab.nativelibloader.api.NativeLibLoader;
+~~~
+
+~~~java
+NativeLibLoader.init(true);
+NativeLibLoader nativeLibLoader = NativeLibLoader.getInstance();
+nativeLibLoader.load(MyClass.class);
+~~~
+
+Substitute `MyClass` with any class from your project. If you generate multiple JAR's make sure that `MyClass` is in the same JAR as the native files.
+
+
+#### Big JAR
+To make deployment easy it can be a good idea if you bundle your project code, your native libs and the JNativeLibLoader' functionality into one single JAR file.
+
+A way to do this is to configure maven-assembly-plugin to build a jar-with-dependencies.
+You can find examples for this procedure in the internet. E.g. https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven
+
