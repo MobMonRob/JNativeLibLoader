@@ -1,10 +1,10 @@
 ## Description
 JNativeLibLoader' is a powerful library with a simple API to load native libraries (.dll, . so) from JAR files into the JVM for JNI applications.
 
-This includes: \
-1. unpacking binary native library files from the JAR to a cache. \
-2. recognizing the platform the using application is running at. \
-3. loading the binary native library files into the jvm depending on the platform. \
+This includes:
+1. unpacking binary native library files from the JAR to a cache.
+2. recognizing the platform the using application is running at.
+3. loading the binary native library files into the jvm depending on the platform.
 
 The native libs bundled within the JAR will be loaded in the right sequence if they mutually depend on each other. But loading will fail if their dependency graph contains cycles.
 
@@ -17,7 +17,7 @@ More Developer Info [here](DEVELOPER_INFO.md).
 Much source code originates in an extraction of the Gluegen project from 15.09.2020. \
 Customized Gluegen source code is located within folders named “jogamp”. \
 You can find the full source code of the Gluegen project here: https://github.com/JogAmp/gluegen. \
-The copy of the Gluegen license is in the file `Gluegen_LICENSE.txt`. \
+The copy of the Gluegen license is in the file `Gluegen_LICENSE.txt`.
 
 
 ## Tested prerequisites
@@ -58,13 +58,13 @@ If you are not familiar with Maven, search the internet how to properly include 
 Your project structur should look something like this:
 ~~~
 Myproject
-	|- natives
-		|- linux-amd64
-			|- <.so files here>
-		|- windows-amd64
-			|- <.dll files here>
-	|- src
-	|- ...
+|- natives
+   |- linux-amd64
+      |- <.so files here>
+   |- windows-amd64
+      |- <.dll files here>
+|- src
+|- ...
 ~~~
 
 
@@ -89,6 +89,6 @@ Substitute `MyClass` with any class from your project. If you generate multiple 
 #### Big JAR
 To make deployment easy it can be a good idea if you bundle your project code, your native libs and the JNativeLibLoader' functionality into one single JAR file.
 
-A way to do this is to configure maven-assembly-plugin to build a jar-with-dependencies.
+A way to do this is to configure maven-assembly-plugin to build a jar-with-dependencies. \
 You can find examples for this procedure in the internet. E.g. https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven
 

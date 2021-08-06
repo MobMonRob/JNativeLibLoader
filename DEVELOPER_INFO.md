@@ -18,7 +18,7 @@ That will also sometimes prevent the following error:
 > library:
 > <**Project path**>/natives/linux-amd64/<*native lib name*>
 
-**Why?**
+**Why?** \
 Netbeans caches the generated .class file before they are copied into the JAR. \
 NativeLibLoader fetches the path of the .class file of “MyClass” from the JVM within the load() function. \
 If “compile on save is activated” ... \
@@ -41,7 +41,7 @@ Implement native lib loading itself via JNI to the OS specific functions. \
 Linux: dlopen(). Would also allow lazy binding. \
 Windows: LoadLibraryExA(). Allows to set dependency search path explicitly.
 
-**Possible inspiration**
+**Possible inspiration** \
 https://javadoc.lwjgl.org/org/lwjgl/system/Library.html#loadNative(java.lang.Class,java.lang.String,java.lang.String) \
 https://javadoc.lwjgl.org/org/lwjgl/system/windows/WinBase.html \
 https://github.com/jnr/jnr-ffi

@@ -1,4 +1,4 @@
-Parser
+## Parser
 kaitai-struct-compiler 0.9 \
 https://kaitai.io/ \
 https://doc.kaitai.io/user_guide.html
@@ -6,11 +6,11 @@ https://doc.kaitai.io/user_guide.html
 The original parsing files have been expanded to parse the dependency names.
 
 
-Parsing dll files
+## Parsing dll files
 CFF Explorer helped to test https://ntcore.com/?page_id=388
 
 
-.so format parsing sources
+## .so format parsing sources
 (As of July 2021)
 
 https://github.com/kaitai-io/kaitai_struct_formats/blob/544392ff2c0ddc5afc72218cb3a0833fabc6b63e/executable/elf.ksy
@@ -28,7 +28,7 @@ https://wiki.osdev.org/ELF_Tutorial#The_String_Table
 http://www.skyfree.org/linux/references/ELF_Format.pdf
 
 
-.dll format parsing sources
+## .dll format parsing sources
 (As of July 2021)
 
 RVA umrechnen: https://translate.google.com/translate?sl=ru&tl=en&u=https://habr.com/en/post/129241/
