@@ -90,5 +90,5 @@ Substitute `MyClass` with any class from your project. If you generate multiple 
 To make deployment easy it can be a good idea if you bundle your project code, your native libs and the JNativeLibLoader' functionality into one single JAR file.
 
 A way to do this is to configure maven-assembly-plugin to build a jar-with-dependencies. \
-You can find examples for this procedure e.g.here: https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven.
+You can find examples for this procedure e.g. here: https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven.
 
