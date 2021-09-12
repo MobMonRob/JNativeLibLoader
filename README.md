@@ -1,5 +1,5 @@
 ## Description
-JNativeLibLoader' is a powerful library with a simple API to load native libraries (.dll, . so) from JAR files into the JVM for JNI applications.
+JNativeLibLoader' is a powerful library with a simple API to load native libraries (.dll, . so) from JAR files into the JVM for java applications which need to invoke native code via jni in a platform independend manner.
 
 This includes:
 1. unpacking binary native library files from the JAR to a cache.
