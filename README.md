@@ -41,7 +41,7 @@ If you are not familiar with Maven, search the internet how to properly include 
 
 ~~~xml
 <dependency>
-	<groupId>de.dhbw.rahmlab</groupId>
+	<groupId>de.orat.rahmlab</groupId>
 	<artifactId>NativeLibLoader</artifactId>
 	<version>1.0-SNAPSHOT</version>
 </dependency>
