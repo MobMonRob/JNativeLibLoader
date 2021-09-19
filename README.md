@@ -8,11 +8,10 @@ This includes:
 
 The native libs bundled within the JAR will be loaded in the right sequence if they mutually depend on each other. But loading will fail if their dependency graph contains cycles.
 
-## Limitation
-At the moment only Linux x86-64 and Windows x86-64 are supported
-
 More Developer Info [here](DEVELOPER_INFO.md).
 
+## Limitation
+At the moment only Linux x86-64 and Windows x86-64 are supported
 
 ## Credits
 Much source code originates in an extraction of the Gluegen project from 15.09.2020. \
