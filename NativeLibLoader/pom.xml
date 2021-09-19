@@ -20,12 +20,12 @@
             <url>http://www.orat.de</url>
         </developer>
     </developers>
-    <!--scm>
+    <scm>
         <connection>scm:git:https://github.com/MobMonRob/JNativeLibLoader.git</connection>
         <developerConnection>scm:git:https://github.com/MobMonRob/JNativeLibLoader.git</developerConnection>
         <url>https://github.com/MobMonRob/JNativeLibLoader/tree/${project.scm.tag}</url>
         <tag>master</tag>
-    </scm-->
+    </scm>
     <!--licenses>
         <license>
             <name></name>
@@ -33,7 +33,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses-->
-    <!--distributionManagement>
+    <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -42,7 +42,7 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-    </distributionManagement-->
+    </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
