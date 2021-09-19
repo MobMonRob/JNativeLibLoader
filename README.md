@@ -8,7 +8,8 @@ This includes:
 
 The native libs bundled within the JAR will be loaded in the right sequence if they mutually depend on each other. But loading will fail if their dependency graph contains cycles.
 
-Supported systems: Linux x86-64, Windows x86-64
+## Limitation
+At the moment only Linux x86-64 and Windows x86-64 are supported
 
 More Developer Info [here](DEVELOPER_INFO.md).
 
