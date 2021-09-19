@@ -178,8 +178,11 @@ public class Platform extends PlatformPropsImpl {
 
         /**
          * Returns {@code true} if the given {@link CPUType} is compatible w/
-         * this one, i.e. at least {@link #family} and {@link #is32Bit} is
+         * this one, i.e.at least {@link #family} and {@link #is32Bit} is
          * equal.
+         * 
+         * @param other cpu type
+         * @return true if compatible
          */
         public final boolean isCompatible(final CPUType other) {
             if (null == other) {
@@ -278,7 +281,10 @@ public class Platform extends PlatformPropsImpl {
 
         /**
          * Returns {@code true} if the given {@link ABIType} is compatible w/
-         * this one, i.e. they are equal.
+         * this one, i.e.they are equal.
+         * 
+         * @param other abi type
+         * @return true for comapatibility
          */
         public final boolean isCompatible(final ABIType other) {
             if (null == other) {
@@ -419,6 +425,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns true if this machine is little endian, otherwise false.
+     * 
+     * @return true if it is litle endian
      */
     public static boolean isLittleEndian() {
         return LITTLE_ENDIAN;
@@ -429,6 +437,8 @@ public class Platform extends PlatformPropsImpl {
      * <p>
      * In case of {@link OSType#ANDROID}, see {@link #getOSType()}, the OS name
      * is Linux</p>
+     * 
+     * @return os name
      */
     public static String getOSName() {
         return OS;
@@ -436,6 +446,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the OS version.
+     * 
+     * @return os version name
      */
     public static String getOSVersion() {
         return OS_VERSION;
@@ -443,6 +455,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the OS version number.
+     * 
+     * @return os version number
      */
     public static VersionNumber getOSVersionNumber() {
         return OS_VERSION_NUMBER;
@@ -450,6 +464,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the CPU architecture String.
+     * 
+     * @return arch type name
      */
     public static String getArchName() {
         return ARCH;
@@ -460,6 +476,8 @@ public class Platform extends PlatformPropsImpl {
      * <p>
      * In case of {@link OSType#ANDROID} the {@link #getOSName() OS name}, is
      * Linux</p>
+     * 
+     * @return os type
      */
     public static OSType getOSType() {
         return OS_TYPE;
@@ -467,6 +485,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the CPU family.
+     * 
+     * @return cpu family
      */
     public static CPUFamily getCPUFamily() {
         return CPU_ARCH.family;
@@ -474,6 +494,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the CPU architecture type.
+     * 
+     * @return cpu type
      */
     public static CPUType getCPUType() {
         return CPU_ARCH;
@@ -483,6 +505,8 @@ public class Platform extends PlatformPropsImpl {
      * Returns true if this JVM/ARCH is 32bit.
      * <p>
      * Shortcut to {@link #getCPUType()}.{@link CPUType#is32Bit is32Bit}</p>
+     * 
+     * @return true if 32bit
      */
     public static boolean is32Bit() {
         return CPU_ARCH.is32Bit; // used very often
@@ -492,6 +516,8 @@ public class Platform extends PlatformPropsImpl {
      * Returns true if this JVM/ARCH is 64bit.
      * <p>
      * Shortcut to !{@link #getCPUType()}.{@link CPUType#is32Bit is32Bit}</p>
+     * 
+     * @return true if is 64bit
      */
     public static boolean is64Bit() {
         return !CPU_ARCH.is32Bit; // used very often
@@ -506,6 +532,8 @@ public class Platform extends PlatformPropsImpl {
      * <p>
      * Otherwise the value is {@link ABIType#GENERIC_ABI}.
      * </p>
+     * 
+     * @return  abi type
      */
     public static ABIType getABIType() {
         return ABI_TYPE;
@@ -516,6 +544,7 @@ public class Platform extends PlatformPropsImpl {
      * CPUType as implemented in the build system in
      * 'gluegen-cpptasks-base.xml'.<br>
      *
+     * @return  os arch type name
      * @see #getOSAndArch(OSType, CPUType)
      */
     public static String getOSAndArch() {
@@ -524,6 +553,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the JAVA vendor.
+     * 
+     * @return java vendor name
      */
     public static String getJavaVendor() {
         return JAVA_VENDOR;
@@ -531,6 +562,7 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the JAVA VM name.
+     * @return java vm name
      */
     public static String getJavaVMName() {
         return JAVA_VM_NAME;
@@ -538,6 +570,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the JAVA runtime name.
+     * 
+     * @return java runtime name
      */
     public static String getJavaRuntimeName() {
         return JAVA_RUNTIME_NAME;
@@ -545,6 +579,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the JAVA vendor url.
+     * 
+     * @return java vendor url
      */
     public static String getJavaVendorURL() {
         return JAVA_VENDOR_URL;
@@ -552,6 +588,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the JAVA version.
+     * 
+     * @return java version
      */
     public static String getJavaVersion() {
         return JAVA_VERSION;
@@ -559,6 +597,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the JAVA version number.
+     * 
+     * @return java version number
      */
     public static VersionNumber getJavaVersionNumber() {
         return JAVA_VERSION_NUMBER;
@@ -566,6 +606,8 @@ public class Platform extends PlatformPropsImpl {
 
     /**
      * Returns the platform's line separator.
+     * 
+     * @return new line
      */
     public static String getNewline() {
         return NEWLINE;
@@ -582,6 +624,8 @@ public class Platform extends PlatformPropsImpl {
     /**
      * Returns <code>true</code> if AWT is available and not in headless mode,
      * otherwise <code>false</code>.
+     * 
+     * @return is awt available
      */
     public static boolean isAWTAvailable() {
         return AWT_AVAILABLE;
