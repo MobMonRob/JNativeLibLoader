@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.dhbw.rahmlab.nativelibloader.impl.dependencies;
+package de.dhbw.rahmlab.nativelibloader.impl.util;
 
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
 

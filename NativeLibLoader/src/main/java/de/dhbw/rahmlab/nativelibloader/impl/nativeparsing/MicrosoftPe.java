@@ -1,6 +1,6 @@
 // This is a generated file! Please edit source .ksy file and use kaitai-struct-compiler to rebuild
 
-package de.dhbw.rahmlab.nativelibloader.impl.dependencies;
+package de.dhbw.rahmlab.nativelibloader.impl.nativeparsing;
 
 import io.kaitai.struct.ByteBufferKaitaiStream;
 import io.kaitai.struct.KaitaiStruct;
