@@ -5,7 +5,7 @@
  */
 package de.dhbw.rahmlab.nativelibloader.impl._tmp;
 
-import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.Platform;
+import de.dhbw.rahmlab.nativelibloader.impl.jogamp.os.Platform;
 import de.dhbw.rahmlab.nativelibloader.impl.nativeparsing.Elf;
 import de.dhbw.rahmlab.nativelibloader.impl.nativeparsing.MicrosoftPe;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@
  */
 package de.dhbw.rahmlab.nativelibloader.impl.util;
 
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
+import de.dhbw.rahmlab.nativelibloader.impl.jogamp.other.Debug;
 
 /**
  *

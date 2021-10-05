@@ -1,8 +1,8 @@
 package de.dhbw.rahmlab.nativelibloader.api;
 
-import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.NativeLibrary;
-import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.Platform;
-import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
+import de.dhbw.rahmlab.nativelibloader.impl.jogamp.os.NativeLibrary;
+import de.dhbw.rahmlab.nativelibloader.impl.jogamp.os.Platform;
+import de.dhbw.rahmlab.nativelibloader.impl.jogamp.util.cache.TempJarCache;
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
 import de.dhbw.rahmlab.nativelibloader.impl._tmp.MutualBundleDependencyReverseTopologicalSortingService;
 import de.dhbw.rahmlab.nativelibloader.impl._tmp.NativeLibsDependenciesGetterService;
