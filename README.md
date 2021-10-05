@@ -1,5 +1,5 @@
 ## Description
-JNativeLibLoader' is a powerful library with a simple API to load native libraries (.dll, . so) from JAR files into the JVM for JNI applications.
+JNativeLibLoader' is a powerful library with a simple API to load native libraries (.dll, . so) from JAR files into the JVM for java applications which need to invoke native code via jni in a platform independend manner.
 
 This includes:
 1. unpacking binary native library files from the JAR to a cache.
@@ -8,10 +8,10 @@ This includes:
 
 The native libs bundled within the JAR will be loaded in the right sequence if they mutually depend on each other. But loading will fail if their dependency graph contains cycles.
 
-Supported systems: Linux x86-64, Windows x86-64
-
 More Developer Info [here](DEVELOPER_INFO.md).
 
+## Limitation
+At the moment only Linux x86-64 and Windows x86-64 are supported
 
 ## Credits
 Much source code originates in an extraction of the Gluegen project from 15.09.2020. \
@@ -41,7 +41,7 @@ If you are not familiar with Maven, search the internet how to properly include 
 
 ~~~xml
 <dependency>
-	<groupId>de.dhbw.rahmlab</groupId>
+	<groupId>de.orat.rahmlab</groupId>
 	<artifactId>NativeLibLoader</artifactId>
 	<version>1.0-SNAPSHOT</version>
 </dependency>
@@ -90,5 +90,5 @@ Substitute `MyClass` with any class from your project. If you generate multiple 
 To make deployment easy it can be a good idea if you bundle your project code, your native libs and the JNativeLibLoader' functionality into one single JAR file.
 
 A way to do this is to configure maven-assembly-plugin to build a jar-with-dependencies. \
-You can find examples for this procedure in the internet. E.g. https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven
+You can find examples for this procedure e.g. here: https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven.
 
