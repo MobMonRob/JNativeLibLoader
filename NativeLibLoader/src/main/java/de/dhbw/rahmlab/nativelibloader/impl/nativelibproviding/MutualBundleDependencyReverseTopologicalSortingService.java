@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.dhbw.rahmlab.nativelibloader.impl._tmp;
+package de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding;
 
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import org.jgrapht.graph.DirectedAcyclicGraph;
  */
 public class MutualBundleDependencyReverseTopologicalSortingService {
 
-    public static <T> List<T> sort(final Map<T, Set<T>> dependentsToDependecySet) throws Exception {
+    public static <T> List<T> sort(final Map<T, Set<T>> dependentsToDependecySet) throws IllegalArgumentException {
         DirectedAcyclicGraph<T, DefaultEdge> depsGraph = new DirectedAcyclicGraph<>(DefaultEdge.class);
 
         DebugService.print("----");
@@ -46,7 +46,7 @@ public class MutualBundleDependencyReverseTopologicalSortingService {
                 DefaultEdge edge;
                 try {
                     edge = depsGraph.addEdge(dependent, dependency);
-                } catch (java.lang.IllegalArgumentException ex) {
+                } catch (IllegalArgumentException ex) {
                     DebugService.print("Cyclic dependency found. " + "Dependent: " + dependent.toString() + " Dependency: " + dependency.toString());
                     throw ex;
                 }
@@ -61,7 +61,7 @@ public class MutualBundleDependencyReverseTopologicalSortingService {
             }
         }
 
-        ArrayList<T> sortedDeps = new ArrayList<T>();
+        ArrayList<T> sortedDeps = new ArrayList();
 
         // Already in topological order
         depsGraph.iterator().forEachRemaining(sortedDeps::add);
@@ -72,7 +72,7 @@ public class MutualBundleDependencyReverseTopologicalSortingService {
         Collections.reverse(sortedDeps);
 
         DebugService.print("Sorted dependencies:");
-        sortedDeps.forEach(libName -> DebugService.print(libName.toString()));
+        sortedDeps.forEach(dep -> DebugService.print(dep.toString()));
         DebugService.print("----");
 
         return sortedDeps;

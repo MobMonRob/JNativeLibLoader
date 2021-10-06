@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.dhbw.rahmlab.nativelibloader.impl._tmp;
+package de.dhbw.rahmlab.nativelibloader.impl.nativeparsing;
 
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.os.Platform;
-import de.dhbw.rahmlab.nativelibloader.impl.nativeparsing.Elf;
-import de.dhbw.rahmlab.nativelibloader.impl.nativeparsing.MicrosoftPe;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,18 +20,18 @@ import java.util.stream.Collectors;
  */
 public class NativeLibsDependenciesGetterService {
 
-    public static Set<String> getDeps(String path) throws Exception {
+    public static Set<String> getDeps(String path) throws IOException, NoSuchElementException, Exception {
         switch (Platform.OS_TYPE) {
             case WINDOWS:
-                return getWindowsDeps(path);
+                return getDllDeps(path);
             case LINUX:
-                return getLinuxDeps(path);
+                return getSoDeps(path);
             default:
-                throw new Exception("OS not supported.");
+                throw new Exception("OS not supported: " + Platform.OS_TYPE.toString());
         }
     }
 
-    private static Set<String> getWindowsDeps(String path) throws Exception {
+    private static Set<String> getDllDeps(String path) throws IOException, NoSuchElementException {
         MicrosoftPe peFile = MicrosoftPe.fromFile(path);
 
         MicrosoftPe.ImportSection importSection = peFile.pe().sectionHeaderTable().stream()
@@ -50,7 +50,7 @@ public class NativeLibsDependenciesGetterService {
         return depsNames;
     }
 
-    private static Set<String> getLinuxDeps(String path) throws Exception {
+    private static Set<String> getSoDeps(String path) throws IOException, NoSuchElementException, Exception {
         Elf elfFile = Elf.fromFile(path);
 
         Elf.EndianElf.SectionHeader dynamicSectionHeader = elfFile.header().sectionHeaders().stream()
@@ -62,7 +62,7 @@ public class NativeLibsDependenciesGetterService {
         Elf.EndianElf.DynamicSection dynamicSection = (Elf.EndianElf.DynamicSection) dynamicSectionHeader.body();
 
         if (!dynamicSection.isStringTableLinked()) {
-            throw new Exception("String table is not linked!");
+            throw new Exception("ELF string table is not linked! (" + path + ")");
         }
 
         ArrayList<Elf.EndianElf.DynamicSectionEntry> dynamicSectionEntries = dynamicSection.entries().stream()

@@ -1,21 +1,12 @@
 package de.dhbw.rahmlab.nativelibloader.api;
 
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.os.NativeLibrary;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.os.Platform;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.util.cache.TempJarCache;
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
-import de.dhbw.rahmlab.nativelibloader.impl._tmp.MutualBundleDependencyReverseTopologicalSortingService;
-import de.dhbw.rahmlab.nativelibloader.impl._tmp.NativeLibsDependenciesGetterService;
-import de.dhbw.rahmlab.nativelibloader.impl._tmp.NativeLibsPathsFinderService;
-import java.util.HashSet;
+import de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding.NativeLib;
+import de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding.SortedNativeLibProviderService;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 /**
  * @author fabian
@@ -61,43 +52,17 @@ public class NativeLibLoader {
      * are wanted to be loaded.
      */
     public void load(Class markerClass) throws Exception {
-        // Retrieve native lib paths
-        final Set<Path> nativeLibsPaths = NativeLibsPathsFinderService.findNativeLibsPaths(markerClass);
+        // Not static in order to avoid check if inited.
 
-        // Map normalized lib names to their paths
-        Map<String, Path> libNamesToPaths = new HashMap<String, Path>(nativeLibsPaths.size());
-        for (Path nativeLibPath : nativeLibsPaths) {
-            String normalizedLibName = NativeLibrary.isValidNativeLibraryName(nativeLibPath.toString(), false);
-            if (Objects.isNull(normalizedLibName)) {
-                DebugService.print("Not a valid library name, therefore excluded: " + nativeLibPath);
-                continue;
-            }
-            libNamesToPaths.put(normalizedLibName, nativeLibPath);
-        }
+        Objects.requireNonNull(markerClass);
 
-        // Map libs to their bundle dependencies
-        Map<String, Set<String>> libsToDeps = new HashMap();
-        for (Entry<String, Path> libNameToPath : libNamesToPaths.entrySet()) {
-            String libName = libNameToPath.getKey();
-            Path libPath = libNameToPath.getValue();
-            Set<String> deps = NativeLibsDependenciesGetterService.getDeps(libPath.toString());
+        final List<NativeLib> sortedLibs = SortedNativeLibProviderService.getSortedNativeLibs(markerClass);
 
-            // Keep only those dependencies which are part of the bundle
-            Set<String> bundleDeps = deps.stream()
-                .map(dep -> NativeLibrary.isValidNativeLibraryName(dep, false))
-                .filter(Objects::nonNull)
-                .filter(dep -> libNamesToPaths.containsKey(dep))
-                .collect(Collectors.toCollection(HashSet<String>::new));
-
-            libsToDeps.put(libName, bundleDeps);
-        }
-
-        List<String> sortedLibs = MutualBundleDependencyReverseTopologicalSortingService.sort(libsToDeps);
-
-        // Loads LibNames from TempJarCache into the JVM
-        for (String lib : sortedLibs) {
-            final String path = libNamesToPaths.get(lib).toString();
-            DebugService.print("Load next lib: " + lib + " - " + path);
+        // Load libs into the JVM.
+        for (NativeLib lib : sortedLibs) {
+            String name = lib.getName().toString();
+            String path = lib.getPath().toString();
+            DebugService.print("Load next lib: " + name + " - " + path);
             System.load(path);
         }
 

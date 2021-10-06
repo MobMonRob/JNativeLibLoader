@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.dhbw.rahmlab.nativelibloader.impl._tmp;
+package de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding;
 
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.jvm.JNILibLoaderBase;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.net.Uri;
@@ -30,9 +30,7 @@ import java.util.stream.Collectors;
 public class NativeLibsPathsFinderService {
 
     public static Set<Path> findNativeLibsPaths(Class markerClass) throws NullPointerException, IOException, IllegalArgumentException, URISyntaxException, NoSuchElementException, URISyntaxException {
-        if (Objects.isNull(markerClass)) {
-            throw new NullPointerException("markerClass cannot be null!");
-        }
+        Objects.requireNonNull(markerClass);
 
         final Uri markerClassInternalUri = Uri.valueOf(IOUtil.getClassURL(markerClass.getName(), markerClass.getClassLoader()));
 
@@ -42,7 +40,7 @@ public class NativeLibsPathsFinderService {
             // Loads all natives from JAR which contains classesFromJavaJars into TempJarCache.
             final Set<String> addedLibs = JNILibLoaderBase.addNativeJarLibs(markerClass, null).orElseThrow();
 
-            nativeLibsPaths = new HashSet<Path>();
+            nativeLibsPaths = new HashSet(addedLibs.size());
 
             for (String addedLib : addedLibs) {
                 String StringLibPath = TempJarCache.findLibrary(addedLib);
@@ -55,7 +53,7 @@ public class NativeLibsPathsFinderService {
             nativeLibsPaths = findNativeLibsPath(nativesPath);
 
         } else {
-            throw new IllegalArgumentException("Uri is not of a knows scheme.");
+            throw new IllegalArgumentException("Uri is not of a knows scheme: " + markerClassInternalUri.toString());
         }
 
         // For safe use of the return value
