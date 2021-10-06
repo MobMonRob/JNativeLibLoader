@@ -44,7 +44,7 @@ public class NativeLibsPathsFinderService {
 
             for (String addedLib : addedLibs) {
                 String StringLibPath = TempJarCache.findLibrary(addedLib);
-                Path libPath = Paths.get(Uri.valueOfFilepath(StringLibPath).toURI());
+                Path libPath = Path.of(StringLibPath);
                 nativeLibsPaths.add(libPath);
             }
 
