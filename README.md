@@ -8,10 +8,10 @@ This includes:
 
 The native libs bundled within the JAR will be loaded in the right sequence if they mutually depend on each other. But loading will fail if their dependency graph contains cycles.
 
-Supported systems: Linux x86-64, Windows x86-64
-
 More Developer Info [here](DEVELOPER_INFO.md).
 
+## Limitation
+At the moment only Linux x86-64 and Windows x86-64 are supported
 
 ## Credits
 Much source code originates in an extraction of the Gluegen project from 15.09.2020. \
@@ -41,7 +41,7 @@ If you are not familiar with Maven, search the internet how to properly include 
 
 ~~~xml
 <dependency>
-	<groupId>de.dhbw.rahmlab</groupId>
+	<groupId>de.orat.rahmlab</groupId>
 	<artifactId>NativeLibLoader</artifactId>
 	<version>1.0-SNAPSHOT</version>
 </dependency>
