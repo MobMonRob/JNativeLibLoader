@@ -47,6 +47,7 @@ import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
  * <li>Allow mark/reset and switching streams and input/output mode</li>
  * <li>Optimized operations</li>
  * </ul>
+ * @param <T>
  */
 public class Bitstream<T> {
 
@@ -65,11 +66,15 @@ public class Bitstream<T> {
         /**
          * Sets the underlying stream, without {@link #close()}ing the previous
          * one.
+         * 
+         * @param stream
          */
         void setStream(final T stream);
 
         /**
          * Returns the underlying stream
+         * 
+         * @return 
          */
         T getStream();
 
@@ -93,12 +98,14 @@ public class Bitstream<T> {
         void flush() throws IOException;
 
         /**
-         * Return true if stream can handle input, i.e. {@link #read()}.
+         * Return true if stream can handle input, i.e.{@link #read()}.
+         * @return 
          */
         boolean canInput();
 
         /**
-         * Return true if stream can handle output, i.e. {@link #write(byte)}
+         * Return true if stream can handle output, i.e.{@link #write(byte)}
+         * @return 
          */
         boolean canOutput();
 
@@ -147,8 +154,7 @@ public class Bitstream<T> {
          * Set {@code markpos} to current position, allowing the stream to be
          * {@link #reset()}.
          *
-         * @param readlimit maximum number of bytes able to read before
-         * invalidating the {@code markpos}.
+         * @param readLimit
          * @throws UnsupportedOperationException if not supported, i.e. if
          * stream is not an {@link #canInput() input stream}.
          */
@@ -177,6 +183,7 @@ public class Bitstream<T> {
          * the resulting value.
          * </p>
          *
+         * @return 
          * @throws IOException
          * @throws UnsupportedOperationException if not supported, i.e. if
          * stream is not an {@link #canInput() input stream}.
@@ -190,6 +197,8 @@ public class Bitstream<T> {
          * the written value.
          * </p>
          *
+         * @param val
+         * @return 
          * @throws IOException
          * @throws UnsupportedOperationException if not supported, i.e. if
          * stream is not an {@link #canOutput() output stream}.
@@ -717,14 +726,14 @@ public class Bitstream<T> {
         throwIOExceptionOnEOF = false;
     }
 
-    private final void resetLocal() {
+    private void resetLocal() {
         bitBuffer = 0;
         bitCount = 0;
         bitsDataMark = 0;
         bitsCountMark = -1;
     }
 
-    private final void validateMode() throws IllegalArgumentException {
+    private void validateMode() throws IllegalArgumentException {
         if (!canInput() && !canOutput()) {
             throw new IllegalArgumentException("stream can neither input nor output: " + this);
         }
@@ -743,6 +752,8 @@ public class Bitstream<T> {
      * Default behavior for I/O methods is not to throw an {@link IOException},
      * but to return {@link #EOS}.
      * </p>
+     * 
+     * @param enable
      */
     public final void setThrowIOExceptionOnEOF(final boolean enable) {
         throwIOExceptionOnEOF = enable;
@@ -763,6 +774,8 @@ public class Bitstream<T> {
      * {@link #flush()} is being called.
      * </p>
      *
+     * @param stream
+     * @param outputMode
      * @throws IllegalArgumentException if requested <i>outputMode</i> doesn't
      * match stream's {@link #canInput()} and {@link #canOutput()}.
      * @throws IOException could be caused by {@link #flush()}.
@@ -779,6 +792,8 @@ public class Bitstream<T> {
 
     /**
      * Returns the currently used {@link ByteStream}.
+     * 
+     * @return 
      */
     public final ByteStream<T> getStream() {
         return bytes;
@@ -787,6 +802,8 @@ public class Bitstream<T> {
     /**
      * Returns the currently used {@link ByteStream}'s
      * {@link ByteStream#getStream()}.
+     * 
+     * @return 
      */
     public final T getSubStream() {
         return bytes.getStream();
@@ -846,7 +863,8 @@ public class Bitstream<T> {
     }
 
     /**
-     * Return true if stream can handle input, i.e. {@link #readBit(boolean)}.
+     * Return true if stream can handle input, i.e.{@link #readBit(boolean)}.
+     * @return 
      */
     public final boolean canInput() {
         return null != bytes ? bytes.canInput() : false;
@@ -864,7 +882,7 @@ public class Bitstream<T> {
      * Set {@code markpos} to current position, allowing the stream to be
      * {@link #reset()}.
      *
-     * @param readlimit maximum number of bytes able to read before invalidating
+     * @param readLimit maximum number of bytes able to read before invalidating
      * the {@code markpos}.
      * @throws IllegalStateException if not in input mode or stream closed
      */
@@ -912,30 +930,32 @@ public class Bitstream<T> {
      * In input mode, zero indicates reading a new byte and cont. w/ 7. In
      * output mode, the cached byte is written when flipping over to 0.
      * </p>
+     * 
+     * @return 
      */
     public final int getBitCount() {
         return bitCount;
     }
 
     /**
-     * Return the last bit number read or written counting from [0..7]. If no
-     * bit access has been performed, 7 is returned.
-     * <p>
+     * Return the last bit number read or written counting from [0..7].If no
+     * bit access has been performed, 7 is returned.<p>
      * Returned value is normalized [0..7], i.e. independent from <i>msb</i> or
      * <i>lsb</i> read order.
      * </p>
+     * @return 
      */
     public final int getLastBitPos() {
         return 7 - bitCount;
     }
 
     /**
-     * Return the next bit number to be read or write counting from [0..7]. If
-     * no bit access has been performed, 0 is returned.
-     * <p>
+     * Return the next bit number to be read or write counting from [0..7].If
+     * no bit access has been performed, 0 is returned.<p>
      * Returned value is normalized [0..7], i.e. independent from <i>msb</i> or
      * <i>lsb</i> read order.
      * </p>
+     * @return 
      */
     public final int getBitPosition() {
         if (0 == bitCount) {
@@ -948,6 +968,7 @@ public class Bitstream<T> {
     /**
      * Returns the current bit buffer.
      *
+     * @return 
      * @see #getBitCount()
      */
     public final int getBitBuffer() {
@@ -956,6 +977,8 @@ public class Bitstream<T> {
 
     /**
      * Returns the bit position in the stream.
+     * 
+     * @return 
      */
     public final long position() {
         // final long bytePos = bytes.position() - ( !outputMode && 0 != bitCount ? 1 : 0 );
@@ -1349,6 +1372,7 @@ public class Bitstream<T> {
     /**
      * Write the given 8 bits via {@link #writeBits31(int, int)}.
      *
+     * @param int8
      * @return {@link #EOS} or the written 8bit value.
      * @throws IllegalStateException if not in output mode or stream closed
      * @throws IOException
@@ -1426,6 +1450,8 @@ public class Bitstream<T> {
      *
      * @param bigEndian if false, swap incoming bytes to little-endian,
      * otherwise leave them as big-endian.
+     * @param bytes
+     * @param offset
      * @return the 16bit unsigned value within the lower bits.
      * @throws IndexOutOfBoundsException
      */
@@ -1447,6 +1473,7 @@ public class Bitstream<T> {
      *
      * @param bigEndian if true, swap given bytes to little-endian, otherwise
      * leave them as little-endian.
+     * @param int16
      * @return {@link #EOS} or the written 16bit value.
      * @throws IllegalStateException if not in output mode or stream closed
      * @throws IOException
@@ -1547,6 +1574,8 @@ public class Bitstream<T> {
      *
      * @param bigEndian if false, swap incoming bytes to little-endian,
      * otherwise leave them as big-endian.
+     * @param bytes
+     * @param offset
      * @return the 32bit unsigned value within the lower bits.
      * @throws IndexOutOfBoundsException
      */
@@ -1569,6 +1598,7 @@ public class Bitstream<T> {
      *
      * @param bigEndian if true, swap given bytes to little-endian, otherwise
      * leave them as little-endian.
+     * @param int32
      * @return {@link #EOS} or the written 32bit value.
      * @throws IllegalStateException if not in output mode or stream closed
      * @throws IOException
@@ -1633,11 +1663,12 @@ public class Bitstream<T> {
 
     /**
      * Reinterpret the given <code>int32_t</code> value as
-     * <code>uint32_t</code>, i.e. perform the following cast to
-     * <code>long</code>:
-     * <pre>
+     * <code>uint32_t</code>, i.e.perform the following cast to
+     * <code>long</code>:<pre>
      *   final long l = 0xffffffffL & int32;
      * </pre>
+     * @param int32
+     * @return 
      */
     public static final long toUInt32Long(final int int32) {
         return 0xffffffffL & int32;
@@ -1646,7 +1677,9 @@ public class Bitstream<T> {
     /**
      * Returns the reinterpreted given <code>int32_t</code> value as
      * <code>uint32_t</code> if &le; {@link Integer#MAX_VALUE} as within an
-     * <code>int</code> storage. Otherwise return -1.
+     * <code>int</code> storage.Otherwise return -1.
+     * @param int32
+     * @return 
      */
     public static final int toUInt32Int(final int int32) {
         return uint32LongToInt(toUInt32Long(int32));
@@ -1654,7 +1687,10 @@ public class Bitstream<T> {
 
     /**
      * Returns the given <code>uint32_t</code> value <code>long</code> value as
-     * <code>int</code> if &le; {@link Integer#MAX_VALUE}. Otherwise return -1.
+     * <code>int</code> if &le; {@link Integer#MAX_VALUE}.Otherwise return -1.
+     * 
+     * @param uint32
+     * @return 
      */
     public static final int uint32LongToInt(final long uint32) {
         if (Integer.MAX_VALUE >= uint32) {

@@ -141,6 +141,7 @@ public class UnsafeUtil {
      * {@code sun.misc.Unsafe.invokeCleaner(java.nio.ByteBuffer)} is available
      * and has not caused an exception.
      *
+     * @return 
      * @see #invokeCleaner(ByteBuffer)
      */
     public static boolean hasInvokeCleaner() {
@@ -155,6 +156,7 @@ public class UnsafeUtil {
      * instance {@code clean()} method once.
      * </p>
      *
+     * @param bb
      * @return {@code true} if successful, otherwise {@code false}.
      * @see #hasInvokeCleaner()
      */
@@ -179,6 +181,7 @@ public class UnsafeUtil {
      * {@code jdk.internal.module.IllegalAcessLogger}'s {@code logger} field is
      * available and has not caused an exception.
      *
+     * @return 
      * @see #doWithoutIllegalAccessLogger(PrivilegedAction)
      */
     public static boolean hasIllegalAccessLoggerAccess() {
@@ -199,7 +202,9 @@ public class UnsafeUtil {
      * {@code action} is just executed w/o temporary logger modifications.
      * </p>
      *
+     * @param <T>
      * @param action the user action task
+     * @return 
      * @throws RuntimeException is thrown for a caught {@link Throwable} while
      * executing the user {@code action}
      * @see #hasIllegalAccessLoggerAccess()

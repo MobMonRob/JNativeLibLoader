@@ -38,7 +38,7 @@ import java.util.zip.Inflater;
 
 /**
  * All in memory inflater / deflator for small chunks using streams
- * <p>
+ * 
  * Stream header of deflated data:
  * <ul>
  * <li>4 bytes magic 0xDEF1A7E0 (Big Endian)</li>
@@ -46,7 +46,6 @@ import java.util.zip.Inflater;
  * <li>4 bytes integer inflated-size (Big Endian)</li>
  * <li>deflated bytes</li>
  * </ul>
- * </p>
  */
 public class CustomCompress {
 

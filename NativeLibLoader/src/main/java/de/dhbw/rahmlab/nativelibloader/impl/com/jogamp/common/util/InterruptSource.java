@@ -39,6 +39,7 @@ public interface InterruptSource {
      * Returns the source of the last {@link #interrupt()} call.
      *
      * @param clear if true, issues {@link #clearInterruptSource()}
+     * @return 
      */
     Throwable getInterruptSource(final boolean clear);
 
@@ -46,6 +47,7 @@ public interface InterruptSource {
      * Returns the count of {@link java.lang.Thread#interrupt()} calls.
      *
      * @param clear if true, issues {@link #clearInterruptSource()}
+     * @return 
      */
     int getInterruptCounter(final boolean clear);
 
@@ -60,6 +62,9 @@ public interface InterruptSource {
         /**
          * Casts given {@link java.lang.Thread} to {@link InterruptSource} if
          * applicable, otherwise returns {@code null}.
+         * 
+         * @param t
+         * @return 
          */
         public static InterruptSource get(final java.lang.Thread t) {
             if (t instanceof InterruptSource) {
@@ -72,6 +77,8 @@ public interface InterruptSource {
         /**
          * Casts current {@link java.lang.Thread} to {@link InterruptSource} if
          * applicable, otherwise returns {@code null}.
+         * 
+         * @return 
          */
         public static InterruptSource currentThread() {
             return get(java.lang.Thread.currentThread());
@@ -127,6 +134,7 @@ public interface InterruptSource {
          * @param tg explicit {@link ThreadGroup}, may be {@code null}
          * @param target explicit {@link Runnable}, may be {@code null}
          * @param name explicit name of thread, may be {@code null}
+         * @return 
          */
         public static Thread create(final ThreadGroup tg, final Runnable target, final String name) {
             return null != name ? new Thread(tg, target, name) : new Thread(tg, target);

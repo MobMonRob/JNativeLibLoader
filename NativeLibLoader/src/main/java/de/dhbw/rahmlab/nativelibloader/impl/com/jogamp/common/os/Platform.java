@@ -46,8 +46,7 @@ import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl;
  * <p>
  * Some field declarations and it's static initialization has been delegated to
  * it's super class {@link PlatformPropsImpl} to solve static initialization
- * interdependencies w/ the GlueGen native library loading and it's derived
- * information {@link #getMachineDataInfo()}, {@link #is32Bit()}, ..<br>
+ * interdependencies w/ the GlueGen native library loading <br>
  * This mechanism is preferred in this case to avoid synchronization and locking
  * and allow better performance accessing the mentioned fields/methods.
  * </p>

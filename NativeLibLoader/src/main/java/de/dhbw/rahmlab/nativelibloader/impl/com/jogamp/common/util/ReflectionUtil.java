@@ -66,7 +66,7 @@ public final class ReflectionUtil {
         DEBUG_STATS_FORNAME = PropertyAccess.isPropertyDefined("jogamp.debug.ReflectionUtil.forNameStats", true);
         if (DEBUG_STATS_FORNAME) {
             forNameLock = new Object();
-            forNameStats = new HashMap<String, ClassNameLookup>();
+            forNameStats = new HashMap<>();
         } else {
             forNameLock = null;
             forNameStats = null;
@@ -156,6 +156,10 @@ public final class ReflectionUtil {
 
     /**
      * Returns true only if the class could be loaded.
+     * 
+     * @param clazzName
+     * @param cl
+     * @return 
      */
     public static final boolean isClassAvailable(final String clazzName, final ClassLoader cl) {
         try {
@@ -168,6 +172,10 @@ public final class ReflectionUtil {
     /**
      * Loads and returns the class or null.
      *
+     * @param clazzName
+     * @param initializeClazz
+     * @param cl
+     * @return 
      * @see Class#forName(java.lang.String, boolean, java.lang.ClassLoader)
      */
     public static final Class<?> getClass(final String clazzName, final boolean initializeClazz, final ClassLoader cl)
@@ -180,7 +188,11 @@ public final class ReflectionUtil {
     }
 
     /**
+     * @param clazzName
+     * @param cstrArgTypes
      * @param initializeClazz TODO
+     * @param cl
+     * @return 
      * @throws JogampRuntimeException if the constructor can not be delivered.
      */
     public static final Constructor<?> getConstructor(final String clazzName, final Class<?>[] cstrArgTypes, final boolean initializeClazz, final ClassLoader cl)
@@ -218,6 +230,9 @@ public final class ReflectionUtil {
      * <code>cstrArgs</code>.
      * </p>
      *
+     * @param clazz
+     * @param cstrArgTypes
+     * @return 
      * @throws JogampRuntimeException if the constructor can not be delivered.
      */
     public static final Constructor<?> getConstructor(final Class<?> clazz, Class<?>... cstrArgTypes)
@@ -261,6 +276,9 @@ public final class ReflectionUtil {
     }
 
     /**
+     * @param cstr
+     * @param cstrArgs
+     * @return 
      * @throws JogampRuntimeException if the instance can not be created.
      */
     public static final Object createInstance(final Constructor<?> cstr, final Object... cstrArgs)
@@ -283,6 +301,12 @@ public final class ReflectionUtil {
     }
 
     /**
+     * Create instance.
+     * 
+     * @param clazz
+     * @param cstrArgTypes
+     * @param cstrArgs
+     * @return 
      * @throws JogampRuntimeException if the instance can not be created.
      */
     public static final Object createInstance(final Class<?> clazz, final Class<?>[] cstrArgTypes, final Object... cstrArgs)
@@ -368,7 +392,13 @@ public final class ReflectionUtil {
         return instanceOf(clazz, AWTNames.ComponentClass);
     }
 
-    /**
+    
+    /** Get method.
+     * 
+     * @param clazz
+     * @param methodName
+     * @param argTypes
+     * @return 
      * @throws JogampRuntimeException if the Method can not be found.
      */
     public static final Method getMethod(final Class<?> clazz, final String methodName, final Class<?>... argTypes)
@@ -389,6 +419,13 @@ public final class ReflectionUtil {
     }
 
     /**
+     * Get method.
+     * 
+     * @param clazzName
+     * @param methodName
+     * @param argTypes
+     * @param cl
+     * @return 
      * @throws JogampRuntimeException if the Method can not be found.
      */
     public static final Method getMethod(final String clazzName, final String methodName, final Class<?>[] argTypes, final ClassLoader cl)
@@ -428,6 +465,14 @@ public final class ReflectionUtil {
     }
 
     /**
+     * Call static method.
+     * 
+     * @param clazzName
+     * @param methodName
+     * @param argTypes
+     * @param args
+     * @param cl
+     * @return 
      * @throws JogampRuntimeException if the instance can not be created.
      */
     public static final Object callStaticMethod(final String clazzName, final String methodName, final Class<?>[] argTypes, final Object[] args, final ClassLoader cl)
@@ -444,6 +489,9 @@ public final class ReflectionUtil {
 
         /**
          * Check {@link #available()} before using instance.
+         * @param clazz
+         * @param methodName
+         * @param argTypes
          */
         public MethodAccessor(final Class<?> clazz, final String methodName, final Class<?>... argTypes) {
             try {
@@ -454,6 +502,7 @@ public final class ReflectionUtil {
 
         /**
          * Returns true if method is available, otherwise false.
+         * @return 
          */
         public boolean available() {
             return null != m;
@@ -463,6 +512,9 @@ public final class ReflectionUtil {
          * Check {@link #available()} before calling to avoid throwing a
          * JogampRuntimeException.
          *
+         * @param instance
+         * @param args
+         * @return 
          * @throws JogampRuntimeException if method is not available
          */
         public Object callMethod(final Object instance, final Object... args) {

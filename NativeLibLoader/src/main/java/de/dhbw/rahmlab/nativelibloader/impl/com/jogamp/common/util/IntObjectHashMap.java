@@ -52,10 +52,7 @@ import java.util.Iterator;
  * @author Simon Goller
  * @author Sven Gothel
  *
- * @see IntIntHashMap
- * @see IntLongHashMap
  * @see LongObjectHashMap
- * @see LongLongHashMap
  * @see LongIntHashMap
  */
 public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
@@ -159,10 +156,9 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
 
     /**
      * Disclaimer: If the value type doesn't implement
-     * {@link Object#clone() clone()}, only the reference is copied. Note: Due
+     * {@link Object#clone() clone()}, only the reference is copied.Note: Due
      * to private fields we cannot implement a copy constructor, sorry.
      *
-     * @param source the primitive hash map to copy
      */
     @Override
     public Object clone() {
@@ -171,7 +167,7 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
                 mask, capacity, threshold,
                 keyNotFoundValue);
 
-        final ArrayList<Entry> entries = new ArrayList<Entry>();
+        final ArrayList<Entry> entries = new ArrayList<>();
         for (int i = table.length - 1; i >= 0; i--) {
             // single linked list -> ArrayList
             Entry se = table[i];
@@ -207,7 +203,7 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
                     }
                 } else {
                     final Boolean b = (Boolean) ReflectionUtil.callMethod(value, equalsMethod, e.value);
-                    if (b.booleanValue()) {
+                    if (b) {
                         return true;
                     }
                 }
@@ -231,6 +227,9 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
     /**
      * Returns the value to which the specified key is mapped, or
      * {@link #getKeyNotFoundValue} if this map contains no mapping for the key.
+     * 
+     * @param key
+     * @return 
      */
 //    @SuppressWarnings(value="cast")
     public Object get(final int key) {
@@ -245,9 +244,13 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
     }
 
     /**
-     * Maps the key to the specified value. If a mapping to this key already
+     * Maps the key to the specified value.If a mapping to this key already
      * exists, the previous value will be returned (otherwise
      * {@link #getKeyNotFoundValue}).
+     * 
+     * @param key
+     * @param value
+     * @return 
      */
 //    @SuppressWarnings(value="cast")
     public Object put(final int key, final Object value) {
@@ -292,6 +295,8 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
 
     /**
      * Copies all of the mappings from the specified map to this map.
+     * 
+     * @param source
      */
     public void putAll(final /*name*/ IntObjectHashMap/*name*/ source) {
         final Iterator<Entry> itr = source.iterator();
@@ -302,8 +307,11 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
     }
 
     /**
-     * Removes the key-value mapping from this map. Returns the previously
+     * Removes the key-value mapping from this map.Returns the previously
      * mapped value or {@link #getKeyNotFoundValue} if no such mapping exists.
+     * 
+     * @param key
+     * @return 
      */
 //    @SuppressWarnings(value="cast")
     public Object remove(final int key) {
@@ -331,6 +339,8 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
 
     /**
      * Returns the current number of key-value mappings in this map.
+     * 
+     * @return 
      */
     public int size() {
         return size;
@@ -338,6 +348,7 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
 
     /**
      * Returns the current capacity (buckets) in this map.
+     * @return 
      */
     public int capacity() {
         return capacity;
@@ -361,9 +372,10 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
     }
 
     /**
-     * Sets the new key not found value. For primitive types (int, long) the
+     * Sets the new key not found value.For primitive types (int, long) the
      * default is -1, for Object types, the default is null.
      *
+     * @param newKeyNotFoundValue
      * @return the previous key not found value
      * @see #get
      * @see #put
@@ -378,6 +390,7 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
      * Returns the value which is returned if no value has been found for the
      * specified key.
      *
+     * @return 
      * @see #get
      * @see #put
      */
@@ -474,6 +487,7 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
 
         /**
          * Returns the key of this entry.
+         * @return 
          */
         public int getKey() {
             return key;
@@ -481,6 +495,7 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
 
         /**
          * Returns the value of this entry.
+         * @return 
          */
         public Object getValue() {
             return value;
@@ -488,6 +503,7 @@ public class /*name*/ IntObjectHashMap/*name*/ implements Cloneable,
 
         /**
          * Sets the value for this entry.
+         * @param value
          */
         public void setValue(final Object value) {
             this.value = value;

@@ -15,6 +15,7 @@ import java.net.URLConnection;
  * <p>
  * See example in {@link AssetURLConnection}.
  * </p>
+ * @param <I>
  */
 public abstract class PiggybackURLConnection<I extends PiggybackURLContext> extends URLConnection {
 
@@ -65,6 +66,7 @@ public abstract class PiggybackURLConnection<I extends PiggybackURLContext> exte
      * Result          test/lala.txt
      * </pre>
      *
+     * @return 
      * @throws IOException is not connected
      *
      */
@@ -78,6 +80,7 @@ public abstract class PiggybackURLConnection<I extends PiggybackURLContext> exte
      * Result          jar:file:/data/app/jogamp.test.apk!/assets/test/lala.txt
      * </pre>
      *
+     * @return sub protocol url
      * @throws IOException is not connected
      */
     public URL getSubProtocol() throws IOException {

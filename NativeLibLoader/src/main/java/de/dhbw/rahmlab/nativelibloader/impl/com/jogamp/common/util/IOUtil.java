@@ -464,7 +464,7 @@ public class IOUtil {
     }
 
     /**
-     * @param clazzBinName com.jogamp.common.util.cache.TempJarCache
+     * @param clazzBinName de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache
      * @param cl ClassLoader to locate the JarFile
      * @return
      * jar:file:/usr/local/projects/JOGL/gluegen/build-x86_64/gluegen-rt.jar!/com/jogamp/common/util/cache/TempJarCache.class

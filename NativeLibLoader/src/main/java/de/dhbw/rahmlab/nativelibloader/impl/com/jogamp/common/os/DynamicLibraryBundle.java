@@ -50,19 +50,15 @@ import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
  * libraries. The ClassLoader of it's implementation is also being used to help
  * locating the native libraries.
  * </p>
- * An instance provides a complete
- * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.DynamicLookupHelper}
- * to
- * {@link com.jogamp.gluegen.runtime.ProcAddressTable#reset(com.jogamp.common.os.DynamicLookupHelper) reset}
- * the {@link com.jogamp.gluegen.runtime.ProcAddressTable}.<br>
+ <br>
  * At construction, it:
  * <ul>
  * <li> loads the Tool native library via
- * {@link com.jogamp.common.os.NativeLibrary#open(java.lang.String, java.lang.ClassLoader, boolean) NativeLibrary's open method}</li>
+ * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.NativeLibrary#open(java.lang.String, boolean, boolean, java.lang.ClassLoader, boolean) NativeLibrary's open method}</li>
  * <li> loads the
- * {@link com.jogamp.common.jvm.JNILibLoaderBase#loadLibrary(java.lang.String, java.lang.String[], boolean, ClassLoader)  Glue native library}</li>
+ * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.jvm.JNILibLoaderBase#loadLibrary(java.lang.String, java.lang.String[], boolean, ClassLoader)  Glue native library}</li>
  * <li> resolves the Tool's
- * {@link com.jogamp.common.os.DynamicLibraryBundleInfo#getToolGetProcAddressFuncNameList() GetProcAddress}.
+ * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.os.DynamicLibraryBundleInfo#getToolGetProcAddressFuncNameList() GetProcAddress}.
  * (optional)</li>
  * </ul>
  */

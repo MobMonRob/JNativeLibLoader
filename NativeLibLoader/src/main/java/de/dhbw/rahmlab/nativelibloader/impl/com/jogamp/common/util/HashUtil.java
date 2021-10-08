@@ -32,6 +32,9 @@ public class HashUtil {
     /**
      * Generates a 32bit equally distributed identity hash value from
      * <code>addr</code> avoiding XOR collision.
+     * 
+     * @param addr
+     * @return 
      */
     public static int getAddrHash32_EqualDist(final long addr) {
         // avoid xor collisions of low/high parts
@@ -43,6 +46,10 @@ public class HashUtil {
     /**
      * Generates a 32bit equally distributed identity hash value from
      * <code>addr</code> and <code>size</code> avoiding XOR collision.
+     * 
+     * @param addr
+     * @param size
+     * @return 
      */
     public static int getAddrSizeHash32_EqualDist(final long addr, final long size) {
         // avoid xor collisions of low/high parts
@@ -56,6 +63,10 @@ public class HashUtil {
     /**
      * Generates a 64bit equally distributed hash value from <code>addr</code>
      * and <code>size</code> avoiding XOR collisions.
+     * 
+     * @param addr
+     * @param size
+     * @return 
      */
     public static long getHash64(final long addr, final long size) {
         // 31 * x == (x << 5) - x

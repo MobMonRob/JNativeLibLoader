@@ -84,8 +84,9 @@ public class SecurityUtil {
     /**
      * Returns <code>true</code> if no {@link SecurityManager} has been
      * installed or the installed {@link SecurityManager}'s
-     * <code>checkPermission(new AllPermission())</code> passes. Otherwise
+     * <code>checkPermission(new AllPermission())</code> passes.Otherwise
      * method returns <code>false</code>.
+     * @return 
      */
     public static final boolean hasAllPermissions() {
         return hasPermission(allPermissions);
@@ -94,8 +95,10 @@ public class SecurityUtil {
     /**
      * Returns <code>true</code> if no {@link SecurityManager} has been
      * installed or the installed {@link SecurityManager}'s
-     * <code>checkPermission(perm)</code> passes. Otherwise method returns
+     * <code>checkPermission(perm)</code> passes.Otherwise method returns
      * <code>false</code>.
+     * @param perm
+     * @return 
      */
     public static final boolean hasPermission(final Permission perm) {
         try {
@@ -118,6 +121,8 @@ public class SecurityUtil {
     /**
      * Throws an {@link SecurityException} if an installed
      * {@link SecurityManager} does not permit the requested {@link Permission}.
+     * 
+     * @param perm
      */
     public static final void checkPermission(final Permission perm) throws SecurityException {
         if (null != securityManager) {
@@ -128,8 +133,11 @@ public class SecurityUtil {
     /**
      * Returns <code>true</code> if no {@link SecurityManager} has been
      * installed or the installed {@link SecurityManager}'s
-     * <code>checkLink(libName)</code> passes. Otherwise method returns
+     * <code>checkLink(libName)</code> passes.Otherwise method returns
      * <code>false</code>.
+     * 
+     * @param libName
+     * @return 
      */
     public static final boolean hasLinkPermission(final String libName) {
         try {
@@ -144,6 +152,8 @@ public class SecurityUtil {
      * Throws an {@link SecurityException} if an installed
      * {@link SecurityManager} does not permit to dynamically link the given
      * libName.
+     * 
+     * @param libName
      */
     public static final void checkLinkPermission(final String libName) throws SecurityException {
         if (null != securityManager) {

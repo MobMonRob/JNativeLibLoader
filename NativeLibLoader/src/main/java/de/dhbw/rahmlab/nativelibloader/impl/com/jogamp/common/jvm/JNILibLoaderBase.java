@@ -60,16 +60,13 @@ import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.PropertyAcces
 import de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.Debug;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.common.os.PlatformPropsImpl;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodHandles.Lookup;
-import java.lang.invoke.MethodType;
-import java.lang.invoke.VarHandle;
-import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+/**
+ * 
+ * 
+ */
 public class JNILibLoaderBase {
 
     public static final boolean DEBUG;
@@ -341,6 +338,9 @@ public class JNILibLoaderBase {
      * <i>ClassJar2</i>-natives-<i>os.and.arch</i>.jar</li>
      * <li>..</li>
      * </ul>
+     * 
+     * @param classFromJavaJars
+     * @return 
      */
     public static final Optional<Set<String>> addNativeJarLibsJoglCfg(final Class<?> classFromJavaJars) {
         return addNativeJarLibs(classFromJavaJars, "-all");
@@ -414,7 +414,7 @@ public class JNILibLoaderBase {
      * </pre>
      * </p>
      *
-     * @param classesFromJavaJars For each given Class, load the native library
+     * @param classFromJavaJar For each given Class, load the native library
      * JAR.
      * @param singleJarMarker Optional string marker like "-all" to identify the
      * single 'all-in-one' JAR file after which processing of the class array
@@ -444,7 +444,8 @@ public class JNILibLoaderBase {
         return addedLibs;
     }
 
-    private static Optional<Set<String>> addNativeJarLibsWithTempJarCache(final Class<?> classFromJavaJar, final String singleJarMarker) {
+    private static Optional<Set<String>> addNativeJarLibsWithTempJarCache(
+            final Class<?> classFromJavaJar, final String singleJarMarker) {
         Optional<Set<String>> addedLibs = Optional.empty();
         try {
             boolean done = false;

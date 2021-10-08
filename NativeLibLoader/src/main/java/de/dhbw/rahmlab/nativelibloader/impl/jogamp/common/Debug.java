@@ -42,7 +42,7 @@ public class Debug extends PropertyAccess {
     private static final boolean debugAll;
 
     static {
-        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+        Object doPrivileged = AccessController.doPrivileged(new PrivilegedAction<Object>() {
             @Override
             public Object run() {
                 PropertyAccess.addTrustedPrefix("jogamp.");

@@ -509,6 +509,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * might be merged
+         * @return 
          */
         public Boolean merge() {
             if (this.merge != null)
@@ -521,6 +522,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * OS-specific
+         * @return 
          */
         public Boolean maskOs() {
             if (this.maskOs != null)
@@ -533,6 +535,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * section is excluded unless referenced or allocated (Solaris)
+         * @return 
          */
         public Boolean exclude() {
             if (this.exclude != null)
@@ -545,6 +548,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Processor-specific
+         * @return 
          */
         public Boolean maskProc() {
             if (this.maskProc != null)
@@ -557,6 +561,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * contains nul-terminated strings
+         * @return 
          */
         public Boolean strings() {
             if (this.strings != null)
@@ -569,6 +574,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * non-standard OS specific handling required
+         * @return 
          */
         public Boolean osNonConforming() {
             if (this.osNonConforming != null)
@@ -581,6 +587,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * occupies memory during execution
+         * @return 
          */
         public Boolean alloc() {
             if (this.alloc != null)
@@ -593,6 +600,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * executable
+         * @return 
          */
         public Boolean execInstr() {
             if (this.execInstr != null)
@@ -605,6 +613,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * 'sh_info' contains SHT index
+         * @return 
          */
         public Boolean infoLink() {
             if (this.infoLink != null)
@@ -617,6 +626,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * writable
+         * @return 
          */
         public Boolean write() {
             if (this.write != null)
@@ -641,6 +651,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * special ordering requirement (Solaris)
+         * @return 
          */
         public Boolean ordered() {
             if (this.ordered != null)
@@ -653,6 +664,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * section hold thread-local data
+         * @return 
          */
         public Boolean tls() {
             if (this.tls != null)
@@ -665,6 +677,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * section is member of a group
+         * @return 
          */
         public Boolean group() {
             if (this.group != null)
@@ -678,6 +691,7 @@ public class Elf extends KaitaiStruct {
         private Elf.EndianElf.SectionHeader _parent;
         public long value() { return value; }
         public Elf _root() { return _root; }
+        @Override
         public Elf.EndianElf.SectionHeader _parent() { return _parent; }
     }
     public static class DtFlag1Values extends KaitaiStruct {
@@ -703,6 +717,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Singleton symbols are used.
+         * @return 
          */
         public Boolean singleton() {
             if (this.singleton != null)
@@ -723,6 +738,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Trigger filtee loading at runtime.
+         * @return 
          */
         public Boolean loadfltr() {
             if (this.loadfltr != null)
@@ -735,6 +751,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Set RTLD_INITFIRST for this object
+         * @return 
          */
         public Boolean initfirst() {
             if (this.initfirst != null)
@@ -747,6 +764,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Object has individual interposers.
+         * @return 
          */
         public Boolean symintpose() {
             if (this.symintpose != null)
@@ -779,6 +797,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Disp reloc applied at build time.
+         * @return 
          */
         public Boolean dispreldne() {
             if (this.dispreldne != null)
@@ -791,6 +810,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Set RTLD_GLOBAL for this object.
+         * @return 
          */
         public Boolean rtldGlobal() {
             if (this.rtldGlobal != null)
@@ -803,6 +823,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Set RTLD_NODELETE for this object.
+         * @return 
          */
         public Boolean nodelete() {
             if (this.nodelete != null)
@@ -823,6 +844,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * $ORIGIN must be handled.
+         * @return 
          */
         public Boolean origin() {
             if (this.origin != null)
@@ -835,6 +857,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Set RTLD_NOW for this object.
+         * @return 
          */
         public Boolean now() {
             if (this.now != null)
@@ -855,6 +878,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Filtee terminates filters search.
+         * @return 
          */
         public Boolean endfiltee() {
             if (this.endfiltee != null)
@@ -867,6 +891,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Object has no-direct binding.
+         * @return 
          */
         public Boolean nodirect() {
             if (this.nodirect != null)
@@ -879,6 +904,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Global auditing required.
+         * @return 
          */
         public Boolean globaudit() {
             if (this.globaudit != null)
@@ -899,6 +925,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Object is used to interpose.
+         * @return 
          */
         public Boolean interpose() {
             if (this.interpose != null)
@@ -911,6 +938,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Object can't be dldump'ed.
+         * @return 
          */
         public Boolean nodump() {
             if (this.nodump != null)
@@ -923,6 +951,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Disp reloc applied at run-time.
+         * @return 
          */
         public Boolean disprelpnd() {
             if (this.disprelpnd != null)
@@ -955,6 +984,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Direct binding enabled.
+         * @return 
          */
         public Boolean direct() {
             if (this.direct != null)
@@ -967,6 +997,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Object is modified after built.
+         * @return 
          */
         public Boolean edited() {
             if (this.edited != null)
@@ -979,6 +1010,7 @@ public class Elf extends KaitaiStruct {
 
         /**
          * Set RTLD_GROUP for this object.
+         * @return 
          */
         public Boolean group() {
             if (this.group != null)
@@ -1196,7 +1228,7 @@ public class Elf extends KaitaiStruct {
                 }
             }
             private void _readLE() {
-                this.entries = new ArrayList<NoteSectionEntry>();
+                this.entries = new ArrayList<>();
                 {
                     int i = 0;
                     while (!this._io.isEof()) {
@@ -1206,7 +1238,7 @@ public class Elf extends KaitaiStruct {
                 }
             }
             private void _readBE() {
-                this.entries = new ArrayList<NoteSectionEntry>();
+                this.entries = new ArrayList<>();
                 {
                     int i = 0;
                     while (!this._io.isEof()) {
@@ -1220,6 +1252,7 @@ public class Elf extends KaitaiStruct {
             private Elf.EndianElf.SectionHeader _parent;
             public ArrayList<NoteSectionEntry> entries() { return entries; }
             public Elf _root() { return _root; }
+            @Override
             public Elf.EndianElf.SectionHeader _parent() { return _parent; }
         }
         public static class ProgramHeader extends KaitaiStruct {
@@ -2084,7 +2117,7 @@ public class Elf extends KaitaiStruct {
                 }
             }
             private void _readLE() {
-                this.entries = new ArrayList<RelocationSectionEntry>();
+                this.entries = new ArrayList<>();
                 {
                     int i = 0;
                     while (!this._io.isEof()) {
@@ -2094,7 +2127,7 @@ public class Elf extends KaitaiStruct {
                 }
             }
             private void _readBE() {
-                this.entries = new ArrayList<RelocationSectionEntry>();
+                this.entries = new ArrayList<>();
                 {
                     int i = 0;
                     while (!this._io.isEof()) {
@@ -2133,7 +2166,7 @@ public class Elf extends KaitaiStruct {
                 }
             }
             private void _readLE() {
-                this.entries = new ArrayList<DynamicSectionEntry>();
+                this.entries = new ArrayList<>();
                 {
                     int i = 0;
                     while (!this._io.isEof()) {
@@ -2143,7 +2176,7 @@ public class Elf extends KaitaiStruct {
                 }
             }
             private void _readBE() {
-                this.entries = new ArrayList<DynamicSectionEntry>();
+                this.entries = new ArrayList<>();
                 {
                     int i = 0;
                     while (!this._io.isEof()) {
@@ -2188,7 +2221,7 @@ public class Elf extends KaitaiStruct {
                 }
             }
             private void _readLE() {
-                this.entries = new ArrayList<DynsymSectionEntry>();
+                this.entries = new ArrayList<>();
                 {
                     int i = 0;
                     while (!this._io.isEof()) {
@@ -2198,7 +2231,7 @@ public class Elf extends KaitaiStruct {
                 }
             }
             private void _readBE() {
-                this.entries = new ArrayList<DynsymSectionEntry>();
+                this.entries = new ArrayList<>();
                 {
                     int i = 0;
                     while (!this._io.isEof()) {
@@ -2220,6 +2253,7 @@ public class Elf extends KaitaiStruct {
             private Elf.EndianElf.SectionHeader _parent;
             public ArrayList<DynsymSectionEntry> entries() { return entries; }
             public Elf _root() { return _root; }
+            @Override
             public Elf.EndianElf.SectionHeader _parent() { return _parent; }
         }
         public static class RelocationSectionEntry extends KaitaiStruct {
@@ -2585,6 +2619,7 @@ public class Elf extends KaitaiStruct {
             public byte[] descriptor() { return descriptor; }
             public byte[] descriptorPadding() { return descriptorPadding; }
             public Elf _root() { return _root; }
+            @Override
             public Elf.EndianElf.NoteSection _parent() { return _parent; }
         }
         public static class StringsStruct extends KaitaiStruct {
@@ -2618,7 +2653,7 @@ public class Elf extends KaitaiStruct {
                 }
             }
             private void _readBE() {
-                this.entries = new ArrayList<String>();
+                this.entries = new ArrayList<>();
                 {
                     int i = 0;
                     while (!this._io.isEof()) {
@@ -2641,16 +2676,16 @@ public class Elf extends KaitaiStruct {
             long _pos = this._io.pos();
             this._io.seek(programHeaderOffset());
             if (_is_le) {
-                this._raw_programHeaders = new ArrayList<byte[]>(((Number) (qtyProgramHeader())).intValue());
-                programHeaders = new ArrayList<ProgramHeader>(((Number) (qtyProgramHeader())).intValue());
+                this._raw_programHeaders = new ArrayList<>(((Number) (qtyProgramHeader())).intValue());
+                programHeaders = new ArrayList<>(((Number) (qtyProgramHeader())).intValue());
                 for (int i = 0; i < qtyProgramHeader(); i++) {
                     this._raw_programHeaders.add(this._io.readBytes(programHeaderEntrySize()));
                     KaitaiStream _io__raw_programHeaders = new ByteBufferKaitaiStream(_raw_programHeaders.get(_raw_programHeaders.size() - 1));
                     this.programHeaders.add(new ProgramHeader(_io__raw_programHeaders, this, _root, _is_le));
                 }
             } else {
-                this._raw_programHeaders = new ArrayList<byte[]>(((Number) (qtyProgramHeader())).intValue());
-                programHeaders = new ArrayList<ProgramHeader>(((Number) (qtyProgramHeader())).intValue());
+                this._raw_programHeaders = new ArrayList<>(((Number) (qtyProgramHeader())).intValue());
+                programHeaders = new ArrayList<>(((Number) (qtyProgramHeader())).intValue());
                 for (int i = 0; i < qtyProgramHeader(); i++) {
                     this._raw_programHeaders.add(this._io.readBytes(programHeaderEntrySize()));
                     KaitaiStream _io__raw_programHeaders = new ByteBufferKaitaiStream(_raw_programHeaders.get(_raw_programHeaders.size() - 1));
@@ -2667,16 +2702,16 @@ public class Elf extends KaitaiStruct {
             long _pos = this._io.pos();
             this._io.seek(sectionHeaderOffset());
             if (_is_le) {
-                this._raw_sectionHeaders = new ArrayList<byte[]>(((Number) (qtySectionHeader())).intValue());
-                sectionHeaders = new ArrayList<SectionHeader>(((Number) (qtySectionHeader())).intValue());
+                this._raw_sectionHeaders = new ArrayList<>(((Number) (qtySectionHeader())).intValue());
+                sectionHeaders = new ArrayList<>(((Number) (qtySectionHeader())).intValue());
                 for (int i = 0; i < qtySectionHeader(); i++) {
                     this._raw_sectionHeaders.add(this._io.readBytes(sectionHeaderEntrySize()));
                     KaitaiStream _io__raw_sectionHeaders = new ByteBufferKaitaiStream(_raw_sectionHeaders.get(_raw_sectionHeaders.size() - 1));
                     this.sectionHeaders.add(new SectionHeader(_io__raw_sectionHeaders, this, _root, _is_le));
                 }
             } else {
-                this._raw_sectionHeaders = new ArrayList<byte[]>(((Number) (qtySectionHeader())).intValue());
-                sectionHeaders = new ArrayList<SectionHeader>(((Number) (qtySectionHeader())).intValue());
+                this._raw_sectionHeaders = new ArrayList<>(((Number) (qtySectionHeader())).intValue());
+                sectionHeaders = new ArrayList<>(((Number) (qtySectionHeader())).intValue());
                 for (int i = 0; i < qtySectionHeader(); i++) {
                     this._raw_sectionHeaders.add(this._io.readBytes(sectionHeaderEntrySize()));
                     KaitaiStream _io__raw_sectionHeaders = new ByteBufferKaitaiStream(_raw_sectionHeaders.get(_raw_sectionHeaders.size() - 1));
@@ -2802,39 +2837,46 @@ public class Elf extends KaitaiStruct {
 
     /**
      * File identification, must be 0x7f + "ELF".
+     * @return 
      */
     public byte[] magic() { return magic; }
 
     /**
      * File class: designates target machine word size (32 or 64
-     * bits). The size of many integer fields in this format will
-     * depend on this setting.
+     * bits).The size of many integer fields in this format will
+ depend on this setting.
+     * @return 
      */
     public Bits bits() { return bits; }
 
     /**
      * Endianness used for all integers.
+     * @return 
      */
     public Endian endian() { return endian; }
 
     /**
      * ELF header version.
+     * @return 
      */
     public int eiVersion() { return eiVersion; }
 
     /**
      * Specifies which OS- and ABI-related extensions will be used
      * in this ELF file.
+     * @return 
      */
     public OsAbi abi() { return abi; }
 
     /**
-     * Version of ABI targeted by this ELF file. Interpretation
-     * depends on `abi` attribute.
+     * Version of ABI targeted by this ELF file.Interpretation
+ depends on `abi` attribute.
+     * @return 
      */
     public int abiVersion() { return abiVersion; }
     public byte[] pad() { return pad; }
     public EndianElf header() { return header; }
     public Elf _root() { return _root; }
+    @Override
     public KaitaiStruct _parent() { return _parent; }
 }

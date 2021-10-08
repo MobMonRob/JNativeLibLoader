@@ -107,14 +107,14 @@ public class JarUtil {
 
     /**
      * Returns <code>true</code> if the Class's
-     * <code>"com.jogamp.common.GlueGenVersion"</code> is loaded from a JarFile
+     * <code>"de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion"</code> is loaded from a JarFile
      * and hence has a Jar URI like URI
      * <code>jar:<i>sub_protocol</i>:/some/path/gluegen-rt.jar!/com/jogamp/common/GlueGenVersion.class"</code>.
      * <p>
      * <i>sub_protocol</i> may be "file", "http", etc..
      * </p>
      *
-     * @param clazzBinName "com.jogamp.common.GlueGenVersion"
+     * @param clazzBinName "de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion"
      * @param cl
      * @return true if the class is loaded from a Jar file, otherwise false.
      * @see {@link #getJarUri(String, ClassLoader)}
@@ -128,14 +128,14 @@ public class JarUtil {
     }
 
     /**
-     * The Class's <code>"com.jogamp.common.GlueGenVersion"</code> Uri
+     * The Class's <code>"de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion"</code> Uri
      * <code>jar:<i>sub_protocol</i>:/some/path/gluegen-rt.jar!/com/jogamp/common/GlueGenVersion.class"</code>
      * will be returned.
      * <p>
      * <i>sub_protocol</i> may be "file", "http", etc..
      * </p>
      *
-     * @param clazzBinName "com.jogamp.common.GlueGenVersion"
+     * @param clazzBinName "de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion"
      * @param cl ClassLoader to locate the JarFile
      * @return
      * "jar:<i>sub_protocol</i>:/some/path/gluegen-rt.jar!/com/jogamp/common/GlueGenVersion.class"
@@ -191,7 +191,7 @@ public class JarUtil {
      * </p>
      *
      * @param classJarUri as retrieved w/
-     * {@link #getJarUri(String, ClassLoader) getJarUri("com.jogamp.common.GlueGenVersion", cl)},
+     * {@link #getJarUri(String, ClassLoader) getJarUri("de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion", cl)},
      * i.e.
      * <code>jar:<i>sub_protocol</i>:/some/path/gluegen-rt.jar!/com/jogamp/common/GlueGenVersion.class</code>
      * @return <code>gluegen-rt.jar</code>
@@ -243,14 +243,14 @@ public class JarUtil {
     }
 
     /**
-     * The Class's <code>com.jogamp.common.GlueGenVersion</code> Uri
+     * The Class's <code>de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion</code> Uri
      * <code>jar:<i>sub_protocol</i>:/some/path/gluegen-rt.jar!/com/jogamp/common/GlueGenVersion.class</code>
      * Jar basename <code>gluegen-rt.jar</code> will be returned.
      * <p>
      * <i>sub_protocol</i> may be "file", "http", etc..
      * </p>
      *
-     * @param clazzBinName <code>com.jogamp.common.GlueGenVersion</code>
+     * @param clazzBinName <code>de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion</code>
      * @param cl
      * @return <code>gluegen-rt.jar</code>
      * @throws IllegalArgumentException if the Uri doesn't match the expected
@@ -272,7 +272,7 @@ public class JarUtil {
      * will be returned.
      *
      * @param classJarUri as retrieved w/
-     * {@link #getJarUri(String, ClassLoader) getJarUri("com.jogamp.common.GlueGenVersion", cl)},
+     * {@link #getJarUri(String, ClassLoader) getJarUri("de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion", cl)},
      * i.e.
      * <code>jar:<i>sub_protocol</i>:/some/path/gluegen-rt.jar!/com/jogamp/common/GlueGenVersion.class</code>
      * @return <code>/com/jogamp/common/GlueGenVersion.class</code>
@@ -305,7 +305,7 @@ public class JarUtil {
     }
 
     /**
-     * The Class's <code>"com.jogamp.common.GlueGenVersion"</code> Uri
+     * The Class's <code>"de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion"</code> Uri
      * <code>jar:<i>sub_protocol</i>:/some/path/gluegen-rt.jar!/com/jogamp/common/GlueGenVersion.class"</code>
      * Jar file Uri
      * <code>jar:<i>sub_protocol</i>:/some/path/gluegen-rt.jar!/</code> will be
@@ -314,7 +314,7 @@ public class JarUtil {
      * <i>sub_protocol</i> may be "file", "http", etc..
      * </p>
      *
-     * @param clazzBinName "com.jogamp.common.GlueGenVersion"
+     * @param clazzBinName "de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.GlueGenVersion"
      * @param cl
      * @return "jar:<i>sub_protocol</i>:/some/path/gluegen-rt.jar!/"
      * @throws IllegalArgumentException if the Uri doesn't match the expected
@@ -393,7 +393,7 @@ public class JarUtil {
     }
 
     /**
-     * @param clazzBinName com.jogamp.common.util.cache.TempJarCache
+     * @param clazzBinName de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache
      * @param cl domain
      * @return JarFile containing the named class within the given ClassLoader
      * @throws IOException if the class's Jar file could not been found by the

@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * @author fabian
+ * @author Fabian Hinderer
  */
 public class NativeLibLoader {
 
@@ -23,9 +23,15 @@ public class NativeLibLoader {
         TempJarCache.initSingleton();
     }
 
-    public static void init(boolean debug) throws Exception {
+    /**
+     * Initialization of the native lib loader.
+     * 
+     * @param debug if debug set to true debug messages are print to System.err
+     * @throws RuntimeException if the method is invoked more than once
+     */
+    public static void init(boolean debug) throws RuntimeException {
         if (instance != null) {
-            throw new Exception("Can only be set once!");
+            throw new RuntimeException("Can only be set once!");
         }
 
         if (debug == true) {
@@ -39,12 +45,14 @@ public class NativeLibLoader {
     /**
      * {@link #initSetDebug(boolean) initSetDebug} needs to be invoked before
      * you can use this method!
+     * 
+     * @return Instance of native lib loader
+     * @throws java.lang.RuntimeException if the method is invoked before init
      */
-    public static NativeLibLoader getInstance() throws Exception {
+    public static NativeLibLoader getInstance() throws RuntimeException {
         if (instance == null) {
-            throw new Exception("Only possible after 'initSetDebug' Method!");
+            throw new RuntimeException("Only possible after 'initSetDebug' Method!");
         }
-
         return instance;
     }
 
@@ -53,14 +61,17 @@ public class NativeLibLoader {
      *
      * @param MarkerClass A class within the same JAR as the native libs which
      * are wanted to be loaded.
-     */
+     * @throws java.lang.Exception if native libs not found in the jar of the
+     * given class or cauld not be loaded from this jar.
+     */ 
     public void load(Class MarkerClass) throws Exception {
         // Loads all natives from JAR which contains classesFromJavaJars into TempJarCache.
+        // throws Exception
         Optional<Set<String>> addedLibs = JNILibLoaderBase.addNativeJarLibs(MarkerClass, null);
 
         // Can occur if the JAR which contains the MarkerClass was already processed.
         if (addedLibs.isEmpty()) {
-            throw new Exception("No libs could be added.");
+            throw new RuntimeException("No libs could be added.");
         }
 
         /**
@@ -76,7 +87,7 @@ public class NativeLibLoader {
         DynamicLibraryBundle dynamicLibraryBundle = new DynamicLibraryBundle(new BundleInfoImpl(sortedLibs));
 
         if (!dynamicLibraryBundle.isLibComplete()) {
-            throw new Exception("Native lib loading failed.");
+            throw new RuntimeException("Native lib loading failed.");
         } else {
             DebugService.print("Native lib loading succeeded.");
         }

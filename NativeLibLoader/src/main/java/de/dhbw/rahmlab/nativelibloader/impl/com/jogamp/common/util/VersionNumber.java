@@ -63,7 +63,6 @@ public class VersionNumber implements Comparable<Object> {
      * <pre>
      *   "\\D*(\\d+)[^\\"+delim+"\\s]*(?:\\"+delim+"\\D*(\\d+)[^\\"+delim+"\\s]*(?:\\"+delim+"\\D*(\\d+))?)?"
      * </pre>
-     * </p>
      * <p>
      * A whitespace within the version number will end the parser.
      * </p>
@@ -120,6 +119,9 @@ public class VersionNumber implements Comparable<Object> {
      * Explicit version number instantiation, with all components defined
      * explicitly.
      *
+     * @param majorRev
+     * @param minorRev
+     * @param subMinorRev
      * @see #hasMajor()
      * @see #hasMinor()
      * @see #hasSub()
@@ -214,7 +216,7 @@ public class VersionNumber implements Comparable<Object> {
                     }
                 }
             }
-        } catch (final Exception e) {
+        } catch (final NumberFormatException e) {
         }
 
         major = val[0];
@@ -227,6 +229,8 @@ public class VersionNumber implements Comparable<Object> {
     /**
      * Returns <code>true</code>, if all version components are zero, otherwise
      * <code>false</code>.
+     * 
+     * @return 
      */
     public final boolean isZero() {
         return major == 0 && minor == 0 && sub == 0;
@@ -234,8 +238,9 @@ public class VersionNumber implements Comparable<Object> {
 
     /**
      * Returns <code>true</code>, if the major component is defined explicitly,
-     * otherwise <code>false</code>. Undefined components has the value
-     * <code>0</code>.
+     * otherwise <code>false</code>.Undefined components has the value
+    <code>0</code>.
+     * @return 
      */
     public final boolean hasMajor() {
         return 0 != (HAS_MAJOR & state);
@@ -243,8 +248,10 @@ public class VersionNumber implements Comparable<Object> {
 
     /**
      * Returns <code>true</code>, if the optional minor component is defined
-     * explicitly, otherwise <code>false</code>. Undefined components has the
+     * explicitly, otherwise <code>false</code>.Undefined components has the
      * value <code>0</code>.
+     * 
+     * @return 
      */
     public final boolean hasMinor() {
         return 0 != (HAS_MINOR & state);
@@ -252,8 +259,10 @@ public class VersionNumber implements Comparable<Object> {
 
     /**
      * Returns <code>true</code>, if the optional sub component is defined
-     * explicitly, otherwise <code>false</code>. Undefined components has the
+     * explicitly, otherwise <code>false</code>.Undefined components has the
      * value <code>0</code>.
+     * 
+     * @return 
      */
     public final boolean hasSub() {
         return 0 != (HAS_SUB & state);
@@ -263,6 +272,8 @@ public class VersionNumber implements Comparable<Object> {
      * If constructed with <code>version-string</code>, returns the string
      * offset <i>after</i> the last matching character, or <code>0</code> if
      * none matched, or <code>-1</code> if not constructed with a string.
+     * 
+     * @return 
      */
     public final int endOfStringMatch() {
         return strEnd;

@@ -54,6 +54,9 @@ public class AndroidUtils {
     }
 
     /**
+     * Get package info version code.
+     * 
+     * @param packageName
      * @return null if platform is not Android or no Android Context is
      * registered via
      * {@link jogamp.common.os.android.StaticContext#init(android.content.Context) StaticContext.init(..)},
@@ -62,12 +65,15 @@ public class AndroidUtils {
      */
     public static final int getPackageInfoVersionCode(final String packageName) {
         if (null != androidGetPackageInfoVersionCodeMethod) {
-            return ((Integer) ReflectionUtil.callMethod(null, androidGetPackageInfoVersionCodeMethod, packageName)).intValue();
+            return ((Integer) ReflectionUtil.callMethod(null, androidGetPackageInfoVersionCodeMethod, packageName));
         }
         return -1;
     }
 
     /**
+     * Get package info version name.
+     * 
+     * @param packageName
      * @return null if platform is not Android or no Android Context is
      * registered via
      * {@link jogamp.common.os.android.StaticContext#init(android.content.Context) StaticContext.init(..)},

@@ -48,10 +48,12 @@ public class MutualBundleDependencySortingService {
      * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.util.cache.TempJarCache TempJarCache}
      * via
      * {@link de.dhbw.rahmlab.nativelibloader.impl.com.jogamp.common.jvm.JNILibLoaderBase#addNativeJarLibs(Class, String) addNativeJarLibs}
+     * @return 
+     * @throws java.lang.Exception
      *
      */
     public List<String> mutualBundleDependencyTopologicalSorting(Set<String> libNames) throws Exception {
-        Map<String, String> libNameToPaths = new HashMap<String, String>(libNames.size());
+        Map<String, String> libNameToPaths = new HashMap<>(libNames.size());
 
         // Precondition: libNames must be already added into TempJarCache
         for (String lib : libNames) {
@@ -107,7 +109,7 @@ public class MutualBundleDependencySortingService {
             }
         }
 
-        ArrayList<String> topologicalSortedBundleLibNames = new ArrayList<String>();
+        ArrayList<String> topologicalSortedBundleLibNames = new ArrayList<>();
 
         // Already in topological order
         depsGraph.iterator().forEachRemaining(topologicalSortedBundleLibNames::add);
