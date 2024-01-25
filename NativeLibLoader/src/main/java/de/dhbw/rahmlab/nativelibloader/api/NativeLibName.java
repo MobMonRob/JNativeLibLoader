@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding;
+package de.dhbw.rahmlab.nativelibloader.api;
 
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.os.NativeLibrary;
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;

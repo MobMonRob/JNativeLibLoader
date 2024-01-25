@@ -5,6 +5,8 @@
  */
 package de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding;
 
+import de.dhbw.rahmlab.nativelibloader.api.NativeLibName;
+import de.dhbw.rahmlab.nativelibloader.api.NativeLib;
 import de.dhbw.rahmlab.nativelibloader.impl.nativeparsing.NativeLibsDependenciesGetterService;
 import java.nio.file.Path;
 import java.util.ArrayList;

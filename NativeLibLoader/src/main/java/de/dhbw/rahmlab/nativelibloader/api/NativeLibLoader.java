@@ -3,7 +3,6 @@ package de.dhbw.rahmlab.nativelibloader.api;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.os.Platform;
 import de.dhbw.rahmlab.nativelibloader.impl.jogamp.util.cache.TempJarCache;
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
-import de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding.NativeLib;
 import de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding.SortedNativeLibProviderService;
 import java.util.List;
 import java.util.Objects;
@@ -58,8 +57,9 @@ public class NativeLibLoader {
      *
      * @param markerClass A class within the same JAR as the native libs which
      * are wanted to be loaded.
-     */
-    public void load(Class markerClass) throws Exception {
+	 * @return The loaded libs.
+	 */
+	public List<NativeLib> load(Class markerClass) throws Exception {
         // Not static in order to avoid check if inited.
 
         Objects.requireNonNull(markerClass);
@@ -74,6 +74,8 @@ public class NativeLibLoader {
             System.load(path);
         }
 
-        DebugService.print("Native lib loading finished.");
+		DebugService.print("Native lib loading finished.");
+
+		return sortedLibs;
     }
 }
