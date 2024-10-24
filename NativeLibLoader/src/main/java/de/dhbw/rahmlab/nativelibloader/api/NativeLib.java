@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.dhbw.rahmlab.nativelibloader.api;
 
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
@@ -17,42 +12,39 @@ import java.util.Optional;
  */
 public class NativeLib {
 
-    private final NativeLibName name;
-    private final Path path;
+	private final NativeLibName name;
+	private final Path path;
 
-    private NativeLib(final NativeLibName name, final Path path) {
-        this.name = name;
-        this.path = path;
-    }
+	private NativeLib(final NativeLibName name, final Path path) {
+		this.name = name;
+		this.path = path;
+	}
 
-    public static Optional<NativeLib> fromPath(final Path fromPath) {
-        if (Objects.isNull(fromPath)) {
-            DebugService.print("fromPath is null.");
-            return Optional.empty();
-        }
+	public static Optional<NativeLib> fromPath(final Path fromPath) {
+		if (Objects.isNull(fromPath)) {
+			DebugService.print("fromPath is null.");
+			return Optional.empty();
+		}
 
-        Path path;
-        try {
-            path = fromPath.toRealPath();
-        } catch (IOException ex) {
-            DebugService.print("Can't access path: " + fromPath.toString());
-            return Optional.empty();
-        }
+		Path path;
+		try {
+			path = fromPath.toRealPath();
+		} catch (IOException ex) {
+			DebugService.print("Can't access path: " + fromPath.toString());
+			return Optional.empty();
+		}
 
-        final Optional<NativeLibName> nativeLibName = NativeLibName.fromPathOrName(path.toString());
-        if (nativeLibName.isEmpty()) {
-            return Optional.empty();
-        }
+		final NativeLibName nativeLibName = NativeLibName.fromPathOrName(path.toString());
 
-        NativeLib nativeLib = new NativeLib(nativeLibName.get(), path);
-        return Optional.of(nativeLib);
-    }
+		NativeLib nativeLib = new NativeLib(nativeLibName, path);
+		return Optional.of(nativeLib);
+	}
 
-    public Path getPath() {
-        return path;
-    }
+	public Path getPath() {
+		return path;
+	}
 
-    public NativeLibName getName() {
-        return name;
-    }
+	public NativeLibName getName() {
+		return name;
+	}
 }

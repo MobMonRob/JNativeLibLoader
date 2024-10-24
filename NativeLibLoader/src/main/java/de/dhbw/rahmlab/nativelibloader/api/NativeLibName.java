@@ -1,14 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.dhbw.rahmlab.nativelibloader.api;
 
-import de.dhbw.rahmlab.nativelibloader.impl.jogamp.os.NativeLibrary;
-import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
-import java.util.Objects;
-import java.util.Optional;
+import de.dhbw.rahmlab.nativelibloader.impl.util.Platform;
 
 /**
  *
@@ -16,53 +8,74 @@ import java.util.Optional;
  */
 public class NativeLibName {
 
-    private final String name;
+	private final String name;
 
-    private NativeLibName(final String name) {
-        this.name = name;
-    }
+	private NativeLibName(final String name) {
+		this.name = name;
+	}
 
-    public static Optional<NativeLibName> fromPathOrName(final String pathOrName) {
-        final String normalizedName = NativeLibrary.isValidNativeLibraryName(pathOrName, false);
-        if (Objects.isNull(normalizedName)) {
-            DebugService.print("Does not contain a valid library name: " + pathOrName);
-            return Optional.empty();
-        }
+	private static String removeDirName(String fullName) {
+		final int lios = fullName.lastIndexOf('/');
+		if (lios >= 0) {
+			fullName = fullName.substring(lios + 1);
+		}
+		return fullName;
+	}
 
-        NativeLibName nativeLibName = new NativeLibName(normalizedName);
-        return Optional.of(nativeLibName);
-    }
+	private static String normalizeLibName(String fullLibName) {
+		final String lowercase = fullLibName.toLowerCase();
 
-    public String getName() {
-        return this.name;
-    }
+		int from = lowercase.indexOf(Platform.LIB_PREFIX);
+		if (from == 0) {
+			from = Platform.LIB_PREFIX.length();
+		} else {
+			from = 0;
+		}
 
-    @Override
-    public int hashCode() {
-        return this.name.hashCode();
-    }
+		int to = lowercase.lastIndexOf(Platform.LIB_SUFFIX);
+		if (to == -1) {
+			to = lowercase.length();
+		}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+		final String normalizedName = fullLibName.substring(from, to);
+		return normalizedName;
+	}
 
-        if (obj == this) {
-            return true;
-        }
+	public static NativeLibName fromPathOrName(final String pathOrName) {
+		final String normalizedName = normalizeLibName(removeDirName(pathOrName));
+		return new NativeLibName(normalizedName);
+	}
 
-        if (obj.getClass() != this.getClass()) {
-            return false;
-        }
+	public String getName() {
+		return this.name;
+	}
 
-        NativeLibName rhs = (NativeLibName) obj;
+	@Override
+	public int hashCode() {
+		return this.name.hashCode();
+	}
 
-        return this.name.equals(rhs.name);
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 
-    @Override
-    public String toString() {
-        return this.name;
-    }
+		if (obj == this) {
+			return true;
+		}
+
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
+		NativeLibName rhs = (NativeLibName) obj;
+
+		return this.name.equals(rhs.name);
+	}
+
+	@Override
+	public String toString() {
+		return this.name;
+	}
 }

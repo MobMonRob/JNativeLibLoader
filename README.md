@@ -2,27 +2,23 @@
 JNativeLibLoader' is a powerful library with a simple API to load native libraries (.dll, . so) from JAR files into the JVM for java applications which need to invoke native code via jni in a platform independend manner.
 
 This includes:
-1. unpacking binary native library files from the JAR to a cache.
-2. recognizing the platform the using application is running at.
-3. loading the binary native library files into the jvm depending on the platform.
+- recognizing the platform the using application is running at.
+- finding native libs based on a provided marker class only.
+- unpacking binary native library files from the JAR to a cache.
+- loading the binary native library files into the jvm depending on the platform.
 
 The native libs bundled within the JAR will be loaded in the right sequence if they mutually depend on each other. But loading will fail if their dependency graph contains cycles.
 
 More Developer Info [here](DEVELOPER_INFO.md).
 
+
 ## Limitation
 At the moment only Linux x86-64 and Windows x86-64 are supported
 
-## Credits
-Much source code originates in an extraction of the Gluegen project from 15.09.2020. \
-Customized Gluegen source code is located within folders named “jogamp”. \
-You can find the full source code of the Gluegen project here: https://github.com/JogAmp/gluegen. \
-The copy of the Gluegen license is in the file `Gluegen_LICENSE.txt`.
-
 
 ## Tested prerequisites
-* Netbeans 12
-* Java SDK 11
+* Netbeans 23
+* Java SDK 21
 * Maven
 
 
@@ -55,7 +51,7 @@ If you are not familiar with Maven, search the internet how to properly include 
 
 
 #### Add native files
-Your project structur should look something like this:
+Your project structure should look similar to this:
 ~~~
 Myproject
 |- natives

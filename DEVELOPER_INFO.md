@@ -1,8 +1,9 @@
 ## Debugging
 To debug jar loading make sure you ... \
-\- opened your project and JNativeLibLoader source code in Netbeans. \
 \- built the current version of JNativeLibLoader's source code. \
-\- deactivated “compile on save” in Netbeans.
+\- have a project depending on the project of which jar loading you want to debug. Start debugging from a main function of the depending project.
+\- opened the source code of all three projects in Netbeans. \
+\- deactivated “compile on save” in Netbeans for the three projects.
 
 To deactivate “compile on save”: \
 Rightclick the project name -> Properties -> Build -> Compiling. Select "Disable". \
