@@ -3,8 +3,6 @@ package de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding;
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
 import de.dhbw.rahmlab.nativelibloader.impl.util.Platform;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -39,7 +37,7 @@ public class NativeLibsPathsFinderService {
 		return url;
 	}
 
-	public static Set<Path> findNativeLibsPaths(Class markerClass) throws NullPointerException, IOException, IllegalArgumentException, URISyntaxException, NoSuchElementException, URISyntaxException {
+	public static Set<Path> findNativeLibsPaths(Class markerClass) throws NullPointerException, IOException, URISyntaxException {
 		Objects.requireNonNull(markerClass);
 
 		URL markerClassURL = getClassURL(markerClass);
@@ -49,36 +47,7 @@ public class NativeLibsPathsFinderService {
 		Set<Path> nativeLibsPaths;
 
 		if (scheme.equals("jar")) {
-			String prefix = String.format("natives/%s/", Platform.PLATFORM_DIR_NAME);
-
-			Set<Path> cachedLibs = new HashSet<>();
-			try (var jarFile = ((JarURLConnection) markerClassURL.openConnection()).getJarFile()) {
-				var jarEntries = jarFile.stream()
-					.filter(e -> !e.isDirectory())
-					.filter(e -> e.getName().startsWith(prefix))
-					.toList();
-				// jarEntries.forEach(System.out::println);
-
-				// UUID.randomUUID().toString()
-				// There could be multiple parallel usages of JNativeLibLoader.
-				// ToDo: Find a solution to delete all directories which are not in active use any more and failed to deleteOnExit.
-				var tmpDir = Files.createTempDirectory("JNativeLibLoader_").toFile();
-				var tmpDirPath = tmpDir.toPath();
-
-				for (var jarEntry : jarEntries) {
-					Path entryTargetPath = tmpDirPath.resolve(jarEntry.getName());
-					try (InputStream entryInputStream = jarFile.getInputStream(jarEntry)) {
-						Files.createDirectories(entryTargetPath.getParent());
-						Files.copy(entryInputStream, entryTargetPath);
-					}
-					cachedLibs.add(entryTargetPath);
-				}
-
-				// Note: deleteOnExit does not always work.
-				Files.walk(tmpDirPath).forEach(p -> p.toFile().deleteOnExit());
-			}
-
-			nativeLibsPaths = cachedLibs;
+			nativeLibsPaths = JarCacheService.cacheLibs(markerClassURL);
 
 		} else if (scheme.equals("file")) {
 			Path nativesPath = findNativesDirectoryPath(Paths.get(markerClassURL.toURI()));
