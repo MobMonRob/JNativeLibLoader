@@ -43,6 +43,7 @@ public class NativeLibsPathsFinderService {
 		Objects.requireNonNull(markerClass);
 
 		URL markerClassURL = getClassURL(markerClass);
+		DebugService.print(String.format("markerClass URL: %s", markerClassURL));
 		String scheme = markerClassURL.getProtocol();
 
 		Set<Path> nativeLibsPaths;
