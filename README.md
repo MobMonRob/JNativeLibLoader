@@ -1,5 +1,5 @@
 ## Description
-JNativeLibLoader' is a powerful library with a simple API to load native libraries (.dll, . so) from JAR files into the JVM for java applications which need to invoke native code via jni in a platform independend manner.
+JNativeLibLoader' is a powerful library with a simple API to load native libraries (.dll, .so) from JAR files into the JVM for java applications which need to invoke native code via jni in a platform independend manner.
 
 This includes:
 - recognizing the platform the using application is running at.
@@ -13,7 +13,7 @@ More Developer Info [here](DEVELOPER_INFO.md).
 
 
 ## Limitation
-At the moment only Linux x86-64 and Windows x86-64 are supported
+At the moment only Linux x86-64 and Windows x86-64 are supported.
 
 
 ## Tested prerequisites
@@ -28,12 +28,12 @@ You only need to rebuild JNativeLibLoader if you change it's codebase.
 
 Then follow the steps in the next section to configure your project.
 
-Exemplary project: [JViconDataStream2](https://github.com/MobMonRob/JViconDataStream2).
+Exemplary project: [JCasADi](https://github.com/MobMonRob/JCasADi).
 
 
 ## Configure your project
 #### Add to Maven pom
-If you are not familiar with Maven, search the internet how to properly include these snippets:
+If you are not familiar with Maven, search the internet how to properly include this snippet:
 
 ~~~xml
 <dependency>
@@ -42,25 +42,22 @@ If you are not familiar with Maven, search the internet how to properly include 
 	<version>1.0-SNAPSHOT</version>
 </dependency>
 ~~~
-~~~xml
-<resource>
-	<targetPath>${basedir}/target/classes/natives</targetPath>
-	<directory>${basedir}/natives</directory>
-</resource>
-~~~
 
 
 #### Add native files
 Your project structure should look similar to this:
+
 ~~~
 Myproject
-|- natives
-   |- linux-amd64
-      |- <.so files here>
-   |- windows-amd64
-      |- <.dll files here>
 |- src
-|- ...
+   |- main
+      |- java
+      |- resources
+         |- nativeLibs
+            |- linux-amd64
+               |- <.so files here>
+            |- windows-amd64
+               |- <.dll files here>
 ~~~
 
 
@@ -74,9 +71,7 @@ import de.dhbw.rahmlab.nativelibloader.api.NativeLibLoader;
 ~~~
 
 ~~~java
-NativeLibLoader.init(true);
-NativeLibLoader nativeLibLoader = NativeLibLoader.getInstance();
-nativeLibLoader.load(MyClass.class);
+NativeLibLoader.loadLibs(MyClass.class);
 ~~~
 
 Substitute `MyClass` with any class from your project. If you generate multiple JAR's make sure that `MyClass` is in the same JAR as the native files.

@@ -37,7 +37,7 @@ public class NativeLibsPathsFinderService {
 		return url;
 	}
 
-	public static Set<Path> findNativeLibsPaths(Class markerClass) throws NullPointerException, IOException, URISyntaxException {
+	public static Set<Path> findNativeLibsPaths(Class markerClass, String nativesFolderName) throws NullPointerException, IOException, URISyntaxException {
 		Objects.requireNonNull(markerClass);
 
 		URL markerClassURL = getClassURL(markerClass);
@@ -47,10 +47,10 @@ public class NativeLibsPathsFinderService {
 		Set<Path> nativeLibsPaths;
 
 		if (scheme.equals("jar")) {
-			nativeLibsPaths = JarCacheService.cacheLibs(markerClassURL);
+			nativeLibsPaths = JarCacheService.cacheLibs(markerClassURL, nativesFolderName);
 
 		} else if (scheme.equals("file")) {
-			Path nativesPath = findNativesDirectoryPath(Paths.get(markerClassURL.toURI()));
+			Path nativesPath = findNativesDirectoryPath(Paths.get(markerClassURL.toURI()), nativesFolderName);
 			Path archNativesPath = nativesPath.resolve(Platform.PLATFORM_DIR_NAME);
 			nativeLibsPaths = findNativeLibsPath(archNativesPath);
 
@@ -72,7 +72,7 @@ public class NativeLibsPathsFinderService {
 		return nativeLibsPaths;
 	}
 
-	private static Path findNativesDirectoryPath(final Path markerClassPath) throws IOException, NoSuchElementException {
+	private static Path findNativesDirectoryPath(final Path markerClassPath, String nativesFolderName) throws IOException, NoSuchElementException {
 		Optional<Path> nativesPath = Optional.empty();
 
 		Path currentSearchPath = markerClassPath.getParent();
@@ -81,7 +81,7 @@ public class NativeLibsPathsFinderService {
 
 			Optional<Path> possibleNativesPath = Files.walk(currentSearchPath, 1).parallel()
 				.filter(Files::isDirectory)
-				.filter(path -> path.getFileName().toString().equals("natives"))
+				.filter(path -> path.getFileName().toString().equals(nativesFolderName))
 				.findAny();
 
 			if (possibleNativesPath.isPresent()) {

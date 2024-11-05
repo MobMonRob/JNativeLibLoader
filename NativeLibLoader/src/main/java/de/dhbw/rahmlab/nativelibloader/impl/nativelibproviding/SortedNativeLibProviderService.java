@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
  */
 public class SortedNativeLibProviderService {
 
-	public static List<NativeLib> getSortedNativeLibs(Class markerClass) throws Exception {
+	public static List<NativeLib> getSortedNativeLibs(Class markerClass, String nativesFolderName) throws Exception {
 		Objects.requireNonNull(markerClass);
 
 		// Get bundled libs.
-		final Set<Path> nativeLibsPaths = NativeLibsPathsFinderService.findNativeLibsPaths(markerClass);
+		final Set<Path> nativeLibsPaths = NativeLibsPathsFinderService.findNativeLibsPaths(markerClass, nativesFolderName);
 		final Set<NativeLib> nativeLibs = nativeLibsFromSelectedPaths(nativeLibsPaths);
 		final Map<NativeLibName, NativeLib> nativeLibNameLookup = generateNativeLibNameLookup(nativeLibs);
 

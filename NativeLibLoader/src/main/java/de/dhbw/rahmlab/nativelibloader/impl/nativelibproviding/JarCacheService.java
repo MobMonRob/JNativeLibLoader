@@ -15,8 +15,8 @@ public class JarCacheService {
 	/**
 	 * Precondition: markerClassURL.getProtocol() == "jar".
 	 */
-	public static Set<Path> cacheLibs(URL markerClassURL) throws IOException {
-		String prefix = String.format("natives/%s/", Platform.PLATFORM_DIR_NAME);
+	public static Set<Path> cacheLibs(URL markerClassURL, String nativesFolderName) throws IOException {
+		String prefix = String.format("%s/%s/", nativesFolderName, Platform.PLATFORM_DIR_NAME);
 
 		Set<Path> cachedLibs = new HashSet<>();
 		try (var jarFile = ((JarURLConnection) markerClassURL.openConnection()).getJarFile()) {
