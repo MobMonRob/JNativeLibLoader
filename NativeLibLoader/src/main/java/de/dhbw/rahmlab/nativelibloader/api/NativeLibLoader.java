@@ -62,9 +62,8 @@ public class NativeLibLoader {
 	 * @return The loaded libs.
 	 */
 	public static synchronized List<NativeLib> load(Class markerClass, String nativesFolderName) throws Exception {
-		// Not static in order to avoid check if inited.
-
 		Objects.requireNonNull(markerClass);
+		Objects.requireNonNull(nativesFolderName);
 
 		final List<NativeLib> sortedLibs = SortedNativeLibProviderService.getSortedNativeLibs(markerClass, nativesFolderName);
 
