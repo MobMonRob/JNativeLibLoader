@@ -61,7 +61,7 @@ public class NativeLibLoader {
 	 * @param nativesFolderName name of the folder containing the platform specific natives folders.
 	 * @return The loaded libs.
 	 */
-	public static synchronized List<NativeLib> load(Class markerClass, String nativesFolderName) throws Exception {
+	public static List<NativeLib> load(Class markerClass, String nativesFolderName) throws Exception {
 		Objects.requireNonNull(markerClass);
 		Objects.requireNonNull(nativesFolderName);
 
