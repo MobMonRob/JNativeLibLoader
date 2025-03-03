@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class SortedNativeLibProviderService {
 
-	public static List<NativeLib> getSortedNativeLibs(Class markerClass, String nativesFolderName) throws Exception {
+	public static List<NativeLib> getSortedNativeLibs(Class markerClass, String nativesFolderName, Optional<Set<String>> loadOnlyThisLibsAndTheirDepsOpt) throws Exception {
 		Objects.requireNonNull(markerClass);
 
 		// Get bundled libs.
@@ -29,7 +30,24 @@ public class SortedNativeLibProviderService {
 		final Map<NativeLibName, NativeLib> nativeLibNameLookup = generateNativeLibNameLookup(nativeLibs);
 
 		// Get their mutual dependencies.
-		final Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = getMutualDeps(nativeLibs, nativeLibNameLookup);
+		Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = getMutualDeps(nativeLibs, nativeLibNameLookup);
+
+		// filter for loadOnlyThisLibsAndTheirDeps
+		if (loadOnlyThisLibsAndTheirDepsOpt.isPresent()) {
+			Set<NativeLibName> loadOnlyThisLibsAndTheirDeps = loadOnlyThisLibsAndTheirDepsOpt.get().stream()
+				.map(NativeLibName::fromPathOrName)
+				.collect(Collectors.toSet());
+
+			// ensure existence of all loadOnlyThisLibsAndTheirDeps
+			Set<NativeLibName> allNativeLibNames = nativeLibNameLookup.keySet();
+			for (NativeLibName libName : loadOnlyThisLibsAndTheirDeps) {
+				if (!allNativeLibNames.contains(libName)) {
+					throw new RuntimeException(String.format("NativeLibLoader: loadOnlyThisLibsAndTheirDeps \"%s\" not found!", libName));
+				}
+			}
+
+			nativeLibsToDeps = filterNativeLibsToDeps(nativeLibsToDeps, loadOnlyThisLibsAndTheirDeps);
+		}
 
 		// Sort libs of the bundle reverse-topological by their mutual dependency relation.
 		final List<NativeLibName> sortedLibNames = MutualBundleDependencyReverseTopologicalSortingService.sort(nativeLibsToDeps);
@@ -39,6 +57,22 @@ public class SortedNativeLibProviderService {
 			.collect(Collectors.toCollection(ArrayList<NativeLib>::new));
 
 		return sortedLibs;
+	}
+
+	private static Map<NativeLibName, Set<NativeLibName>> filterNativeLibsToDeps(Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps, Set<NativeLibName> loadOnlyThisLibsAndTheirDeps) {
+		Map<NativeLibName, Set<NativeLibName>> filteredNativeLibsToDeps = HashMap.newHashMap(nativeLibsToDeps.size());
+		List<NativeLibName> currentLibs = new ArrayList<>(nativeLibsToDeps.size());
+		currentLibs.addAll(loadOnlyThisLibsAndTheirDeps);
+		while (!currentLibs.isEmpty()) {
+			NativeLibName currentLib = currentLibs.removeLast();
+			if (filteredNativeLibsToDeps.containsKey(currentLib)) {
+				continue;
+			}
+			Set<NativeLibName> currentLibDeps = nativeLibsToDeps.get(currentLib);
+			filteredNativeLibsToDeps.put(currentLib, currentLibDeps);
+			currentLibs.addAll(currentLibDeps);
+		}
+		return filteredNativeLibsToDeps;
 	}
 
 	private static Set<NativeLib> nativeLibsFromSelectedPaths(final Set<Path> nativeLibsPaths) {

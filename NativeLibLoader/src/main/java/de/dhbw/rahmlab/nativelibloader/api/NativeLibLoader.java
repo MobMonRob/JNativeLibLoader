@@ -4,6 +4,8 @@ import de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding.SortedNativeLibPr
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 public class NativeLibLoader {
 
@@ -51,8 +53,23 @@ public class NativeLibLoader {
 	 * @param markerClass A class within the same JAR as the native libs which are wanted to be loaded.
 	 */
 	public static List<NativeLib> loadLibs(Class markerClass) throws Exception {
-		return load(markerClass, "nativeLibs");
+		return load(markerClass, defaultNativesFolderName);
 	}
+
+	/**
+	 * <pre>
+	 * Loads libs from a folder "nativeLibs".
+	 * OS must be Windows or Linux.
+	 * <pre>
+	 *
+	 * @param markerClass A class within the same JAR as the native libs which are wanted to be loaded.
+	 * @param loadOnlyThisLibsAndTheirDeps restrict lib loading to this libs and their deps.
+	 */
+	public static List<NativeLib> loadLibs(Class markerClass, Set<String> loadOnlyThisLibsAndTheirDeps) throws Exception {
+		return load(markerClass, defaultNativesFolderName, loadOnlyThisLibsAndTheirDeps);
+	}
+
+	public static String defaultNativesFolderName = "nativeLibs";
 
 	/**
 	 * OS must be Windows or Linux.
@@ -62,10 +79,22 @@ public class NativeLibLoader {
 	 * @return The loaded libs.
 	 */
 	public static List<NativeLib> load(Class markerClass, String nativesFolderName) throws Exception {
+		return load(markerClass, nativesFolderName, null);
+	}
+
+	/**
+	 * OS must be Windows or Linux.
+	 *
+	 * @param markerClass A class within the same JAR as the native libs which are wanted to be loaded.
+	 * @param nativesFolderName name of the folder containing the platform specific natives folders.
+	 * @param loadOnlyThisLibsAndTheirDeps restrict lib loading to this libs and their deps.
+	 * @return The loaded libs.
+	 */
+	public static List<NativeLib> load(Class markerClass, String nativesFolderName, Set<String> loadOnlyThisLibsAndTheirDeps) throws Exception {
 		Objects.requireNonNull(markerClass);
 		Objects.requireNonNull(nativesFolderName);
 
-		final List<NativeLib> sortedLibs = SortedNativeLibProviderService.getSortedNativeLibs(markerClass, nativesFolderName);
+		final List<NativeLib> sortedLibs = SortedNativeLibProviderService.getSortedNativeLibs(markerClass, nativesFolderName, Optional.ofNullable(loadOnlyThisLibsAndTheirDeps));
 
 		// Load libs into the JVM.
 		for (NativeLib lib : sortedLibs) {
