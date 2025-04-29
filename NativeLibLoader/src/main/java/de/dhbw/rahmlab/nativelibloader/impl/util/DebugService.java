@@ -20,4 +20,8 @@ public class DebugService {
 			System.err.println(s);
 		}
 	}
+    
+    public static boolean isDebug() {
+        return debug;
+    }
 }

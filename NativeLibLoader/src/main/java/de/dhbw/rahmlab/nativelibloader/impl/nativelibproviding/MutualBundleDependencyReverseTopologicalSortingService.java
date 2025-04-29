@@ -3,56 +3,80 @@ package de.dhbw.rahmlab.nativelibloader.impl.nativelibproviding;
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
-/**
- *
- * checked precondition: the represented graph does not contain any cyclic dependencies.
- *
- * @author fabian
- */
 public class MutualBundleDependencyReverseTopologicalSortingService {
 
-	public static <T> List<T> sort(final Map<T, Set<T>> dependentsToDependecySet) throws IllegalArgumentException {
+    /**
+     * <pre>
+     * Precondition: The represented graph does not contain any cyclic dependencies.
+     * Precondition: All dependencies are dependents as well. ("Mutuality")
+     * </pre>
+     */
+	public static <T extends Comparable<T>> List<T> sort(final Map<T, Set<T>> dependentsToDependecySet) throws IllegalArgumentException {
 		DirectedAcyclicGraph<T, DefaultEdge> depsGraph = new DirectedAcyclicGraph<>(DefaultEdge.class);
+        
+        // (Debugging only) Make order deterministic only for debugging. This improves the debugging experience.
+        List<Entry<T, Set<T>>> sortedDependentsToDependecySet;
+        List<Entry<T, Set<T>>> reversedSortedDependentsToDependecySet;
+        if (DebugService.isDebug()) {
+            sortedDependentsToDependecySet = dependentsToDependecySet.entrySet().stream().sorted(Entry.comparingByKey()).toList();
+            reversedSortedDependentsToDependecySet = sortedDependentsToDependecySet.reversed();
+        } else {
+            sortedDependentsToDependecySet = List.copyOf(dependentsToDependecySet.entrySet());
+            reversedSortedDependentsToDependecySet = sortedDependentsToDependecySet;
+        }
 
 		DebugService.print("----");
 
-		// Recursion is not needed because the full vertex set is already known
-		for (Entry<T, Set<T>> dependentToDepencencySet : dependentsToDependecySet.entrySet()) {
+        // Add all vertices.
+        // (Debugging only) Reversed because it will be reversed again at the end.
+        // (Debugging only) Vertex insertion order defines order of dependencies which do not depend from each other.
+        for (Entry<T, Set<T>> dependentToDepencencySet : reversedSortedDependentsToDependecySet) {
 			final T dependent = dependentToDepencencySet.getKey();
-			final Set<T> dependencySet = dependentToDepencencySet.getValue();
+            depsGraph.addVertex(dependent);
+        }
 
-			// Ensures vertices are present
-			depsGraph.addVertex(dependent);
+        // (Debugging only) sortedDependentsToDependecySet for sorted printing only.
+		for (Entry<T, Set<T>> dependentToDepencencySet : sortedDependentsToDependecySet) {
+			final T dependent = dependentToDepencencySet.getKey();
+			Set<T> dependencySet = dependentToDepencencySet.getValue();
+            
+            // (Debugging only) Sorted dependencies printing.
+            if (DebugService.isDebug()) {
+                dependencySet = dependencySet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+            }
 
+            DebugService.print("dependent : " + dependent.toString());
+            
 			for (T dependency : dependencySet) {
-
-				// Ensures vertices are present
-				depsGraph.addVertex(dependency);
-
 				// Insert edge
 				DefaultEdge edge;
 				try {
 					edge = depsGraph.addEdge(dependent, dependency);
 				} catch (IllegalArgumentException ex) {
-					DebugService.print("Cyclic dependency found. " + "Dependent: " + dependent.toString() + " Dependency: " + dependency.toString());
-					throw ex;
+                    if (!depsGraph.containsVertex(dependency)) {
+                        throw new IllegalArgumentException(String.format("Dependency \"%s\" is not part of the dependents.", dependency), ex);
+                    } else {
+                        throw new IllegalArgumentException(String.format("Cyclic dependency found. Dependent: \"%s\" Dependency: \"%s\"", dependency), ex);
+                    }
 				}
 
 				if (edge == null) {
-					DebugService.print("Adding edge failed. " + "Dependent: " + dependent.toString() + " Dependency: " + dependency.toString());
+                    throw new IllegalArgumentException(String.format("Adding edge failed. Dependent: \"%s\" Dependency: \"%s\"", dependency));
 				}
 
-				DebugService.print("dependent : " + dependent.toString());
 				DebugService.print("dependency: " + dependency.toString());
-				DebugService.print("----");
 			}
+            
+            DebugService.print("----");
 		}
 
 		ArrayList<T> sortedDeps = new ArrayList();

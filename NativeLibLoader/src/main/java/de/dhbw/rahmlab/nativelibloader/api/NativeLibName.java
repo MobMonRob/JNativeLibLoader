@@ -6,7 +6,7 @@ import de.dhbw.rahmlab.nativelibloader.impl.util.Platform;
  *
  * @author fabian
  */
-public class NativeLibName {
+public class NativeLibName implements Comparable<NativeLibName> {
 
 	private final String name;
 
@@ -15,7 +15,7 @@ public class NativeLibName {
 	}
 
 	private static String removeDirName(String fullName) {
-		final int lios = fullName.lastIndexOf('/');
+		final int lios = fullName.lastIndexOf(Platform.FILE_SEPARATOR);
 		if (lios >= 0) {
 			fullName = fullName.substring(lios + 1);
 		}
@@ -78,4 +78,9 @@ public class NativeLibName {
 	public String toString() {
 		return this.name;
 	}
+
+    @Override
+    public int compareTo(NativeLibName o) {
+        return this.name.compareToIgnoreCase(o.name);
+    }
 }

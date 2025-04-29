@@ -1,5 +1,6 @@
 package de.dhbw.rahmlab.nativelibloader.impl.util;
 
+import static de.dhbw.rahmlab.nativelibloader.impl.util.Platform.OS.WINDOWS;
 import java.util.Locale;
 
 public class Platform {
@@ -58,4 +59,15 @@ public class Platform {
 				".dll";
 		};
 	}
+    
+    public static final char FILE_SEPARATOR = getFileSeparator();
+    
+    private static char getFileSeparator() {
+        return switch (OS) {
+			case LINUX ->
+				'/';
+			case WINDOWS ->
+				'\\';
+		};
+    }
 }
