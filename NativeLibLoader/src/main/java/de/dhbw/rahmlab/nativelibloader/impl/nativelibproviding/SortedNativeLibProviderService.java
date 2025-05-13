@@ -6,8 +6,10 @@ import de.dhbw.rahmlab.nativelibloader.impl.nativeparsing.NativeLibsDependencies
 import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +32,7 @@ public class SortedNativeLibProviderService {
 		final Map<NativeLibName, NativeLib> nativeLibNameLookup = generateNativeLibNameLookup(nativeLibs);
 
 		// Get their mutual dependencies.
-		Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = getMutualDeps(nativeLibs, nativeLibNameLookup);
+		Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = getMutualDeps(nativeLibNameLookup);
 
 		// filter for loadOnlyThisLibsAndTheirDeps
 		if (loadOnlyThisLibsAndTheirDepsOpt.isPresent()) {
@@ -84,38 +86,79 @@ public class SortedNativeLibProviderService {
 		return nativeLibs;
 	}
 
-	private static Map<NativeLibName, NativeLib> generateNativeLibNameLookup(final Set<NativeLib> nativeLibs) {
-		Map<NativeLibName, NativeLib> nameToLib = new HashMap(nativeLibs.size());
-		nativeLibs.forEach(nativeLib -> nameToLib.put(nativeLib.getName(), nativeLib));
+    private static Map<NativeLibName, NativeLib> generateNativeLibNameLookup(Set<NativeLib> nativeLibs) {
+        if (DebugService.isDebug()) {
+            nativeLibs = nativeLibs.stream()
+                .sorted(Comparator.comparing(NativeLib::getName))
+                .collect(Collectors.toCollection(LinkedHashSet<NativeLib>::new));
+        }
+        Map<NativeLibName, NativeLib> nameToLib = new HashMap(nativeLibs.size());
+        for (NativeLib nativeLib : nativeLibs) {
+            NativeLib oldValue = nameToLib.putIfAbsent(nativeLib.getName(), nativeLib);
+            if (DebugService.isDebug()) {
+                if (oldValue != null) {
+                    DebugService.print(String.format("NativeLibLoader: Found two libs with same name: \"%s\": \"%s\" and \"%s\"", nativeLib.getName(), nativeLib.getPath(), oldValue.getPath()));
+                }
+            }
+        }
 		return nameToLib;
 	}
 
-	private static Set<NativeLibName> bundleDepsFromDeps(final Set<String> deps, final Map<NativeLibName, NativeLib> nativeLibNameLookup) {
-		// Keep only those dependencies which are part of the bundle
-		final Set<NativeLibName> bundleDeps = deps.stream()
-			.map(dep -> NativeLibName.fromPathOrName(dep))
-			.filter(nativeLibName -> nativeLibNameLookup.containsKey(nativeLibName))
-			.collect(Collectors.toCollection(HashSet<NativeLibName>::new));
+    private static Set<NativeLibName> bundleDepsFromDeps(final Set<String> deps, final Map<NativeLibName, NativeLib> nativeLibNameLookup) {
+        final Set<NativeLibName> allDeps = deps.stream()
+            .map(dep -> NativeLibName.fromPathOrName(dep))
+            .collect(Collectors.toCollection(LinkedHashSet<NativeLibName>::new));
+
+        Set<NativeLibName> bundleDeps = HashSet.<NativeLibName>newHashSet(allDeps.size());
+        List<NativeLibName> externalDeps = new ArrayList<>(0);
+        for (NativeLibName dep : allDeps) {
+            if (nativeLibNameLookup.containsKey(dep)) {
+                bundleDeps.add(dep);
+            } else {
+                if (DebugService.isDebug()) {
+                    externalDeps.add(dep);
+                }
+            }
+        }
+
+        if (DebugService.isDebug()) {
+            bundleDeps = bundleDeps.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+            externalDeps = externalDeps.stream().sorted().toList();
+
+            bundleDeps.forEach(dep -> DebugService.print("dependency bundled: " + dep.toString()));
+            externalDeps.forEach(dep -> DebugService.print("dependency external: " + dep.toString()));
+        }
+
 		return bundleDeps;
 	}
 
-	private static Map<NativeLibName, Set<NativeLibName>> getMutualDeps(
-		final Set<NativeLib> nativeLibs,
-		final Map<NativeLibName, NativeLib> nativeLibNameLookup) throws Exception {
-		Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = new HashMap(nativeLibs.size());
-		for (NativeLib nativeLib : nativeLibs) {
+    private static Map<NativeLibName, Set<NativeLibName>> getMutualDeps(
+        final Map<NativeLibName, NativeLib> nativeLibNameLookup) throws Exception {
+        Set<NativeLibName> nativeLibNames = nativeLibNameLookup.keySet();
+        Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = new HashMap(nativeLibNames.size());
+        if (DebugService.isDebug()) {
+            nativeLibNames = nativeLibNames.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+        for (NativeLibName dependentName : nativeLibNames) {
+            NativeLib dependent = nativeLibNameLookup.get(dependentName);
+            DebugService.print("----");
 			Set<String> deps;
 			try {
-				deps = NativeLibsDependenciesGetterService.getDeps(nativeLib.getPath().toString());
+                deps = NativeLibsDependenciesGetterService.getDeps(dependent.getPath().toString());
 			} catch (Exception e) {
 				// Invalid file
-				DebugService.print(String.format("Invalid file: \"%s\", error: \"%s\"", nativeLib.getPath(), e.getMessage()));
+				DebugService.print(String.format("Invalid file: \"%s\", error: \"%s\"", dependent.getPath(), e.getMessage()));
 				continue;
-			}
-			final Set<NativeLibName> bundleDeps = bundleDepsFromDeps(deps, nativeLibNameLookup);
+            }
 
-			nativeLibsToDeps.put(nativeLib.getName(), bundleDeps);
-		}
+            DebugService.print("dependent : " + dependent.getName().toString());
+
+            final Set<NativeLibName> bundleDeps = bundleDepsFromDeps(deps, nativeLibNameLookup);
+
+            nativeLibsToDeps.put(dependent.getName(), bundleDeps);
+        }
+        DebugService.print("----");
+
 		return nativeLibsToDeps;
 	}
 }

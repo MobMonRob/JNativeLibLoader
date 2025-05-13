@@ -34,7 +34,7 @@ public class MutualBundleDependencyReverseTopologicalSortingService {
             reversedSortedDependentsToDependecySet = sortedDependentsToDependecySet;
         }
 
-		DebugService.print("----");
+        //DebugService.print("----");
 
         // Add all vertices.
         // (Debugging only) Reversed because it will be reversed again at the end.
@@ -54,7 +54,7 @@ public class MutualBundleDependencyReverseTopologicalSortingService {
                 dependencySet = dependencySet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
             }
 
-            DebugService.print("dependent : " + dependent.toString());
+            //DebugService.print("dependent : " + dependent.toString());
             
 			for (T dependency : dependencySet) {
 				// Insert edge
@@ -73,10 +73,10 @@ public class MutualBundleDependencyReverseTopologicalSortingService {
                     throw new IllegalArgumentException(String.format("Adding edge failed. Dependent: \"%s\" Dependency: \"%s\"", dependency));
 				}
 
-				DebugService.print("dependency: " + dependency.toString());
+                //DebugService.print("dependency: " + dependency.toString());
 			}
             
-            DebugService.print("----");
+            //DebugService.print("----");
 		}
 
 		ArrayList<T> sortedDeps = new ArrayList();
