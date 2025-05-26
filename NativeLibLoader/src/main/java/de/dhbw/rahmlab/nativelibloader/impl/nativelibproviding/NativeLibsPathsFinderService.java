@@ -74,12 +74,15 @@ public class NativeLibsPathsFinderService {
 
 	private static Path findNativesDirectoryPath(final Path markerClassPath, String nativesFolderName) throws IOException, NoSuchElementException {
 		Optional<Path> nativesPath = Optional.empty();
-
-		Path currentSearchPath = markerClassPath.getParent();
-		while (Objects.nonNull(currentSearchPath)) {
+        Path root = markerClassPath.getRoot();
+        
+		for (Path currentSearchPath = markerClassPath.getParent();
+            !currentSearchPath.equals(root);
+            currentSearchPath = currentSearchPath.getParent())
+        {
 			DebugService.print("currentSearchPath: " + currentSearchPath.toString());
 
-			Optional<Path> possibleNativesPath = Files.walk(currentSearchPath, 1).parallel()
+			Optional<Path> possibleNativesPath = Files.walk(currentSearchPath, 1)
 				.filter(Files::isDirectory)
 				.filter(path -> path.getFileName().toString().equals(nativesFolderName))
 				.findAny();
@@ -89,10 +92,15 @@ public class NativeLibsPathsFinderService {
 				DebugService.print("Found natives directory Path: " + nativesPath.get().toString());
 				break;
 			}
-
-			currentSearchPath = currentSearchPath.getParent();
 		}
+        
+        if (nativesPath.isEmpty()) {
+            throw new NoSuchElementException(String.format(
+                "NativeLibLoader: nativesFolderName \"%s\" not found near markerClass \"%s\".",
+                nativesFolderName,
+                markerClassPath.toString()));
+        }
 
-		return nativesPath.orElseThrow();
+		return nativesPath.get();
 	}
 }
