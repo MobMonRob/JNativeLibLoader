@@ -29,7 +29,9 @@ public class SortedNativeLibProviderService {
 		// Get bundled libs.
 		final Set<Path> nativeLibsPaths = NativeLibsPathsFinderService.findNativeLibsPaths(markerClass, nativesFolderName);
 		final Set<NativeLib> nativeLibs = nativeLibsFromSelectedPaths(nativeLibsPaths);
-		final Map<NativeLibName, NativeLib> nativeLibNameLookup = generateNativeLibNameLookup(nativeLibs);
+        final Map<NativeLibName, NativeLib> nativeLibNameLookup = generateNativeLibNameLookup(nativeLibs);
+        
+        nativeLibNameLookup.remove(NativeLibName.fromPathOrName("libc.so.6"));
 
 		// Get their mutual dependencies.
 		Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = getMutualDeps(nativeLibNameLookup);
