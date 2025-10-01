@@ -30,8 +30,12 @@ public class SortedNativeLibProviderService {
 		final Set<Path> nativeLibsPaths = NativeLibsPathsFinderService.findNativeLibsPaths(markerClass, nativesFolderName);
 		final Set<NativeLib> nativeLibs = nativeLibsFromSelectedPaths(nativeLibsPaths);
         final Map<NativeLibName, NativeLib> nativeLibNameLookup = generateNativeLibNameLookup(nativeLibs);
-        
-        nativeLibNameLookup.remove(NativeLibName.fromPathOrName("libc.so.6"));
+
+        // Better include in API if needed. Comment only to find the right place in the future.
+        // Please note: If the lib should be loadable by other ones, it still needs to be extracted.
+        // // This is the default behaviour and is done at this point.
+        // // But the code should model this more clearly.
+        // nativeLibNameLookup.remove(NativeLibName.fromPathOrName("libc.so.6"));
 
 		// Get their mutual dependencies.
 		Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = getMutualDeps(nativeLibNameLookup);
