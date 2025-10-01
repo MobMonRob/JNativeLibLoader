@@ -7,13 +7,15 @@ import de.dhbw.rahmlab.nativelibloader.impl.util.DebugService;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.SequencedMap;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,8 +30,10 @@ public class SortedNativeLibProviderService {
 
 		// Get bundled libs.
 		final Set<Path> nativeLibsPaths = NativeLibsPathsFinderService.findNativeLibsPaths(markerClass, nativesFolderName);
-		final Set<NativeLib> nativeLibs = nativeLibsFromSelectedPaths(nativeLibsPaths);
-        final Map<NativeLibName, NativeLib> nativeLibNameLookup = generateNativeLibNameLookup(nativeLibs);
+        final LinkedHashSet<NativeLib> nativeLibsSorted = nativeLibsFromSelectedPaths(nativeLibsPaths).stream()
+            .sorted(Comparator.comparing(NativeLib::getName))
+            .collect(Collectors.toCollection(LinkedHashSet<NativeLib>::new));
+        final SequencedMap<NativeLibName, NativeLib> nativeLibNameLookupSorted = generateNativeLibNameLookup(nativeLibsSorted);
 
         // Better include in API if needed. Comment only to find the right place in the future.
         // Please note: If the lib should be loadable by other ones, it still needs to be extracted.
@@ -38,7 +42,7 @@ public class SortedNativeLibProviderService {
         // nativeLibNameLookup.remove(NativeLibName.fromPathOrName("libc.so.6"));
 
 		// Get their mutual dependencies.
-		Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = getMutualDeps(nativeLibNameLookup);
+		SequencedMap<NativeLibName, SequencedSet<NativeLibName>> nativeLibsToDeps = getMutualDeps(nativeLibNameLookupSorted);
 
 		// filter for loadOnlyThisLibsAndTheirDeps
 		if (loadOnlyThisLibsAndTheirDepsOpt.isPresent()) {
@@ -47,7 +51,7 @@ public class SortedNativeLibProviderService {
 				.collect(Collectors.toSet());
 
 			// ensure existence of all loadOnlyThisLibsAndTheirDeps
-			Set<NativeLibName> allNativeLibNames = nativeLibNameLookup.keySet();
+			Set<NativeLibName> allNativeLibNames = nativeLibNameLookupSorted.keySet();
 			for (NativeLibName libName : loadOnlyThisLibsAndTheirDeps) {
 				if (!allNativeLibNames.contains(libName)) {
 					throw new RuntimeException(String.format("NativeLibLoader: loadOnlyThisLibsAndTheirDeps \"%s\" not found!", libName));
@@ -60,15 +64,20 @@ public class SortedNativeLibProviderService {
 		// Sort libs of the bundle reverse-topological by their mutual dependency relation.
 		final List<NativeLibName> sortedLibNames = MutualBundleDependencyReverseTopologicalSortingService.sort(nativeLibsToDeps);
 
+        DebugService.print("Sorted dependencies:");
+        sortedLibNames.forEach(dep -> DebugService.print(dep.toString()));
+        DebugService.print("----");
+
 		final List<NativeLib> sortedLibs = sortedLibNames.stream()
-			.map(libName -> nativeLibNameLookup.get(libName))
-			.collect(Collectors.toCollection(ArrayList<NativeLib>::new));
+            .map(libName -> nativeLibNameLookupSorted.get(libName))
+            .collect(Collectors.toCollection(ArrayList<NativeLib>::new));
 
 		return sortedLibs;
 	}
 
-	private static Map<NativeLibName, Set<NativeLibName>> filterNativeLibsToDeps(Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps, Set<NativeLibName> loadOnlyThisLibsAndTheirDeps) {
-		Map<NativeLibName, Set<NativeLibName>> filteredNativeLibsToDeps = HashMap.newHashMap(nativeLibsToDeps.size());
+    private static SequencedMap<NativeLibName, SequencedSet<NativeLibName>> filterNativeLibsToDeps(SequencedMap<NativeLibName, SequencedSet<NativeLibName>> nativeLibsToDeps, Set<NativeLibName> loadOnlyThisLibsAndTheirDeps) {
+
+        LinkedHashMap<NativeLibName, SequencedSet<NativeLibName>> filteredNativeLibsToDeps = LinkedHashMap.newLinkedHashMap(nativeLibsToDeps.size());
 		List<NativeLibName> currentLibs = new ArrayList<>(nativeLibsToDeps.size());
 		currentLibs.addAll(loadOnlyThisLibsAndTheirDeps);
 		while (!currentLibs.isEmpty()) {
@@ -76,77 +85,69 @@ public class SortedNativeLibProviderService {
 			if (filteredNativeLibsToDeps.containsKey(currentLib)) {
 				continue;
 			}
-			Set<NativeLibName> currentLibDeps = nativeLibsToDeps.get(currentLib);
+            SequencedSet<NativeLibName> currentLibDeps = nativeLibsToDeps.get(currentLib);
 			filteredNativeLibsToDeps.put(currentLib, currentLibDeps);
 			currentLibs.addAll(currentLibDeps);
 		}
 		return filteredNativeLibsToDeps;
 	}
 
-	private static Set<NativeLib> nativeLibsFromSelectedPaths(final Set<Path> nativeLibsPaths) {
+    private static Set<NativeLib> nativeLibsFromSelectedPaths(final Set<Path> nativeLibsPaths) {
+        // Unsure, if silent failure is correct here.
+        // Unsure, if failure is possible at all with the way it is used.
+        // Maybe exception is better for NativeLib::fromPath.
 		final Set<NativeLib> nativeLibs = nativeLibsPaths.stream()
-			.map(path -> NativeLib.fromPath(path))
-			.filter(optional -> optional.isPresent())
-			.map(optional -> optional.get())
-			.collect(Collectors.toCollection(HashSet<NativeLib>::new));
+            .map(NativeLib::fromPath)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toCollection(HashSet<NativeLib>::new));
 		return nativeLibs;
 	}
 
-    private static Map<NativeLibName, NativeLib> generateNativeLibNameLookup(Set<NativeLib> nativeLibs) {
-        if (DebugService.isDebug()) {
-            nativeLibs = nativeLibs.stream()
-                .sorted(Comparator.comparing(NativeLib::getName))
-                .collect(Collectors.toCollection(LinkedHashSet<NativeLib>::new));
-        }
-        Map<NativeLibName, NativeLib> nameToLib = new HashMap(nativeLibs.size());
-        for (NativeLib nativeLib : nativeLibs) {
+    private static SequencedMap<NativeLibName, NativeLib> generateNativeLibNameLookup(SequencedSet<NativeLib> nativeLibsSorted) {
+        LinkedHashMap<NativeLibName, NativeLib> nameToLib = LinkedHashMap.newLinkedHashMap(nativeLibsSorted.size());
+        for (NativeLib nativeLib : nativeLibsSorted) {
             NativeLib oldValue = nameToLib.putIfAbsent(nativeLib.getName(), nativeLib);
-            if (DebugService.isDebug()) {
-                if (oldValue != null) {
-                    DebugService.print(String.format("NativeLibLoader: Found two libs with same name: \"%s\": \"%s\" and \"%s\"", nativeLib.getName(), nativeLib.getPath(), oldValue.getPath()));
-                }
+            if (oldValue != null) {
+                DebugService.print(String.format("NativeLibLoader: Found two libs with same name: \"%s\": \"%s\" and \"%s\"", nativeLib.getName(), nativeLib.getPath(), oldValue.getPath()));
             }
         }
 		return nameToLib;
 	}
 
-    private static Set<NativeLibName> bundleDepsFromDeps(final Set<String> deps, final Map<NativeLibName, NativeLib> nativeLibNameLookup) {
+    private static SequencedSet<NativeLibName> bundleDepsFromDeps(final Set<String> deps, final Map<NativeLibName, NativeLib> nativeLibNameLookup) {
         final Set<NativeLibName> allDeps = deps.stream()
-            .map(dep -> NativeLibName.fromPathOrName(dep))
-            .collect(Collectors.toCollection(LinkedHashSet<NativeLibName>::new));
+            .map(NativeLibName::fromPathOrName)
+            .collect(Collectors.toSet());
 
         Set<NativeLibName> bundleDeps = HashSet.<NativeLibName>newHashSet(allDeps.size());
         List<NativeLibName> externalDeps = new ArrayList<>(0);
         for (NativeLibName dep : allDeps) {
             if (nativeLibNameLookup.containsKey(dep)) {
                 bundleDeps.add(dep);
-            } else {
-                if (DebugService.isDebug()) {
-                    externalDeps.add(dep);
-                }
+            } else if (DebugService.isDebug()) {
+                externalDeps.add(dep);
             }
         }
 
-        if (DebugService.isDebug()) {
-            bundleDeps = bundleDeps.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
-            externalDeps = externalDeps.stream().sorted().toList();
+        LinkedHashSet bundleDepsSorted = bundleDeps.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
 
-            bundleDeps.forEach(dep -> DebugService.print("dependency bundled: " + dep.toString()));
+        if (DebugService.isDebug()) {
+            bundleDepsSorted.forEach(dep -> DebugService.print("dependency bundled: " + dep.toString()));
+            externalDeps = externalDeps.stream().sorted().toList();
             externalDeps.forEach(dep -> DebugService.print("dependency external: " + dep.toString()));
         }
 
-		return bundleDeps;
+        return bundleDepsSorted;
 	}
 
-    private static Map<NativeLibName, Set<NativeLibName>> getMutualDeps(
-        final Map<NativeLibName, NativeLib> nativeLibNameLookup) throws Exception {
-        Set<NativeLibName> nativeLibNames = nativeLibNameLookup.keySet();
-        Map<NativeLibName, Set<NativeLibName>> nativeLibsToDeps = new HashMap(nativeLibNames.size());
-        if (DebugService.isDebug()) {
-            nativeLibNames = nativeLibNames.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
-        }
-        for (NativeLibName dependentName : nativeLibNames) {
-            NativeLib dependent = nativeLibNameLookup.get(dependentName);
+    private static SequencedMap<NativeLibName, SequencedSet<NativeLibName>> getMutualDeps(
+        final SequencedMap<NativeLibName, NativeLib> nativeLibNameLookupSorted) throws Exception {
+
+        SequencedSet<NativeLibName> nativeLibNamesSorted = nativeLibNameLookupSorted.sequencedKeySet();
+        LinkedHashMap<NativeLibName, SequencedSet<NativeLibName>> nativeLibsToDeps = LinkedHashMap.newLinkedHashMap(nativeLibNamesSorted.size());
+        for (NativeLibName dependentName : nativeLibNamesSorted) {
+            NativeLib dependent = nativeLibNameLookupSorted.get(dependentName);
             DebugService.print("----");
 			Set<String> deps;
 			try {
@@ -159,7 +160,7 @@ public class SortedNativeLibProviderService {
 
             DebugService.print("dependent : " + dependent.getName().toString());
 
-            final Set<NativeLibName> bundleDeps = bundleDepsFromDeps(deps, nativeLibNameLookup);
+            final SequencedSet<NativeLibName> bundleDeps = bundleDepsFromDeps(deps, nativeLibNameLookupSorted);
 
             nativeLibsToDeps.put(dependent.getName(), bundleDeps);
         }

@@ -22,6 +22,8 @@ public class NativeLibName implements Comparable<NativeLibName> {
 		return fullName;
 	}
 
+    // Does not recognize, if name is different than expected.
+    // Not a problem though.
 	private static String normalizeLibName(String fullLibName) {
 		final String lowercase = fullLibName.toLowerCase();
 
