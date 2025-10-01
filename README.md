@@ -7,7 +7,7 @@ This includes:
 - unpacking binary native library files from the JAR to a cache.
 - loading the binary native library files into the jvm depending on the platform.
 
-The native libs bundled within the JAR will be loaded in the right sequence if they mutually depend on each other. But loading will fail if their dependency graph contains cycles.
+The native libs bundled within the JAR will be loaded in the right sequence if they mutually depend on each other. But loading will fail if their dependency graph contains cycles. The loading order is deterministic.
 
 More Developer Info [here](DEVELOPER_INFO.md).
 
