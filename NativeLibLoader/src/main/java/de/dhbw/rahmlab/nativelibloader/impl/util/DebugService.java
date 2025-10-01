@@ -16,9 +16,9 @@ public class DebugService {
 	}
 
 	public static void print(String s) {
-        // if (debug) {
+        if (debug) {
 			System.err.println(s);
-        // }
+        }
 	}
     
     public static boolean isDebug() {
