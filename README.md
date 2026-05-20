@@ -25,6 +25,9 @@ At the moment only Linux x86-64 and Windows x86-64 are supported.
 ## How to use it
 Clone the repository and build the project. This will add JNativeLibLoader to the local Maven cache.
 You only need to rebuild JNativeLibLoader if you change it's codebase.
+```bash
+mvn clean install
+```
 
 Then follow the steps in the next section to configure your project.
 
